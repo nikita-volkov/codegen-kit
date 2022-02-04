@@ -36,26 +36,27 @@ section =
 
 newtype Decl = Decl B.Builder
 
-record ::
+product ::
   Text ->
   Text ->
   [(Text, Type)] ->
-  [Deriving] ->
   Decl
-record name haddock fields derivings =
+product name haddock fields =
   Decl
     [i|
       ${haddockCode}data $name
         = $name
+            $fieldsCode
     |]
   where
     haddockCode =
       Snippets.haddockWithNewline haddock
+    fieldsCode =
+      B.intercalate "\n" $ fmap fieldCode $ fields
+      where
+        fieldCode (_, Type typeCode) =
+          "!" <> typeCode
 
 -- *
 
-data Type
-
--- *
-
-data Deriving
+newtype Type = Type B.Builder
