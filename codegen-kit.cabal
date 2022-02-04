@@ -30,3 +30,17 @@ library
     directory,
     rerebase,
     text-builder,
+
+test-suite test
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  default-extensions: BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, InstanceSigs, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators
+  default-language: Haskell2010
+  main-is:
+    Main.hs
+  other-modules:
+    Tests.HaskellExpFormatter
+  build-depends:
+    coalmine,
+    codegen-kit,
+    rerebase <2,
