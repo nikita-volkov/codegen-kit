@@ -41,12 +41,16 @@ record ::
   Text ->
   [(Text, Type)] ->
   [Deriving] ->
-  [ProductInstance] ->
   Decl
 record name haddock fields derivings =
-  error "TODO"
+  Decl
+    [i|
+      ${haddockCode}data $name
+        = $name
+    |]
   where
-    haddockCode = Snippets.haddock haddock
+    haddockCode =
+      Snippets.haddockWithNewline haddock
 
 -- *
 
@@ -55,7 +59,3 @@ data Type
 -- *
 
 data Deriving
-
--- *
-
-data ProductInstance
