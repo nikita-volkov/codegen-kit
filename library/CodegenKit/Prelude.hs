@@ -3,4 +3,5 @@ module CodegenKit.Prelude
   )
 where
 
-import Coalmine.Prelude as Exports
+import Coalmine.Prelude as Exports hiding (FilePath)
+import Coalmine.SimplePaths as Exports (DirPath, FilePath)
