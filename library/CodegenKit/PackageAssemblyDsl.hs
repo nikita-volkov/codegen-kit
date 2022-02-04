@@ -7,6 +7,7 @@ module CodegenKit.PackageAssemblyDsl
     print,
 
     -- **
+    fromFile,
     fromModule,
     inDir,
 
@@ -65,6 +66,10 @@ print :: Package -> IO ()
 print = TextIO.putStrLn . toText
 
 -- *
+
+fromFile :: FilePath -> Text -> Package
+fromFile path content =
+  Package [(path, content)]
 
 -- |
 -- Lift and resolve a module definition.
