@@ -1,13 +1,13 @@
 module CodegenKit.PackageAssemblyDsl
   ( -- *
-    Package (..),
+    Package,
 
     -- ** Execution
     write,
     print,
 
     -- **
-    fromModuleList,
+    fromModule,
     inDir,
 
     -- *
@@ -66,9 +66,11 @@ print = TextIO.putStrLn . toText
 
 -- *
 
-fromModuleList :: [([Name], Module)] -> Package
-fromModuleList =
-  Package . fmap (\(ns, Module mod) -> mod ns)
+-- |
+-- Lift and resolve a module definition.
+fromModule :: [Name] -> Module -> Package
+fromModule ns (Module mod) =
+  Package [mod ns]
 
 -- |
 -- Prepend a directory path to all contents of this package.
