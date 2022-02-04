@@ -32,6 +32,9 @@ import qualified System.Directory as Directory
 newtype Package = Package [(FilePath, Text)]
   deriving (Semigroup, Monoid)
 
+instance ToString Package where
+  toString = toString . toMultilineTextBuilder
+
 instance ToText Package where
   toText = toText . toMultilineTextBuilder
 
@@ -48,9 +51,6 @@ instance ToMultilineTextBuilder Package where
             ":",
             B.indent 2 $ mappend "\n" $ toMultilineTextBuilder contents
           ]
-
-instance ToString Package where
-  toString = toString . toMultilineTextBuilder
 
 -- * Execution
 
