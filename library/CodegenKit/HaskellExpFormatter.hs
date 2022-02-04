@@ -147,10 +147,10 @@ appChain :: Exp -> [Exp] -> Exp
 appChain fn params =
   if all (not . isMultiline) params && not (isMultiline fn)
     then
-      Exp False False $
+      Exp True False $
         ungroupedExp fn <> foldMap (mappend " " . groupedExp) params
     else
-      Exp False True $
+      Exp True True $
         groupedExp fn <> B.indent 2 (foldMap (mappend "\n" . groupedExp) params)
 
 -- *
