@@ -2,5 +2,19 @@
 Config:
   product:
 
-Spec:
+Structure:
   product:
+    declarations: BVec Decl
+
+Decl:
+  product:
+    name: Name
+    docs: Text
+    def: 
+      sum:
+        newtype: Type
+
+Type:
+  sum:
+    reference: Text
+
