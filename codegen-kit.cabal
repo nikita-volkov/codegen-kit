@@ -1,0 +1,29 @@
+cabal-version: 3.0
+
+name: codegen-kit
+version: 0.1
+synopsis: Code generation utils
+homepage: https://github.com/nikita-volkov/codegen-kit
+bug-reports: https://github.com/nikita-volkov/codegen-kit/issues
+author: Nikita Volkov <nikita.y.volkov@mail.ru>
+maintainer: Nikita Volkov <nikita.y.volkov@mail.ru>
+copyright: (c) 2022 Nikita Volkov
+license: MIT
+license-file: LICENSE
+build-type: Simple
+
+source-repository head
+  type: git
+  location: git://github.com/nikita-volkov/codegen-kit.git
+
+library
+  hs-source-dirs: library
+  default-extensions: BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedLabels, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators
+  default-language: Haskell2010
+  exposed-modules:
+  other-modules:
+    CodegenKit.Prelude
+  build-depends:
+    coalmine,
+    rerebase,
+    text-builder,
