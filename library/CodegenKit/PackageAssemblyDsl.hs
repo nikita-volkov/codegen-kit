@@ -1,6 +1,6 @@
 module CodegenKit.PackageAssemblyDsl
   ( -- *
-    Package,
+    Package (..),
 
     -- ** Execution
     write,
