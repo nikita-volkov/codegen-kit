@@ -1,32 +1,33 @@
--- |
--- Brings all variations of rendering to order by defining
--- package sets.
---
--- The abstraction.
-module CodegenKit.Package
+module CodegenKit.PackageAssemblyDsl
   ( -- *
     Package (..),
 
-    -- * Execution
+    -- ** Execution
     write,
     print,
 
-    -- *
+    -- **
     fromModuleList,
     inDir,
+
+    -- *
+    Module (..),
   )
 where
 
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.SimplePaths as Paths
-import CodegenKit.Module (Module)
-import qualified CodegenKit.Module as Module
 import CodegenKit.Prelude hiding (inDir, print)
 import qualified Data.Text.IO as TextIO
 import qualified System.Directory as Directory
 
 -- *
 
+-- |
+-- Brings all variations of rendering to order by defining
+-- package sets.
+--
+-- The abstraction.
 newtype Package = Package [(FilePath, Text)]
   deriving (Semigroup, Monoid)
 
@@ -67,10 +68,19 @@ print = TextIO.putStrLn . toText
 
 fromModuleList :: [([Name], Module)] -> Package
 fromModuleList =
-  Package . fmap (\(ns, Module.Module mod) -> mod ns)
+  Package . fmap (\(ns, Module mod) -> mod ns)
 
 -- |
 -- Prepend a directory path to all contents of this package.
 inDir :: DirPath -> Package -> Package
 inDir path (Package contents) =
   Package $ fmap (first (Paths.inDir path)) contents
+
+-- *
+
+-- |
+-- Module file-name and content generated given the namespace provided by the user.
+newtype Module
+  = -- |
+    -- Function from namespace into filename and contents.
+    Module ([Name] -> (FilePath, Text))

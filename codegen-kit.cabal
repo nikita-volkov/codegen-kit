@@ -22,8 +22,7 @@ library
   default-language: Haskell2010
   exposed-modules:
     CodegenKit.HaskellExpFormatter
-    CodegenKit.Module
-    CodegenKit.Package
+    CodegenKit.PackageAssemblyDsl
   other-modules:
     CodegenKit.Prelude
   build-depends:
