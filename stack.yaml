@@ -1,7 +1,7 @@
 resolver: nightly-2022-01-27
 extra-deps:
   - git: https://github.com/nikita-volkov/coalmine
-    commit: 2264f0038607e1275eaa7cf58188eecb5f6f009d
+    commit: 6518dfc070fa26eca4a59d86ac820d4dce62ccf2
   - git: https://github.com/nikita-volkov/fx
     commit: a612390cf54c37150c367324b154170921b98318
   - git: https://github.com/nikita-volkov/moore-machines
