@@ -12,12 +12,15 @@ module CodegenKit.Package
     print,
 
     -- *
+    fromModuleList,
     inDir,
   )
 where
 
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.SimplePaths as Paths
+import CodegenKit.Module (Module)
+import qualified CodegenKit.Module as Module
 import CodegenKit.Prelude hiding (inDir, print)
 import qualified Data.Text.IO as TextIO
 import qualified System.Directory as Directory
@@ -61,6 +64,10 @@ print :: Package -> IO ()
 print = TextIO.putStrLn . toText
 
 -- *
+
+fromModuleList :: [([Name], Module)] -> Package
+fromModuleList =
+  Package . fmap (\(ns, Module.Module mod) -> mod ns)
 
 -- |
 -- Prepend a directory path to all contents of this package.
