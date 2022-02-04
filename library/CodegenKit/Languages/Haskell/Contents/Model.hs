@@ -26,7 +26,7 @@ content namespace docs prelude sections =
       $content
     |]
   where
-    haddockCode = Snippets.haddockWithNewline docs
+    haddockCode = Snippets.prefixHaddockWithNewline docs
     content =
       sections
         & coerce
@@ -63,12 +63,12 @@ product name haddock fields =
     |]
   where
     haddockCode =
-      Snippets.haddockWithNewline haddock
+      Snippets.prefixHaddockWithNewline haddock
     fieldsCode =
       B.intercalate "\n" $ fmap fieldCode $ fields
       where
-        fieldCode (_, Type typeCode) =
-          "!" <> typeCode
+        fieldCode (docs, Type typeCode) =
+          "!" <> typeCode <> Snippets.suffixHaddockWithNewline docs
 
 -- *
 
