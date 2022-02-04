@@ -1,7 +1,4 @@
 
-Config:
-  product:
-
 Structure:
   product:
     declarations: BVec Decl
