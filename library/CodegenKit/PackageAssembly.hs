@@ -1,4 +1,4 @@
-module CodegenKit.PackageAssemblyDsl
+module CodegenKit.PackageAssembly
   ( -- *
     Package (..),
 
