@@ -1,10 +1,8 @@
 module CodegenKit.Languages.Haskell.Contents.Model where
 
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified Coalmine.Name as Name
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude
-import qualified TextBuilder as B'
 
 -- *
 
@@ -13,15 +11,30 @@ content ::
   Text ->
   -- | Docs.
   Text ->
+  -- | Prelude module ref.
+  Text ->
   -- | Declaration sections.
   [Section] ->
   Text
-content =
-  error "TODO"
+content namespace docs prelude sections =
+  toText
+    [i|
+      ${haddockCode}module $namespace where
+
+      import qualified $prelude as $preludeAlias
+
+      $content
+    |]
+  where
+    haddockCode = Snippets.haddockWithNewline docs
+    content =
+      sections
+        & coerce
+        & B.intercalate "\n\n"
 
 -- *
 
-data Section
+newtype Section = Section B.Builder
 
 section ::
   -- | Heading.
@@ -60,3 +73,8 @@ product name haddock fields =
 -- *
 
 newtype Type = Type B.Builder
+
+-- *
+
+preludeAlias :: Text
+preludeAlias = "P"
