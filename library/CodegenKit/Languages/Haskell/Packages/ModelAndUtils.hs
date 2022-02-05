@@ -3,16 +3,17 @@ module CodegenKit.Languages.Haskell.Packages.ModelAndUtils
     package,
 
     -- *
-    Product,
+    Section,
+    section,
+
+    -- *
+    Decl,
     product,
+    sum,
 
     -- *
     Field,
     field,
-
-    -- *
-    Sum,
-    sum,
 
     -- *
     Variant,
@@ -40,10 +41,9 @@ import qualified TextBuilder as B'
 package ::
   -- | Namespace.
   [Name] ->
-  [Product] ->
-  [Sum] ->
+  [Section] ->
   Package
-package ns products sums =
+package ns sections =
   mconcat
     [ m "Model" model,
       m "ModelAccessors" modelAccessors
@@ -60,94 +60,113 @@ package ns products sums =
     nsBuilders =
       fmap Name.toUpperCamelCaseTextBuilder ns
     model =
-      Model.content packageNamespace sections
+      Model.content packageNamespace $ fmap section sections
       where
-        sections =
-          [ Model.section "Product Types" productDecls,
-            Model.section "Sum Types" sumDecls
-          ]
+        section (Section header decls) =
+          Model.section header $ join $ fmap decl decls
           where
-            productDecls =
-              products & fmap mapper & join
-              where
-                mapper (Product productName productDocs fields fieldsAmount) =
-                  Model.productAndInstances productName productDocs modelFields
-                  where
-                    modelFields =
-                      fmap modelField fields
-                      where
-                        modelField (FieldSpec _ lcFieldName fieldDocs (MemberType sig _) _) =
-                          (lcFieldName, fieldDocs, sig)
-            sumDecls =
-              sums & fmap mapper & join
-              where
-                mapper (Sum sumName sumDocs variants) =
-                  Model.sumAndInstances sumName sumDocs $
-                    fmap constructor variants
-                  where
-                    constructor (Variant variantName variantDocs memberTypes) =
-                      (variantName, variantDocs, fmap modelMemberType memberTypes)
-                      where
-                        modelMemberType (MemberType type_ _) =
-                          type_
+            decl = \case
+              ProductDecl productName productDocs fields fieldsAmount ->
+                Model.productAndInstances productName productDocs modelFields
+                where
+                  modelFields =
+                    fmap modelField fields
+                    where
+                      modelField (FieldSpec _ lcFieldName fieldDocs (MemberType sig _) _) =
+                        (lcFieldName, fieldDocs, sig)
+              SumDecl sumName sumDocs variants ->
+                Model.sumAndInstances sumName sumDocs $
+                  fmap constructor variants
+                where
+                  constructor (Variant variantName variantDocs memberTypes) =
+                    (variantName, variantDocs, fmap modelMemberType memberTypes)
+                    where
+                      modelMemberType (MemberType type_ _) =
+                        type_
     modelAccessors =
       ModelAccessors.content
         packageNamespace
         hasFieldConfigs
         hasVariantConfigs
       where
-        hasFieldConfigs =
-          foldr step exit products Map.empty
+        decls = do
+          Section _ decls <- sections
+          decls
+        (hasFieldConfigs, hasVariantConfigs) =
+          foldr step exit decls Map.empty Map.empty
           where
-            step (Product productName productDocs fields fieldsAmount) next registry =
-              foldr step next fields registry
-              where
-                step (FieldSpec ucFieldName lcFieldName fieldDocs (MemberType _ fieldSig) index) next registry =
-                  next $! Map.alter alteration ucFieldName registry
-                  where
-                    alteration = \case
-                      Nothing ->
-                        Just (lcFieldName, [instanceConfig])
-                      Just (lcFieldName, instanceConfigs) ->
-                        Just (lcFieldName, instanceConfig : instanceConfigs)
-                    instanceConfig =
-                      (productName, fieldSig, index, fieldsAmount)
+            step decl next fieldRegistry variantRegistry = case decl of
+              ProductDecl productName productDocs fields fieldsAmount ->
+                foldr step exit fields fieldRegistry
+                where
+                  step (FieldSpec ucFieldName lcFieldName fieldDocs (MemberType _ fieldSig) index) next fieldRegistry =
+                    next $! Map.alter alteration ucFieldName fieldRegistry
+                    where
+                      alteration = \case
+                        Nothing ->
+                          Just (lcFieldName, [instanceConfig])
+                        Just (lcFieldName, instanceConfigs) ->
+                          Just (lcFieldName, instanceConfig : instanceConfigs)
+                      instanceConfig =
+                        (productName, fieldSig, index, fieldsAmount)
+                  exit fieldRegistry =
+                    next fieldRegistry variantRegistry
+              SumDecl sumName sumDocs variants ->
+                foldr step exit variants variantRegistry
+                where
+                  step (Variant ucVariantName variantDocs [(MemberType _ variantSig)]) next variantRegistry =
+                    next $! Map.alter alteration ucVariantName variantRegistry
+                    where
+                      alteration = \case
+                        Nothing ->
+                          Just [instanceConfig]
+                        Just instanceConfigs ->
+                          Just $ instanceConfig : instanceConfigs
+                      instanceConfig =
+                        (sumName, variantSig)
+                  exit variantRegistry =
+                    next fieldRegistry variantRegistry
             exit ::
               Map Text (Text, [(Text, Text, Int, Int)]) ->
-              [(Text, Text, [(Text, Text, Int, Int)])]
-            exit =
-              fmap
-                ( \(ucFieldName, (lcFieldName, instanceConfigs)) ->
-                    (lcFieldName, ucFieldName, instanceConfigs)
-                )
-                . Map.toAscList
-
-        hasVariantConfigs =
-          foldr step exit sums Map.empty
-          where
-            step (Sum sumName sumDocs variants) next registry =
-              foldr step next variants registry
-              where
-                step (Variant ucVariantName variantDocs [(MemberType _ variantSig)]) next registry =
-                  next $! Map.alter alteration ucVariantName registry
-                  where
-                    alteration = \case
-                      Nothing ->
-                        Just [instanceConfig]
-                      Just instanceConfigs ->
-                        Just $ instanceConfig : instanceConfigs
-                    instanceConfig =
-                      (sumName, variantSig)
-            exit ::
               Map Text [(Text, Text)] ->
-              [(Text, [(Text, Text)])]
-            exit =
-              Map.toAscList
+              ( [(Text, Text, [(Text, Text, Int, Int)])],
+                [(Text, [(Text, Text)])]
+              )
+            exit fieldRegistry variantRegistry =
+              (hasField, hasVariant)
+              where
+                hasField =
+                  fmap
+                    ( \(ucFieldName, (lcFieldName, instanceConfigs)) ->
+                        (lcFieldName, ucFieldName, instanceConfigs)
+                    )
+                    . Map.toAscList
+                    $ fieldRegistry
+                hasVariant =
+                  Map.toAscList variantRegistry
 
 -- *
 
-data Product
-  = Product
+data Section
+  = Section
+      Text
+      -- ^ Header.
+      [Decl]
+      -- ^ Declarations.
+
+section ::
+  -- | Header.
+  Text ->
+  -- | Declarations.
+  [Decl] ->
+  Section
+section =
+  Section
+
+-- *
+
+data Decl
+  = ProductDecl
       Text
       -- ^ Uppercase name.
       Text
@@ -156,10 +175,17 @@ data Product
       -- ^ Fields.
       Int
       -- ^ Precalculated amount of fields.
+  | SumDecl
+      Text
+      -- ^ Uppercase name.
+      Text
+      -- ^ Docs.
+      [Variant]
+      -- ^ Variants.
 
-product :: Name -> Text -> [Field] -> Product
+product :: Name -> Text -> [Field] -> Decl
 product name docs fields =
-  Product
+  ProductDecl
     (Name.toUpperCamelCaseText name)
     docs
     ( fields
@@ -167,6 +193,11 @@ product name docs fields =
         & fmap (\(index, Field fieldSpec) -> fieldSpec index)
     )
     (length fields)
+
+sum :: Name -> Text -> [Variant] -> Decl
+sum name =
+  SumDecl
+    (Name.toUpperCamelCaseText name)
 
 -- *
 
@@ -197,22 +228,6 @@ field name docs type_ =
       docs
       type_
       index
-
--- *
-
-data Sum
-  = Sum
-      Text
-      -- ^ Uppercase name.
-      Text
-      -- ^ Docs.
-      [Variant]
-      -- ^ Variants.
-
-sum :: Name -> Text -> [Variant] -> Sum
-sum name =
-  Sum
-    (Name.toUpperCamelCaseText name)
 
 -- *
 
