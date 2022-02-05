@@ -73,9 +73,20 @@ product name haddock fields =
         fieldCode (docs, Type typeCode) =
           "!" <> typeCode <> Snippets.suffixHaddockWithNewline docs
 
-productAccessorIsLabelInstance :: Text -> Type -> Int -> Int -> Decl
-productAccessorIsLabelInstance =
-  error "TODO"
+productAccessorIsLabelInstance :: Text -> Text -> Type -> Int -> Int -> Decl
+productAccessorIsLabelInstance productName fieldName (Type fieldType) fieldIndex fieldAmount =
+  Decl
+    [i|
+      instance (a ~ $fieldType) => $preludeAlias.IsLabel "$fieldName" ($productName -> a) where
+        fromLabel ($productName $fieldPatterns) = x
+    |]
+  where
+    fieldPatterns =
+      B.intercalate " " $
+        blanks 0 (pred fieldIndex) <> ["x"] <> blanks (succ fieldIndex) (pred fieldAmount)
+      where
+        blanks from to =
+          replicate (to - from) "_"
 
 -- *
 
@@ -84,20 +95,20 @@ productAndInstances ::
   Text ->
   [(Text, Text, Type)] ->
   [Decl]
-productAndInstances name docs fields =
+productAndInstances productName productDocs fields =
   typeDecl :
   isLabelInstanceDecls
   where
     typeDecl =
       fields
-        & fmap (\(name, docs_, type_) -> (docs, type_))
-        & product name docs
+        & fmap (\(name, docs, type_) -> (docs, type_))
+        & product productName productDocs
     isLabelInstanceDecls =
       fields
         & zip (enumFrom 0)
         & fmap
           ( \(i, (name, docs, type_)) ->
-              [ productAccessorIsLabelInstance name type_ size i
+              [ productAccessorIsLabelInstance productName name type_ i size
               ]
           )
         & join
