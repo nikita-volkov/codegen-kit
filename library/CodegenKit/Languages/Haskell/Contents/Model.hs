@@ -18,6 +18,7 @@ content namespace sections =
     [i|
       module $namespace.Model where
 
+      import $namespace.Operators
       import qualified $namespace.Prelude as $preludeAlias
       import qualified Data.Vector as $boxedVectorAlias
       import qualified Data.Vector.Unboxed as $unboxedVectorAlias
@@ -99,8 +100,8 @@ productHashableInstance productName fieldAmount =
       where
         fieldExp name =
           ExpFormatter.appChain
-            (ExpFormatter.reference "" "flip")
-            [ ExpFormatter.reference "" "hashWithSalt",
+            (ExpFormatter.reference (toText preludeAlias) "flip")
+            [ ExpFormatter.reference (toText preludeAlias) "hashWithSalt",
               ExpFormatter.reference "" (toText name)
             ]
 
