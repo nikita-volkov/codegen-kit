@@ -49,8 +49,11 @@ module_ namespace productFieldsContent sumVariantsContent =
 hasFieldClass lcFieldName ucFieldName =
   [i|
     class Has${ucFieldName}Field a where
+      -- |
       type ${ucFieldName}FieldOf a
+      -- |
       get${ucFieldName}Field :: a -> ${ucFieldName}FieldOf a
+      -- |
       set${ucFieldName}Field :: ${ucFieldName}FieldOf a -> a -> a
       -- |
       -- Map over the \"$lcFieldName\" field of a record that has it.
@@ -81,9 +84,13 @@ hasFieldClass lcFieldName ucFieldName =
 hasVariantClass ucVariantName =
   [i|
     class Has${ucVariantName}Variant a where
+      -- |
       type ${ucVariantName}VariantOf a
+      -- |
       lookup${ucVariantName}Variant :: a -> Maybe (${ucVariantName}VariantOf a)
+      -- |
       from${ucVariantName}Variant :: ${ucVariantName}VariantOf a -> a
+      -- |
       map${ucVariantName}Variant ::
         (${ucVariantName}VariantOf a -> ${ucVariantName}VariantOf a) ->
         (a -> a)
@@ -91,6 +98,7 @@ hasVariantClass ucVariantName =
         case lookup${ucVariantName}Variant a of
           Just b -> from${ucVariantName}Variant (map b)
           Nothing -> a
+      -- |
       traverse${ucVariantName}Variant ::
         (Has${ucVariantName}Variant a, Applicative f) =>
         (${ucVariantName}VariantOf a -> f (${ucVariantName}VariantOf a)) ->
