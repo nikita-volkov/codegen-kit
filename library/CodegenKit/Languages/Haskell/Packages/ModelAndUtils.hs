@@ -78,9 +78,15 @@ package ns products sums =
             sumDecls =
               sums & fmap mapper & join
               where
-                mapper (Sum ucSumName sumDocs variants) =
-                  -- TODO: Implement
-                  []
+                mapper (Sum sumName sumDocs variants) =
+                  Model.sumAndInstances sumName sumDocs $
+                    fmap constructor variants
+                  where
+                    constructor (Variant variantName variantDocs memberTypes) =
+                      (variantName, variantDocs, fmap modelMemberType memberTypes)
+                      where
+                        modelMemberType (MemberType type_ _) =
+                          type_
     modelAccessors =
       ModelAccessors.content
         packageNamespace
@@ -116,10 +122,10 @@ package ns products sums =
         hasVariantConfigs =
           foldr step exit sums Map.empty
           where
-            step (Sum ucSumName sumDocs variants) next registry =
+            step (Sum sumName sumDocs variants) next registry =
               foldr step next variants registry
               where
-                step (Variant ucVariantName variantDocs (MemberType _ variantSig)) next registry =
+                step (Variant ucVariantName variantDocs [(MemberType _ variantSig)]) next registry =
                   next $! Map.alter alteration ucVariantName registry
                   where
                     alteration = \case
@@ -128,7 +134,7 @@ package ns products sums =
                       Just instanceConfigs ->
                         Just $ instanceConfig : instanceConfigs
                     instanceConfig =
-                      (ucSumName, variantSig)
+                      (sumName, variantSig)
             exit ::
               Map Text [(Text, Text)] ->
               [(Text, [(Text, Text)])]
@@ -208,8 +214,8 @@ data Variant
       -- ^ Uppercase name.
       Text
       -- ^ Docs.
-      MemberType
-      -- ^ Variant type.
+      [MemberType]
+      -- ^ Variant types.
 
 -- *
 
