@@ -2,7 +2,7 @@ module CodegenKit.Languages.Haskell.Contents.Model where
 
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
-import CodegenKit.Prelude
+import CodegenKit.Prelude hiding (product, sum)
 
 -- *
 
@@ -73,8 +73,8 @@ product name haddock fields =
         fieldCode (docs, Type typeCode) =
           "!" <> typeCode <> Snippets.suffixHaddockWithNewline docs
 
-productIsLabelInstance :: Text -> Text -> Type -> Int -> Int -> Decl
-productIsLabelInstance =
+productAccessorIsLabelInstance :: Text -> Type -> Int -> Int -> Decl
+productAccessorIsLabelInstance =
   error "TODO"
 
 -- *
@@ -82,10 +82,26 @@ productIsLabelInstance =
 productAndInstances ::
   Text ->
   Text ->
-  [(Text, Type)] ->
+  [(Text, Text, Type)] ->
   [Decl]
-productAndInstances =
-  error "TODO"
+productAndInstances name docs fields =
+  typeDecl :
+  isLabelInstanceDecls
+  where
+    typeDecl =
+      fields
+        & fmap (\(name, docs_, type_) -> (docs, type_))
+        & product name docs
+    isLabelInstanceDecls =
+      fields
+        & zip (enumFrom 0)
+        & fmap
+          ( \(i, (name, docs, type_)) ->
+              [ productAccessorIsLabelInstance name type_ size i
+              ]
+          )
+        & join
+    size = length fields
 
 -- *
 
