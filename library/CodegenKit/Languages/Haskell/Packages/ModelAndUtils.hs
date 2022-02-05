@@ -5,12 +5,18 @@ import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.Languages.Haskell.Contents.Model as Model
 import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors as ModelAccessors
 import CodegenKit.PackageAssembly
-import CodegenKit.Prelude hiding (Product)
+import CodegenKit.Prelude hiding (Product, Sum)
 import qualified Data.Map.Strict as Map
 import qualified TextBuilder as B'
 
 -- *
 
+package ::
+  -- | Namespace.
+  [TextBuilder] ->
+  [Product] ->
+  [Sum] ->
+  Package
 package ns products sums =
   mconcat
     [ m "Model" model,
@@ -98,6 +104,24 @@ data Field
       -- ^ Field type.
       Int
       -- ^ Field index.
+
+data Sum
+  = Sum
+      Text
+      -- ^ Uppercase name.
+      Text
+      -- ^ Docs.
+      [Variant]
+      -- ^ Variants.
+
+data Variant
+  = Variant
+      Text
+      -- ^ Uppercase name.
+      Text
+      -- ^ Docs.
+      MemberType
+      -- ^ Variant type.
 
 data MemberType
   = MemberType
