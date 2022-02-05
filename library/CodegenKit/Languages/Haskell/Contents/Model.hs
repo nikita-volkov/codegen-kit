@@ -130,16 +130,7 @@ productHashableInstance productName fieldAmount =
       fieldNames
         & B.intercalate " "
     exp =
-      ExpFormatter.ungroupedExp $
-        ExpFormatter.multilinePostAppChain (ExpFormatter.reference "" "salt") $
-          fmap fieldExp fieldNames
-      where
-        fieldExp name =
-          ExpFormatter.appChain
-            (ExpFormatter.reference (toText preludeAlias) "flip")
-            [ ExpFormatter.reference (toText preludeAlias) "hashWithSalt",
-              ExpFormatter.reference "" (toText name)
-            ]
+      hashSaltExp fieldNames
 
 productAccessorIsLabelInstance :: Text -> Text -> Type -> Int -> Int -> Decl
 productAccessorIsLabelInstance productName fieldName (Type fieldType) fieldIndex fieldAmount =
@@ -194,8 +185,7 @@ sumHashableInstance sumName variants =
         variantMatch (variantIndex, (variantName, memberCount)) =
           [i|
             ${variantName}${sumName}${memberPatterns} ->
-              salt
-                & $preludeAlias.extendHash $variantIndexCode$suffix
+              $hashCode
           |]
           where
             variantIndexCode =
@@ -205,9 +195,10 @@ sumHashableInstance sumName variants =
                 & fmap Snippets.alphabeticIndexName
             memberPatterns =
               foldMap (mappend " ") memberNames
-            suffix =
-              memberNames
-                & foldMap (\a -> "\n& " <> preludeAlias <> ".extendHash " <> a)
+            hashCode =
+              hashSaltExp $
+                variantIndexCode :
+                memberNames
 
 -- *
 
@@ -276,7 +267,7 @@ unboxedVectorType :: Type -> Type
 unboxedVectorType =
   Type . mappend unboxedVectorAlias . mappend ".Vector " . coerce
 
--- *
+-- * Helpers
 
 preludeAlias :: B.Builder
 preludeAlias = "P"
@@ -286,3 +277,9 @@ boxedVectorAlias = "BVec"
 
 unboxedVectorAlias :: B.Builder
 unboxedVectorAlias = "UVec"
+
+hashSaltExp extends =
+  "salt" <> foldMap extendCode extends
+  where
+    extendCode extend =
+      "\n  & " <> preludeAlias <> ".extendHash " <> extend
