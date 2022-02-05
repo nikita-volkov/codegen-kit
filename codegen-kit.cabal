@@ -23,6 +23,7 @@ library
   exposed-modules:
     CodegenKit.HaskellExpFormatter
     CodegenKit.Languages.Haskell.Contents.Model
+    CodegenKit.Languages.Haskell.Packages.ModelAndUtils
     CodegenKit.Languages.Haskell.Snippets
     CodegenKit.PackageAssembly
   other-modules:
