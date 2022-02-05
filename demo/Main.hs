@@ -1,37 +1,13 @@
 module Main where
 
 import Coalmine.Prelude
-import qualified CodegenKit.Languages.Haskell.Packages.ModelAndUtils as ModelAndUtils
 import qualified CodegenKit.Packaging as Packaging
+import qualified Demo.SamplesFor.ModelAndUtils.Iso8601 as Iso8601ModelAndUtils
 
 -- *
 
 main =
   Packaging.print $
     mconcat
-      [ modelAndUtilsPackage
+      [ Iso8601ModelAndUtils.iso8601Package
       ]
-
--- *
-
-modelAndUtilsPackage =
-  ModelAndUtils.package
-    ["our", "demo"]
-    [ ModelAndUtils.product
-        "ymd"
-        "ISO-8601 Year Month Day for representing a date."
-        [ ModelAndUtils.field
-            "year"
-            "Year."
-            (ModelAndUtils.primitiveType "Int"),
-          ModelAndUtils.field
-            "month"
-            "Month."
-            (ModelAndUtils.primitiveType "Int"),
-          ModelAndUtils.field
-            "day"
-            "Day."
-            (ModelAndUtils.primitiveType "Int")
-        ]
-    ]
-    []
