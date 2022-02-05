@@ -114,16 +114,23 @@ package ns sections =
               SumDecl sumName sumDocs variants ->
                 foldr step exit variants variantRegistry
                 where
-                  step (Variant ucVariantName variantDocs [(MemberType _ variantSig)]) next variantRegistry =
-                    next $! Map.alter alteration ucVariantName variantRegistry
-                    where
-                      alteration = \case
-                        Nothing ->
-                          Just [instanceConfig]
-                        Just instanceConfigs ->
-                          Just $ instanceConfig : instanceConfigs
-                      instanceConfig =
-                        (sumName, variantSig)
+                  step (Variant ucVariantName variantDocs memberTypes) next variantRegistry =
+                    case memberTypes of
+                      [] ->
+                        -- TODO: Provide enum instances
+                        next variantRegistry
+                      [MemberType _ variantSig] ->
+                        next $! Map.alter alteration ucVariantName variantRegistry
+                        where
+                          alteration = \case
+                            Nothing ->
+                              Just [instanceConfig]
+                            Just instanceConfigs ->
+                              Just $ instanceConfig : instanceConfigs
+                          instanceConfig =
+                            (sumName, variantSig)
+                      _ ->
+                        error "TODO: Multimember variant"
                   exit variantRegistry =
                     next fieldRegistry variantRegistry
             exit ::
