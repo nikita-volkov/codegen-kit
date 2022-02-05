@@ -15,17 +15,16 @@ content ::
   [Section] ->
   Text
 content namespace sections =
-  toText
-    [i|
-      module $namespace.Model where
+  [i|
+    module $namespace.Model where
 
-      import $namespace.Operators
-      import qualified $namespace.Prelude as $preludeAlias
-      import qualified Data.Vector as $boxedVectorAlias
-      import qualified Data.Vector.Unboxed as $unboxedVectorAlias
+    import $namespace.Operators
+    import qualified $namespace.Prelude as $preludeAlias
+    import qualified Data.Vector as $boxedVectorAlias
+    import qualified Data.Vector.Unboxed as $unboxedVectorAlias
 
-      $content
-    |]
+    $content
+  |]
   where
     content =
       sections

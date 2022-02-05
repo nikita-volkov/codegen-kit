@@ -12,13 +12,16 @@ module CodegenKit.Languages.Haskell.Packages.ModelAndUtils
 
     -- *
     Sum,
+    sum,
 
     -- *
     Variant,
+    variant,
 
     -- *
     MemberType,
     primitiveType,
+    modelType,
   )
 where
 
@@ -206,6 +209,11 @@ data Sum
       [Variant]
       -- ^ Variants.
 
+sum :: Name -> Text -> [Variant] -> Sum
+sum name =
+  Sum
+    (Name.toUpperCamelCaseText name)
+
 -- *
 
 data Variant
@@ -216,6 +224,10 @@ data Variant
       -- ^ Docs.
       [MemberType]
       -- ^ Variant types.
+
+variant :: Name -> Text -> [MemberType] -> Variant
+variant name =
+  Variant (Name.toUpperCamelCaseText name)
 
 -- *
 
@@ -233,3 +245,9 @@ primitiveType ucName =
   MemberType
     (Model.primitiveType ucName)
     ("P." <> ucName)
+
+modelType :: Text -> MemberType
+modelType ucName =
+  MemberType
+    (Model.modelType ucName)
+    (ucName)

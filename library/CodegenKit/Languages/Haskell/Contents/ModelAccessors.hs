@@ -17,25 +17,24 @@ content ::
   [(Text, [(Text, Text)])] ->
   Text
 content namespace hasFieldConfigs hasVariantConfigs =
-  toText $
-    Templates.module_
-      namespace
-      ( hasFieldConfigs
-          & fmap
-            ( \(lcFieldName, ucFieldName, instanceConfigs) ->
-                hasFieldDecls lcFieldName ucFieldName instanceConfigs
-            )
-          & join
-          & B.intercalate "\n\n"
-      )
-      ( hasVariantConfigs
-          & fmap
-            ( \(ucVariantName, instanceConfigs) ->
-                hasVariantDecls ucVariantName instanceConfigs
-            )
-          & join
-          & B.intercalate "\n\n"
-      )
+  Templates.module_
+    namespace
+    ( hasFieldConfigs
+        & fmap
+          ( \(lcFieldName, ucFieldName, instanceConfigs) ->
+              hasFieldDecls lcFieldName ucFieldName instanceConfigs
+          )
+        & join
+        & B.intercalate "\n\n"
+    )
+    ( hasVariantConfigs
+        & fmap
+          ( \(ucVariantName, instanceConfigs) ->
+              hasVariantDecls ucVariantName instanceConfigs
+          )
+        & join
+        & B.intercalate "\n\n"
+    )
 
 -- *
 
