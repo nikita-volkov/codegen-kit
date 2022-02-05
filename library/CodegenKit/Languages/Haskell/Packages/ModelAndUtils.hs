@@ -1,11 +1,24 @@
-module CodegenKit.Languages.Haskell.Packages.ModelAndUtils where
+module CodegenKit.Languages.Haskell.Packages.ModelAndUtils
+  ( -- *
+    package,
+
+    -- *
+    Product,
+    product,
+
+    -- *
+    Field,
+    field,
+  )
+where
 
 import qualified Coalmine.MultilineTextBuilder as B
+import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.Languages.Haskell.Contents.Model as Model
 import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors as ModelAccessors
 import CodegenKit.PackageAssembly
-import CodegenKit.Prelude hiding (Product, Sum)
+import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified Data.Map.Strict as Map
 import qualified TextBuilder as B'
 
@@ -48,7 +61,7 @@ package ns products sums =
                     modelFields =
                       fmap modelField fields
                       where
-                        modelField (Field _ lcFieldName fieldDocs (MemberType sig _) _) =
+                        modelField (FieldSpec _ lcFieldName fieldDocs (MemberType sig _) _) =
                           (lcFieldName, fieldDocs, sig)
             sumDecls =
               sums & fmap mapper & join
@@ -68,7 +81,7 @@ package ns products sums =
             step (Product productName productDocs fields fieldsAmount) next registry =
               foldr step next fields registry
               where
-                step (Field ucFieldName lcFieldName fieldDocs (MemberType _ fieldSig) index) next registry =
+                step (FieldSpec ucFieldName lcFieldName fieldDocs (MemberType _ fieldSig) index) next registry =
                   next $! Map.alter alteration ucFieldName registry
                   where
                     alteration = \case
@@ -118,13 +131,26 @@ data Product
       -- ^ Uppercase name.
       Text
       -- ^ Docs.
-      [Field]
+      [FieldSpec]
       -- ^ Fields.
       Int
       -- ^ Precalculated amount of fields.
 
-data Field
-  = Field
+product :: Name -> Text -> [Field] -> Product
+product name docs fields =
+  Product
+    (Name.toUpperCamelCaseText name)
+    docs
+    ( fields
+        & zip (enumFrom 0)
+        & fmap (\(index, Field fieldSpec) -> fieldSpec index)
+    )
+    (length fields)
+
+-- *
+
+data FieldSpec
+  = FieldSpec
       Text
       -- ^ Uppercase name.
       Text
@@ -136,6 +162,23 @@ data Field
       Int
       -- ^ Field index.
 
+-- *
+
+newtype Field
+  = Field (Int -> FieldSpec)
+
+field :: Name -> Text -> MemberType -> Field
+field name docs type_ =
+  Field $ \index ->
+    FieldSpec
+      (Name.toUpperCamelCaseText name)
+      (Name.toLowerCamelCaseText name)
+      docs
+      type_
+      index
+
+-- *
+
 data Sum
   = Sum
       Text
@@ -145,6 +188,8 @@ data Sum
       [Variant]
       -- ^ Variants.
 
+-- *
+
 data Variant
   = Variant
       Text
@@ -153,6 +198,8 @@ data Variant
       -- ^ Docs.
       MemberType
       -- ^ Variant type.
+
+-- *
 
 data MemberType
   = MemberType
