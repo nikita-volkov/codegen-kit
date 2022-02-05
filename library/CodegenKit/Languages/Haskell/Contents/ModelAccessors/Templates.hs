@@ -118,22 +118,19 @@ hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount 
   |]
   where
     -- Helpers
-    fieldName n =
-      "fld" <> B'.unsignedDecimal n
     constructorExp fieldExp =
       toMultilineTextBuilder ucProductName <> fields
       where
         fields =
           enumFromTo 0 (pred fieldsAmount)
-            & fmap (\n -> if n == fieldIndex then fieldExp else B.uniline (fieldName (succ n)))
+            & fmap (\n -> if n == fieldIndex then fieldExp else Snippets.alphabeticIndexName n)
             & foldMap (mappend " ")
     -- Definitions
     allFields =
-      enumFromTo 1 fieldsAmount
-        & foldMap (mappend " " . fieldName)
-        & B.uniline
+      enumFromTo 0 (pred fieldsAmount)
+        & foldMap (mappend " " . Snippets.alphabeticIndexName)
     selectedFieldName =
-      B.uniline $ fieldName (succ fieldIndex)
+      Snippets.alphabeticIndexName fieldIndex
     setExp =
       constructorExp "value"
     mapExp =
