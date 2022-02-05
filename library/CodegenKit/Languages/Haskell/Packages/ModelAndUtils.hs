@@ -46,7 +46,10 @@ package ns products sums =
                   Model.productAndInstances productName productDocs modelFields
                   where
                     modelFields =
-                      error "TODO"
+                      fmap modelField fields
+                      where
+                        modelField (Field _ lcFieldName fieldDocs (MemberType sig _) _) =
+                          (lcFieldName, fieldDocs, sig)
             sumDecls =
               error "TODO"
     modelAccessors =
