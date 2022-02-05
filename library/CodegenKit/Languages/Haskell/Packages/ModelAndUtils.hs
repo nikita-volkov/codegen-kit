@@ -9,6 +9,16 @@ module CodegenKit.Languages.Haskell.Packages.ModelAndUtils
     -- *
     Field,
     field,
+
+    -- *
+    Sum,
+
+    -- *
+    Variant,
+
+    -- *
+    MemberType,
+    primitiveType,
   )
 where
 
@@ -209,3 +219,11 @@ data MemberType
       -- ^ Type for model.
       Text
       -- ^ Signature for accessors.
+
+-- |
+-- Non-parametric type from Prelude.
+primitiveType :: Text -> MemberType
+primitiveType ucName =
+  MemberType
+    (Model.primitiveType ucName)
+    ("P." <> ucName)

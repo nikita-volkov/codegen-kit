@@ -13,12 +13,12 @@ function build_and_test {
   --test \
   --fast \
   --ghc-options "-j6 +RTS -A128m -n2m -RTS -fwarn-incomplete-patterns"
-
 }
 
 function build {
   stack build \
-  --fast
+  --fast \
+  --ghc-options "-j6 +RTS -A128m -n2m -RTS -fwarn-incomplete-patterns"
 }
 
 function demo {
@@ -26,5 +26,5 @@ function demo {
 }
 
 format
-build_and_test
+build
 demo

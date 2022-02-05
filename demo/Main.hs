@@ -19,7 +19,19 @@ modelAndUtilsPackage =
     ["our", "demo"]
     [ ModelAndUtils.product
         "ymd"
-        ""
-        []
+        "ISO-8601 Year Month Day for representing a date."
+        [ ModelAndUtils.field
+            "year"
+            "Year."
+            (ModelAndUtils.primitiveType "Int"),
+          ModelAndUtils.field
+            "month"
+            "Month."
+            (ModelAndUtils.primitiveType "Int"),
+          ModelAndUtils.field
+            "day"
+            "Day."
+            (ModelAndUtils.primitiveType "Int")
+        ]
     ]
     []
