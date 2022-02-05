@@ -109,7 +109,7 @@ package ns products sums =
             exit =
               fmap
                 ( \(ucFieldName, (lcFieldName, instanceConfigs)) ->
-                    (ucFieldName, lcFieldName, instanceConfigs)
+                    (lcFieldName, ucFieldName, instanceConfigs)
                 )
                 . Map.toAscList
 

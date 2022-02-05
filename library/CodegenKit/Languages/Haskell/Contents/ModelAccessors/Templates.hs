@@ -46,7 +46,7 @@ module_ namespace productFieldsContent sumVariantsContent =
     $sumVariantsContent
   |]
 
-hasFieldClass ucFieldName lcFieldName =
+hasFieldClass lcFieldName ucFieldName =
   [i|
     class Has${ucFieldName}Field a where
       type ${ucFieldName}FieldOf a
