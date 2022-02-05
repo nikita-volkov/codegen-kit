@@ -34,7 +34,7 @@ suffixHaddock =
 -- Multiline Haddock in the suffix position preceded by a line break.
 suffixHaddockWithNewline :: Text -> B.Builder
 suffixHaddockWithNewline =
-  filtered (not . B.null) (flip mappend "\n") . suffixHaddock
+  filtered (not . B.null) (mappend "\n") . suffixHaddock
 
 -- *
 
