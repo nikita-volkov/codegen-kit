@@ -1,4 +1,4 @@
-module CodegenKit.PackageAssembly
+module CodegenKit.Packaging
   ( -- *
     Package (..),
 

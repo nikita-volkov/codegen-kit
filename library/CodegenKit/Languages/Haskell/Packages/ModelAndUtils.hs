@@ -17,7 +17,7 @@ import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.Languages.Haskell.Contents.Model as Model
 import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors as ModelAccessors
-import CodegenKit.PackageAssembly
+import CodegenKit.Packaging
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified Data.Map.Strict as Map
 import qualified TextBuilder as B'
