@@ -5,6 +5,7 @@ import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.HaskellExpFormatter as ExpFormatter
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
+import qualified TextBuilder as B'
 
 -- *
 
@@ -178,6 +179,38 @@ productMapperIsLabelInstance productName fieldName (Type fieldType) fieldIndex f
 
 -- *
 
+sumHashableInstance :: Text -> [(Text, Int)] -> Decl
+sumHashableInstance sumName variants =
+  Decl
+    [i|
+      instance $preludeAlias.Hashable $sumName where
+        hashWithSalt salt sum = case sum of
+          $matches
+    |]
+  where
+    matches =
+      variants & zip (enumFrom 0) & fmap variantMatch & B.intercalate "\n"
+      where
+        variantMatch (variantIndex, (variantName, memberCount)) =
+          [i|
+            ${variantName}${sumName}${memberPatterns} ->
+              salt
+                & $preludeAlias.extendHash $variantIndexCode$suffix
+          |]
+          where
+            variantIndexCode =
+              B.uniline . B'.decimal $ variantIndex
+            memberNames =
+              enumFromTo 0 (pred memberCount)
+                & fmap Snippets.alphabeticIndexName
+            memberPatterns =
+              foldMap (mappend " ") memberNames
+            suffix =
+              memberNames
+                & foldMap (\a -> "\n& " <> preludeAlias <> ".extendHash " <> a)
+
+-- *
+
 productAndInstances ::
   Text ->
   Text ->
@@ -211,10 +244,17 @@ sumAndInstances ::
   [Decl]
 sumAndInstances sumName sumDocs variants =
   typeDecl :
+  hashableDecl :
   []
   where
     typeDecl =
       sum sumName sumDocs variants
+    hashableDecl =
+      sumHashableInstance sumName $
+        fmap variant variants
+      where
+        variant (name, _, members) =
+          (name, length members)
 
 -- *
 
