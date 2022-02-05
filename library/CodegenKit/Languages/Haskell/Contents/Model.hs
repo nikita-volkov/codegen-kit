@@ -1,6 +1,7 @@
 module CodegenKit.Languages.Haskell.Contents.Model where
 
 import qualified Coalmine.MultilineTextBuilder as B
+import qualified CodegenKit.HaskellExpFormatter as ExpFormatter
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 
@@ -65,7 +66,7 @@ product name haddock fields =
       ${haddockCode}data $name
         = $name
             $fieldsCode
-        deriving ($preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord, $preludeAlias.Generic)
+        deriving ($preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord)
     |]
   where
     haddockCode =
@@ -75,6 +76,33 @@ product name haddock fields =
       where
         fieldCode (docs, Type typeCode) =
           "!" <> typeCode <> Snippets.suffixHaddockWithNewline docs
+
+productHashableInstance :: Text -> Int -> Decl
+productHashableInstance productName fieldAmount =
+  Decl
+    [i|
+      instance $preludeAlias.Hashable $productName where
+        hashWithSalt salt ($productName $fieldPatterns) =
+          $exp
+    |]
+  where
+    fieldNames =
+      enumFromTo 0 (pred fieldAmount)
+        & fmap Snippets.alphabeticIndexName
+    fieldPatterns =
+      fieldNames
+        & B.intercalate " "
+    exp =
+      ExpFormatter.ungroupedExp $
+        ExpFormatter.multilinePostAppChain (ExpFormatter.reference "" "salt") $
+          fmap fieldExp fieldNames
+      where
+        fieldExp name =
+          ExpFormatter.appChain
+            (ExpFormatter.reference "" "flip")
+            [ ExpFormatter.reference "" "hashWithSalt",
+              ExpFormatter.reference "" (toText name)
+            ]
 
 productAccessorIsLabelInstance :: Text -> Text -> Type -> Int -> Int -> Decl
 productAccessorIsLabelInstance productName fieldName (Type fieldType) fieldIndex fieldAmount =
@@ -121,6 +149,7 @@ productAndInstances ::
   [Decl]
 productAndInstances productName productDocs fields =
   typeDecl :
+  productHashableInstance productName size :
   isLabelInstanceDecls
   where
     typeDecl =

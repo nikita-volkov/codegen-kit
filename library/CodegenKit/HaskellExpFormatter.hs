@@ -153,6 +153,11 @@ appChain fn params =
       Exp True True $
         groupedExp fn <> B.indent 2 (foldMap (mappend "\n" . groupedExp) params)
 
+multilinePostAppChain :: Exp -> [Exp] -> Exp
+multilinePostAppChain baseExp chain =
+  Exp True True $
+    groupedExp baseExp <> B.indent 2 (foldMap (mappend "\n& " . B.indent 4 . groupedExp) chain)
+
 -- *
 
 apChain ::
