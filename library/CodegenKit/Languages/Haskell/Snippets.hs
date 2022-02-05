@@ -41,3 +41,12 @@ suffixHaddock =
 suffixHaddockWithNewline :: Text -> B.Builder
 suffixHaddockWithNewline =
   filtered (not . B.null) (flip mappend "\n") . suffixHaddock
+
+-- *
+
+productIsLabelInstance typeName fieldName preludePrefix =
+  [i|
+    instance ${preludePrefix}IsLabel $typeName where
+      fromLabel =
+        error "TODO"
+  |]
