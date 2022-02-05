@@ -78,15 +78,36 @@ productAccessorIsLabelInstance productName fieldName (Type fieldType) fieldIndex
   Decl
     [i|
       instance (a ~ $fieldType) => $preludeAlias.IsLabel "$fieldName" ($productName -> a) where
-        fromLabel ($productName $fieldPatterns) = x
+        fromLabel ($productName $fieldPatterns) = a
     |]
   where
     fieldPatterns =
       B.intercalate " " $
-        blanks 0 (pred fieldIndex) <> ["x"] <> blanks (succ fieldIndex) (pred fieldAmount)
+        blanks 0 (pred fieldIndex) <> ["a"] <> blanks (succ fieldIndex) (pred fieldAmount)
       where
         blanks from to =
           replicate (to - from) "_"
+
+productMapperIsLabelInstance :: Text -> Text -> Type -> Int -> Int -> Decl
+productMapperIsLabelInstance productName fieldName (Type fieldType) fieldIndex fieldAmount =
+  Decl
+    [i|
+      instance (a ~ $fieldType) => $preludeAlias.IsLabel "$fieldName" ((a -> a) -> $productName -> $productName) where
+        fromLabel map ($productName $fieldPatterns) =
+          $productName $fieldExps
+    |]
+  where
+    fieldPatterns =
+      varNamesFromUpTo 0 fieldAmount
+        & B.intercalate " "
+    fieldExps =
+      B.intercalate " " $
+        varNamesFromUpTo 0 fieldIndex
+          <> ["(map " <> Snippets.alphabeticIndexName fieldIndex <> ")"]
+          <> varNamesFromUpTo (succ fieldIndex) fieldAmount
+    varNamesFromUpTo from to =
+      enumFromTo from (pred to)
+        & fmap Snippets.alphabeticIndexName
 
 -- *
 
@@ -108,7 +129,8 @@ productAndInstances productName productDocs fields =
         & zip (enumFrom 0)
         & fmap
           ( \(i, (name, docs, type_)) ->
-              [ productAccessorIsLabelInstance productName name type_ i size
+              [ productAccessorIsLabelInstance productName name type_ i size,
+                productMapperIsLabelInstance productName name type_ i size
               ]
           )
         & join

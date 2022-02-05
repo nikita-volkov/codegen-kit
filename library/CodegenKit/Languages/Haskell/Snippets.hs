@@ -1,10 +1,4 @@
-module CodegenKit.Languages.Haskell.Snippets
-  ( prefixHaddock,
-    prefixHaddockWithNewline,
-    suffixHaddock,
-    suffixHaddockWithNewline,
-  )
-where
+module CodegenKit.Languages.Haskell.Snippets where
 
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
@@ -41,3 +35,17 @@ suffixHaddock =
 suffixHaddockWithNewline :: Text -> B.Builder
 suffixHaddockWithNewline =
   filtered (not . B.null) (flip mappend "\n") . suffixHaddock
+
+-- *
+
+decimalIndexName :: Int -> B.Builder
+decimalIndexName =
+  B.uniline . mappend "_" . B'.decimal
+
+alphabeticIndexName :: Int -> B.Builder
+alphabeticIndexName a =
+  fromString $ showIntAtBase 26 (chr . (+) 97) a ""
+
+enumAlphabeticNames :: Int -> [B.Builder]
+enumAlphabeticNames =
+  fmap alphabeticIndexName . enumFromTo 0 . pred
