@@ -38,9 +38,9 @@ module_ namespace content =
     $content
   |]
 
-productOverClass lcFieldName ucFieldName =
+hasFieldClass lcFieldName ucFieldName =
   [i|
-    class ProductOver$ucFieldName a where
+    class Has${ucFieldName}Field a where
       type ${ucFieldName}FieldOf a
       get${ucFieldName}Field :: a -> ${ucFieldName}FieldOf a
       set${ucFieldName}Field :: ${ucFieldName}FieldOf a -> a -> a
@@ -58,7 +58,7 @@ productOverClass lcFieldName ucFieldName =
       -- following definition using the \"lens\" library:
       --
       -- > traverse${ucFieldName}Field ::
-      -- >   (ProductOver${ucFieldName} a) =>
+      -- >   (Has${ucFieldName}Field a) =>
       -- >   Lens' a (${ucFieldName}FieldOf a)
       --
       -- Thus it is directly compatible.
@@ -70,9 +70,9 @@ productOverClass lcFieldName ucFieldName =
         fmap (flip set${ucFieldName}Field a) (traverse (get${ucFieldName}Field a))
   |]
 
-sumOverClass ucVariantName =
+hasVariantClass ucVariantName =
   [i|
-    class SumOver${ucVariantName} a where
+    class Has${ucVariantName}Variant a where
       type ${ucVariantName}VariantOf a
       lookup${ucVariantName}Variant :: a -> Maybe (${ucVariantName}VariantOf a)
       from${ucVariantName}Variant :: ${ucVariantName}VariantOf a -> a
@@ -84,7 +84,7 @@ sumOverClass ucVariantName =
           Just b -> from${ucVariantName}Variant (map b)
           Nothing -> a
       traverse${ucVariantName}Variant ::
-        (SumOver${ucVariantName} a, Applicative f) =>
+        (Has${ucVariantName}Variant a, Applicative f) =>
         (${ucVariantName}VariantOf a -> f (${ucVariantName}VariantOf a)) ->
         (a -> f a)
       traverse${ucVariantName}Variant traverse a =
@@ -93,9 +93,9 @@ sumOverClass ucVariantName =
           Nothing -> pure a
   |]
 
-productOverInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount =
+hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount =
   [i|
-    instance ProductOver${ucFieldName} ${ucProductName} where
+    instance Has${ucFieldName}Field ${ucProductName} where
       type ${ucFieldName}FieldOf ${ucProductName} = ${fieldTypeSig}
       get${ucFieldName}Field ($ucProductName$allFields) =
         $selectedFieldName
@@ -131,9 +131,9 @@ productOverInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmou
     mapExp =
       constructorExp ("(map " <> selectedFieldName <> ")")
 
-sumOverInstance ucFieldName ucSumName variantSig =
+hasVariantInstance ucFieldName ucSumName variantSig =
   [i|
-    instance SumOver${ucFieldName} ${ucSumName} where
+    instance Has${ucFieldName}Variant ${ucSumName} where
       type ${ucFieldName}VariantOf ${ucSumName} = ${variantSig}
       lookup${ucFieldName}Variant a =
         case a of
