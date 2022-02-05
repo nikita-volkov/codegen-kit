@@ -51,7 +51,11 @@ package ns products sums =
                         modelField (Field _ lcFieldName fieldDocs (MemberType sig _) _) =
                           (lcFieldName, fieldDocs, sig)
             sumDecls =
-              error "TODO"
+              sums & fmap mapper & join
+              where
+                mapper (Sum ucSumName sumDocs variants) =
+                  -- TODO: Implement
+                  []
     modelAccessors =
       ModelAccessors.content
         packageNamespace
@@ -79,8 +83,28 @@ package ns products sums =
               [(Text, Text, [(Text, Text, Int, Int)])]
             exit =
               error "TODO"
+
         hasVariantConfigs =
-          error "TODO"
+          foldr step exit sums Map.empty
+          where
+            step (Sum ucSumName sumDocs variants) next registry =
+              foldr step next variants registry
+              where
+                step (Variant ucVariantName variantDocs (MemberType _ variantSig)) next registry =
+                  next $! Map.alter alteration ucVariantName registry
+                  where
+                    alteration = \case
+                      Nothing ->
+                        Just [instanceConfig]
+                      Just instanceConfigs ->
+                        Just $ instanceConfig : instanceConfigs
+                    instanceConfig =
+                      (ucSumName, variantSig)
+            exit ::
+              Map Text [(Text, Text)] ->
+              [(Text, [(Text, Text)])]
+            exit =
+              error "TODO"
 
 -- *
 
