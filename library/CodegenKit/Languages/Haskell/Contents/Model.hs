@@ -205,6 +205,18 @@ productAndInstances productName productDocs fields =
         & join
     size = length fields
 
+sumAndInstances ::
+  Text ->
+  Text ->
+  [(Text, Text, [Type])] ->
+  [Decl]
+sumAndInstances sumName sumDocs variants =
+  typeDecl :
+  []
+  where
+    typeDecl =
+      sum sumName sumDocs variants
+
 -- *
 
 newtype Type = Type B.Builder
