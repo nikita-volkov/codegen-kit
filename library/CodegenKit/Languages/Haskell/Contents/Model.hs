@@ -22,6 +22,8 @@ content namespace docs prelude sections =
       ${haddockCode}module $namespace where
 
       import qualified $prelude as $preludeAlias
+      import qualified Data.Vector as $boxedVectorAlias
+      import qualified Data.Vector.Unboxed as $unboxedVectorAlias
 
       $content
     |]
@@ -71,11 +73,47 @@ product name haddock fields =
         fieldCode (docs, Type typeCode) =
           "!" <> typeCode <> Snippets.suffixHaddockWithNewline docs
 
+productIsLabelInstance :: Text -> Text -> Type -> Int -> Int -> Decl
+productIsLabelInstance =
+  error "TODO"
+
+-- *
+
+productAndInstances ::
+  Text ->
+  Text ->
+  [(Text, Type)] ->
+  [Decl]
+productAndInstances =
+  error "TODO"
+
 -- *
 
 newtype Type = Type B.Builder
 
+primitiveType :: Text -> Type
+primitiveType =
+  Type . mappend preludeAlias . mappend "." . fromText
+
+modelType :: Text -> Type
+modelType =
+  Type . fromText
+
+boxedVectorType :: Type -> Type
+boxedVectorType =
+  Type . mappend boxedVectorAlias . mappend ".Vector " . coerce
+
+unboxedVectorType :: Type -> Type
+unboxedVectorType =
+  Type . mappend unboxedVectorAlias . mappend ".Vector " . coerce
+
 -- *
 
-preludeAlias :: Text
+preludeAlias :: B.Builder
 preludeAlias = "P"
+
+boxedVectorAlias :: B.Builder
+boxedVectorAlias = "BVec"
+
+unboxedVectorAlias :: B.Builder
+unboxedVectorAlias = "UVec"
