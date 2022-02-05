@@ -44,8 +44,16 @@ section ::
   -- | Declarations.
   [Decl] ->
   Section
-section =
-  error "TODO"
+section heading declarations =
+  Section
+    [i|
+      -- * $heading
+
+      $declarationsCode
+    |]
+  where
+    declarationsCode =
+      B.intercalate "\n\n" $ coerce declarations
 
 -- *
 
