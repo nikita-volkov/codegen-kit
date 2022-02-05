@@ -52,16 +52,15 @@ newtype Decl = Decl B.Builder
 product ::
   Text ->
   Text ->
-  Text ->
   [(Text, Type)] ->
   Decl
-product preludePrefix name haddock fields =
+product name haddock fields =
   Decl
     [i|
       ${haddockCode}data $name
         = $name
             $fieldsCode
-        deriving (${preludePrefix}Show, ${preludePrefix}Eq, ${preludePrefix}Ord, ${preludePrefix}Generic)
+        deriving ($preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord, $preludeAlias.Generic)
     |]
   where
     haddockCode =
