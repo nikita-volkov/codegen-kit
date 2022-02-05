@@ -1,5 +1,6 @@
 module CodegenKit.Languages.Haskell.Contents.Model where
 
+import qualified Coalmine.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.HaskellExpFormatter as ExpFormatter
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
@@ -56,6 +57,8 @@ section heading declarations =
 
 newtype Decl = Decl B.Builder
 
+-- * Type declarations
+
 product ::
   Text ->
   Text ->
@@ -64,19 +67,52 @@ product ::
 product name haddock fields =
   Decl
     [i|
-      ${haddockCode}data $name
+      ${haddockPrefix}data $name
         = $name
             $fieldsCode
         deriving ($preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord)
     |]
   where
-    haddockCode =
+    haddockPrefix =
       Snippets.prefixHaddockWithNewline haddock
     fieldsCode =
       B.intercalate "\n" $ fmap fieldCode $ fields
       where
         fieldCode (docs, Type typeCode) =
           "!" <> typeCode <> Snippets.suffixHaddockWithNewline docs
+
+sum :: Text -> Text -> [(Text, Text, [Type])] -> Decl
+sum sumName haddock variants =
+  Decl
+    [i|
+      ${haddockPrefix}data $sumName
+        $constructors
+        deriving ($preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord)
+    |]
+  where
+    haddockPrefix =
+      Snippets.prefixHaddockWithNewline haddock
+    constructors =
+      B.intercalate "\n" $
+        List.mapHeadAndTail (variantCode "= ") (fmap (variantCode "| ")) $
+          variants
+      where
+        variantCode prefix (ucVariantName, docs, memberTypes) =
+          B.indent 2 $
+            mconcat
+              [ prefix,
+                Snippets.prefixHaddockWithNewline docs,
+                B.indent 2 $
+                  mconcat
+                    [ fromText ucVariantName,
+                      fromText sumName,
+                      foldMap memberCode memberTypes
+                    ]
+              ]
+          where
+            memberCode (Type typeCode) = " !" <> typeCode
+
+-- * Product instances
 
 productHashableInstance :: Text -> Int -> Decl
 productHashableInstance productName fieldAmount =
