@@ -82,7 +82,11 @@ package ns products sums =
               Map Text (Text, [(Text, Text, Int, Int)]) ->
               [(Text, Text, [(Text, Text, Int, Int)])]
             exit =
-              error "TODO"
+              fmap
+                ( \(ucFieldName, (lcFieldName, instanceConfigs)) ->
+                    (ucFieldName, lcFieldName, instanceConfigs)
+                )
+                . Map.toAscList
 
         hasVariantConfigs =
           foldr step exit sums Map.empty
@@ -104,7 +108,7 @@ package ns products sums =
               Map Text [(Text, Text)] ->
               [(Text, [(Text, Text)])]
             exit =
-              error "TODO"
+              Map.toAscList
 
 -- *
 
