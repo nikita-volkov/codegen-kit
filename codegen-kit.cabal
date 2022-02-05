@@ -24,6 +24,7 @@ library
     CodegenKit.HaskellExpFormatter
     CodegenKit.Languages.Haskell.Contents.Model
     CodegenKit.Languages.Haskell.Packages.ModelAndUtils
+    CodegenKit.Languages.Haskell.Packages.ModelAndUtils.Config
     CodegenKit.Languages.Haskell.Snippets
     CodegenKit.PackageAssembly
   other-modules:
