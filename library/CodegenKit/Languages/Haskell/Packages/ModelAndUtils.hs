@@ -77,31 +77,31 @@ package ns products sums =
 
 data Product
   = Product
-      !Text
+      Text
       -- ^ Uppercase name.
-      !Text
+      Text
       -- ^ Docs.
-      ![Field]
+      [Field]
       -- ^ Fields.
-      !Int
+      Int
       -- ^ Precalculated amount of fields.
 
 data Field
   = Field
-      !Text
+      Text
       -- ^ Uppercase name.
-      !Text
+      Text
       -- ^ Lowercase name.
-      !Text
+      Text
       -- ^ Docs.
-      !MemberType
+      MemberType
       -- ^ Field type.
-      !Int
+      Int
       -- ^ Field index.
 
 data MemberType
   = MemberType
-      !Model.Type
+      Model.Type
       -- ^ Type for model.
-      !Text
+      Text
       -- ^ Signature for accessors.
