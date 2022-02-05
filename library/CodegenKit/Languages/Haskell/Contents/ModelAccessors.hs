@@ -1,8 +1,62 @@
-module CodegenKit.Languages.Haskell.Contents.ModelAccessors where
+module CodegenKit.Languages.Haskell.Contents.ModelAccessors
+  ( content,
+  )
+where
 
 import Coalmine.Inter
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
+import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors.Templates as Templates
 import CodegenKit.Prelude hiding (product, sum)
-import qualified TextBuilder as B'
+
+-- *
+
+content ::
+  Text ->
+  [(Text, Text, [(Builder, Text, Int, Int)])] ->
+  [(Text, [(Text, Text)])] ->
+  Text
+content namespace hasFieldConfigs hasVariantConfigs =
+  toText $
+    Templates.module_
+      namespace
+      ( hasFieldConfigs
+          & fmap
+            ( \(lcFieldName, ucFieldName, instanceConfigs) ->
+                hasFieldDecls lcFieldName ucFieldName instanceConfigs
+            )
+          & join
+          & B.intercalate "\n\n"
+      )
+      ( hasVariantConfigs
+          & fmap
+            ( \(ucVariantName, instanceConfigs) ->
+                hasVariantDecls ucVariantName instanceConfigs
+            )
+          & join
+          & B.intercalate "\n\n"
+      )
+
+-- *
+
+hasFieldDecls lcFieldName ucFieldName instanceConfigs =
+  Templates.hasFieldClass lcFieldName ucFieldName :
+  instanceDecls
+  where
+    instanceDecls =
+      instanceConfigs
+        & fmap
+          ( \(hostSig, fieldSig, fieldIndex, fieldAmount) ->
+              Templates.hasFieldInstance ucFieldName hostSig fieldSig fieldIndex fieldAmount
+          )
+
+hasVariantDecls ucVariantName instanceConfigs =
+  Templates.hasVariantClass ucVariantName :
+  instanceDecls
+  where
+    instanceDecls =
+      instanceConfigs
+        & fmap
+          ( \(ucSumName, variantSig) ->
+              Templates.hasVariantInstance ucVariantName ucSumName variantSig
+          )

@@ -13,7 +13,7 @@ import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 import qualified TextBuilder as B'
 
-module_ namespace content =
+module_ namespace productFieldsContent sumVariantsContent =
   [i|
     -- |
     -- Definitions for all patterns of access to members of all types defined in
@@ -35,7 +35,14 @@ module_ namespace content =
     import qualified ${namespace}.Model as M
     import ${namespace}.Prelude
 
-    $content
+
+    -- * Product Fields
+
+    $productFieldsContent
+
+    -- * Sum Variants
+    
+    $sumVariantsContent
   |]
 
 hasFieldClass lcFieldName ucFieldName =
@@ -131,23 +138,23 @@ hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount 
     mapExp =
       constructorExp ("(map " <> selectedFieldName <> ")")
 
-hasVariantInstance ucFieldName ucSumName variantSig =
+hasVariantInstance ucVariantName ucSumName variantSig =
   [i|
-    instance Has${ucFieldName}Variant ${ucSumName} where
-      type ${ucFieldName}VariantOf ${ucSumName} = ${variantSig}
-      lookup${ucFieldName}Variant a =
+    instance Has${ucVariantName}Variant ${ucSumName} where
+      type ${ucVariantName}VariantOf ${ucSumName} = ${variantSig}
+      lookup${ucVariantName}Variant a =
         case a of
-          M.${ucFieldName}${ucSumName} b -> Just b
+          M.${ucVariantName}${ucSumName} b -> Just b
           _ -> Nothing
-      from${ucFieldName}Variant = M.${ucFieldName}${ucSumName}
-      map${ucFieldName}Variant map a =
+      from${ucVariantName}Variant = M.${ucVariantName}${ucSumName}
+      map${ucVariantName}Variant map a =
         case a of
-          M.${ucFieldName}${ucSumName} b ->
-            M.${ucFieldName}${ucSumName} (map b)
+          M.${ucVariantName}${ucSumName} b ->
+            M.${ucVariantName}${ucSumName} (map b)
           _ -> a
-      traverse${ucFieldName}Variant traverse a =
+      traverse${ucVariantName}Variant traverse a =
         case a of
-          M.${ucFieldName}${ucSumName} b ->
-            fmap M.${ucFieldName}${ucSumName} (traverse b)
+          M.${ucVariantName}${ucSumName} b ->
+            fmap M.${ucVariantName}${ucSumName} (traverse b)
           _ -> pure a
   |]
