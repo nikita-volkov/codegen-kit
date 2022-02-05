@@ -11,7 +11,9 @@ function format {
 function build_and_test {
   stack build \
   --test \
-  --fast
+  --fast \
+  --ghc-options "-j6 +RTS -A128m -n2m -RTS -fwarn-incomplete-patterns"
+
 }
 
 function build {
@@ -19,5 +21,10 @@ function build {
   --fast
 }
 
+function demo {
+  stack exec demo
+}
+
 format
 build_and_test
+demo

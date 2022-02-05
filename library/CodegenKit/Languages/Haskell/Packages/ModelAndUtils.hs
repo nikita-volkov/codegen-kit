@@ -26,7 +26,7 @@ import qualified TextBuilder as B'
 
 package ::
   -- | Namespace.
-  [TextBuilder] ->
+  [Name] ->
   [Product] ->
   [Sum] ->
   Package
@@ -41,9 +41,11 @@ package ns products sums =
         (Paths.inDir packageModulesDir $ fromString $ modName <> ".hs")
         contents
     packageModulesDir =
-      fromString . toString $ foldMap (flip mappend "/") ns
+      fromString . toString $ foldMap (flip mappend "/") nsBuilders
     packageNamespace =
-      fromString . toString $ B'.intercalate "." ns
+      fromString . toString $ B'.intercalate "." nsBuilders
+    nsBuilders =
+      fmap Name.toUpperCamelCaseTextBuilder ns
     model =
       Model.content packageNamespace sections
       where

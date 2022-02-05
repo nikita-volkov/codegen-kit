@@ -15,4 +15,11 @@ main =
 -- *
 
 modelAndUtilsPackage =
-  error "TODO"
+  ModelAndUtils.package
+    ["our", "demo"]
+    [ ModelAndUtils.product
+        "ymd"
+        ""
+        []
+    ]
+    []

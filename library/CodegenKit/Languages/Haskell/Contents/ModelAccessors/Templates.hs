@@ -17,7 +17,7 @@ module_ namespace productFieldsContent sumVariantsContent =
   [i|
     -- |
     -- Definitions for all patterns of access to members of all types defined in
-    -- the "Model" module. E.g., setting a field value or mapping over a
+    -- the "${namespace}.Model" module. E.g., setting a field value or mapping over a
     -- constructor type. 
     --
     -- This module completely resolves the \"records\" problem for all the types
@@ -25,7 +25,8 @@ module_ namespace productFieldsContent sumVariantsContent =
     -- members of the \"sum\" types.
     --
     -- On top of that all it provides definitions of Van Laarhoven optics which
-    -- are directly compatible with the \"lens\" library.
+    -- are directly compatible with the \"lens\" library and at the cost of no
+    -- extra dependencies.
     --
     -- Our approach here is to provide classes for each name of the product field
     -- and the sum variant appearing in the model. Just those two types of classes
