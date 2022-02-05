@@ -11,17 +11,15 @@ content ::
   Text ->
   -- | Docs.
   Text ->
-  -- | Prelude module ref.
-  Text ->
   -- | Declaration sections.
   [Section] ->
   Text
-content namespace docs prelude sections =
+content namespace docs sections =
   toText
     [i|
-      ${haddockCode}module $namespace where
+      ${haddockCode}module $namespace.Model where
 
-      import qualified $prelude as $preludeAlias
+      import qualified $namespace.Prelude as $preludeAlias
       import qualified Data.Vector as $boxedVectorAlias
       import qualified Data.Vector.Unboxed as $unboxedVectorAlias
 
