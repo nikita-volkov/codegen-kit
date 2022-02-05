@@ -9,15 +9,13 @@ import CodegenKit.Prelude hiding (product, sum)
 content ::
   -- | Namespace.
   Text ->
-  -- | Docs.
-  Text ->
   -- | Declaration sections.
   [Section] ->
   Text
-content namespace docs sections =
+content namespace sections =
   toText
     [i|
-      ${haddockCode}module $namespace.Model where
+      module $namespace.Model where
 
       import qualified $namespace.Prelude as $preludeAlias
       import qualified Data.Vector as $boxedVectorAlias
@@ -26,7 +24,6 @@ content namespace docs sections =
       $content
     |]
   where
-    haddockCode = Snippets.prefixHaddockWithNewline docs
     content =
       sections
         & coerce
