@@ -120,7 +120,7 @@ hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount 
     fieldName n =
       "fld" <> B'.unsignedDecimal n
     constructorExp fieldExp =
-      ucProductName <> fields
+      toMultilineTextBuilder ucProductName <> fields
       where
         fields =
           enumFromTo 0 (pred fieldsAmount)

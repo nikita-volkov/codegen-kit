@@ -13,7 +13,7 @@ import CodegenKit.Prelude hiding (product, sum)
 
 content ::
   Text ->
-  [(Text, Text, [(Builder, Text, Int, Int)])] ->
+  [(Text, Text, [(Text, Text, Int, Int)])] ->
   [(Text, [(Text, Text)])] ->
   Text
 content namespace hasFieldConfigs hasVariantConfigs =
@@ -46,8 +46,8 @@ hasFieldDecls lcFieldName ucFieldName instanceConfigs =
     instanceDecls =
       instanceConfigs
         & fmap
-          ( \(hostSig, fieldSig, fieldIndex, fieldAmount) ->
-              Templates.hasFieldInstance ucFieldName hostSig fieldSig fieldIndex fieldAmount
+          ( \(hostName, fieldSig, fieldIndex, fieldAmount) ->
+              Templates.hasFieldInstance ucFieldName hostName fieldSig fieldIndex fieldAmount
           )
 
 hasVariantDecls ucVariantName instanceConfigs =

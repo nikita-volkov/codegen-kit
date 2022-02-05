@@ -5,12 +5,13 @@ import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.Languages.Haskell.Contents.Model as Model
 import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors as ModelAccessors
 import CodegenKit.PackageAssembly
-import CodegenKit.Prelude
+import CodegenKit.Prelude hiding (Product)
+import qualified Data.Map.Strict as Map
 import qualified TextBuilder as B'
 
 -- *
 
-package ns =
+package ns products sums =
   mconcat
     [ m "Model" model,
       m "ModelAccessors" modelAccessors
@@ -28,7 +29,20 @@ package ns =
       Model.content packageNamespace sections
       where
         sections =
-          error "TODO"
+          [ Model.section "Product Types" productDecls,
+            Model.section "Sum Types" sumDecls
+          ]
+          where
+            productDecls =
+              products & fmap mapper & join
+              where
+                mapper (Product productName productDocs fields fieldsAmount) =
+                  Model.productAndInstances productName productDocs modelFields
+                  where
+                    modelFields =
+                      error "TODO"
+            sumDecls =
+              error "TODO"
     modelAccessors =
       ModelAccessors.content
         packageNamespace
@@ -36,6 +50,58 @@ package ns =
         hasVariantConfigs
       where
         hasFieldConfigs =
-          error "TODO"
+          foldr step exit products Map.empty
+          where
+            step (Product productName productDocs fields fieldsAmount) next registry =
+              foldr step next fields registry
+              where
+                step (Field ucFieldName lcFieldName fieldDocs (MemberType _ fieldSig) index) next registry =
+                  next $! Map.alter alteration ucFieldName registry
+                  where
+                    alteration = \case
+                      Nothing ->
+                        Just (lcFieldName, [instanceConfig])
+                      Just (lcFieldName, instanceConfigs) ->
+                        Just (lcFieldName, instanceConfig : instanceConfigs)
+                    instanceConfig =
+                      (productName, fieldSig, index, fieldsAmount)
+            exit ::
+              Map Text (Text, [(Text, Text, Int, Int)]) ->
+              [(Text, Text, [(Text, Text, Int, Int)])]
+            exit =
+              error "TODO"
         hasVariantConfigs =
           error "TODO"
+
+-- *
+
+data Product
+  = Product
+      !Text
+      -- ^ Uppercase name.
+      !Text
+      -- ^ Docs.
+      ![Field]
+      -- ^ Fields.
+      !Int
+      -- ^ Precalculated amount of fields.
+
+data Field
+  = Field
+      !Text
+      -- ^ Uppercase name.
+      !Text
+      -- ^ Lowercase name.
+      !Text
+      -- ^ Docs.
+      !MemberType
+      -- ^ Field type.
+      !Int
+      -- ^ Field index.
+
+data MemberType
+  = MemberType
+      !Model.Type
+      -- ^ Type for model.
+      !Text
+      -- ^ Signature for accessors.
