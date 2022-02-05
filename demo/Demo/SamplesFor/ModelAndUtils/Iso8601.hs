@@ -36,6 +36,13 @@ iso8601Package =
             [ variant "ymd" "" [modelType "Ymd"],
               variant "ym" "" [modelType "Ym"],
               variant "md" "" [modelType "Md"]
+            ],
+          sum
+            "tz"
+            ""
+            [ variant "gmt" "" [],
+              variant "pst" "" [],
+              variant "msk" "" []
             ]
         ]
     ]
