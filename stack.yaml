@@ -1,4 +1,4 @@
-resolver: nightly-2022-01-27
+resolver: nightly-2022-02-07
 extra-deps:
   - git: https://github.com/nikita-volkov/coalmine
     commit: 19e1ef5967b8a53ee9d03da8cd977fe8447a5249

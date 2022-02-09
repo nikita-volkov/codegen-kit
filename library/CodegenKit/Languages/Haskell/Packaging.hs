@@ -13,15 +13,19 @@ import CodegenKit.Prelude
 -- E.g., being exposed or hidden.
 data HaskellPackage
   = HaskellPackage
-      !(Acc (FilePath, [Name], Text))
-      !(Acc (FilePath, [Name], Text))
+      !(Acc (FilePath, Text))
+      -- ^ List of files.
+      !(Acc [Name])
+      -- ^ Exposed modules.
+      !(Acc [Name])
+      -- ^ Hidden modules.
 
 instance Semigroup HaskellPackage where
-  HaskellPackage a b <> HaskellPackage c d =
-    HaskellPackage (a <> c) (b <> d)
+  HaskellPackage l1 l2 l3 <> HaskellPackage r1 r2 r3 =
+    HaskellPackage (l1 <> r1) (l2 <> r2) (l3 <> r3)
 
 instance Monoid HaskellPackage where
-  mempty = HaskellPackage mempty mempty
+  mempty = HaskellPackage mempty mempty mempty
 
 instance ToString HaskellPackage where
   toString = toString . toMultilineTextBuilder
@@ -37,10 +41,8 @@ instance ToMultilineTextBuilder HaskellPackage where
 
 -- **
 
--- |
--- Convert to separate vectors of exposed and hidden modules
-toFileVecs :: HaskellPackage -> (BVec (FilePath, Text), BVec (FilePath, Text))
-toFileVecs =
+toExposedModuleSet :: HaskellPackage -> Set [Name]
+toExposedModuleSet (HaskellPackage files exposed hidden) =
   error "TODO"
 
 -- | Render cabal file contents.
@@ -61,7 +63,8 @@ toFileSet =
 -- **
 
 inNamespace :: [Name] -> HaskellPackage -> HaskellPackage
-inNamespace ns (HaskellPackage exposedModules hiddenModules) =
+inNamespace ns (HaskellPackage files exposed hidden) =
   HaskellPackage
+    (error "TODO")
     (error "TODO")
     (error "TODO")
