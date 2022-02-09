@@ -87,7 +87,7 @@ sum sumName haddock variants =
     [i|
       ${haddockPrefix}data $sumName
         $constructors
-        deriving ($preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord)
+        deriving ($derivings)
     |]
   where
     haddockPrefix =
@@ -111,6 +111,17 @@ sum sumName haddock variants =
               ]
           where
             memberCode (Type typeCode) = " !" <> typeCode
+    derivings :: B.Builder
+    derivings =
+      if all (\(_, _, x) -> null x) variants
+        then
+          [i|
+            $preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord, $preludeAlias.Enum, $preludeAlias.Bounded
+          |]
+        else
+          [i|
+            $preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord
+          |]
 
 -- * Product instances
 
