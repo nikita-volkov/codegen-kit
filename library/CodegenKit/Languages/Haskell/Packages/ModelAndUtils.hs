@@ -266,10 +266,10 @@ primitiveType :: Text -> MemberType
 primitiveType ucName =
   MemberType
     (Model.primitiveType ucName)
-    ("P." <> ucName)
+    ucName
 
 modelType :: Text -> MemberType
 modelType ucName =
   MemberType
     (Model.modelType ucName)
-    (ucName)
+    ("M." <> ucName)
