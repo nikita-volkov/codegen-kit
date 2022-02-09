@@ -16,10 +16,13 @@ source-repository head
   type: git
   location: git://github.com/nikita-volkov/codegen-kit.git
 
-library
-  hs-source-dirs: library
+common language-settings
   default-extensions: BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedLabels, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators
   default-language: Haskell2010
+
+library
+  import: language-settings
+  hs-source-dirs: library
   exposed-modules:
     CodegenKit.HaskellExpFormatter
     CodegenKit.Languages.Haskell.Contents.Model
@@ -38,10 +41,9 @@ library
     text-builder,
 
 test-suite test
+  import: language-settings
   type: exitcode-stdio-1.0
   hs-source-dirs: test
-  default-extensions: BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, InstanceSigs, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators
-  default-language: Haskell2010
   main-is:
     Main.hs
   other-modules:
@@ -52,12 +54,11 @@ test-suite test
     rerebase <2,
 
 executable demo
+  import: language-settings
   hs-source-dirs: demo
   main-is: Main.hs
   other-modules:
     Demo.SamplesFor.ModelAndUtils.Iso8601
-  default-extensions: ApplicativeDo, Arrows, BangPatterns, BinaryLiterals, BlockArguments, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, DuplicateRecordFields, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, HexFloatLiterals, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedLabels, OverloadedStrings, PatternGuards, PatternSynonyms, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, StrictData, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators, UndecidableInstances, ViewPatterns
-  default-language: Haskell2010
   build-depends:
     coalmine,
     codegen-kit,
