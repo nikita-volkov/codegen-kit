@@ -1,6 +1,6 @@
 module CodegenKit.Languages.Haskell.Packages.ModelAndUtils
   ( -- *
-    package,
+    fileSet,
 
     -- *
     Section,
@@ -38,12 +38,12 @@ import qualified TextBuilder as B'
 
 -- *
 
-package ::
+fileSet ::
   -- | Namespace.
   [Name] ->
   [Section] ->
-  Package
-package ns sections =
+  FileSet
+fileSet ns sections =
   mconcat
     [ m "Model" model,
       m "ModelAccessors" modelAccessors

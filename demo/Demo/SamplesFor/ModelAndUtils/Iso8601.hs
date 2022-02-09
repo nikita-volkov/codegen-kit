@@ -5,8 +5,8 @@ import CodegenKit.Languages.Haskell.Packages.ModelAndUtils
 
 -- *
 
-iso8601Package =
-  package
+iso8601FileSet =
+  fileSet
     ["our", "demo"]
     [ section
         "ISO-8601"

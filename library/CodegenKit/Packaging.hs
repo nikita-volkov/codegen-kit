@@ -1,6 +1,6 @@
 module CodegenKit.Packaging
   ( -- *
-    Package (..),
+    FileSet (..),
 
     -- ** Execution
     write,
@@ -29,20 +29,20 @@ import qualified System.Directory as Directory
 -- package sets.
 --
 -- The abstraction.
-newtype Package = Package [(FilePath, Text)]
+newtype FileSet = FileSet [(FilePath, Text)]
   deriving (Semigroup, Monoid)
 
-instance ToString Package where
+instance ToString FileSet where
   toString = toString . toMultilineTextBuilder
 
-instance ToText Package where
+instance ToText FileSet where
   toText = toText . toMultilineTextBuilder
 
-instance ToTextBuilder Package where
+instance ToTextBuilder FileSet where
   toTextBuilder = toTextBuilder . toMultilineTextBuilder
 
-instance ToMultilineTextBuilder Package where
-  toMultilineTextBuilder (Package package) =
+instance ToMultilineTextBuilder FileSet where
+  toMultilineTextBuilder (FileSet package) =
     B.intercalate "\n\n" $ fmap renderFile package
     where
       renderFile (path, contents) =
@@ -54,34 +54,34 @@ instance ToMultilineTextBuilder Package where
 
 -- * Execution
 
-write :: Package -> IO ()
-write (Package files) =
+write :: FileSet -> IO ()
+write (FileSet files) =
   traverse_ (uncurry writeFileCreatingDirs) files
   where
     writeFileCreatingDirs path contents = do
       Directory.createDirectoryIfMissing True $ toString $ Paths.filePathDir path
       TextIO.writeFile (toString path) contents
 
-print :: Package -> IO ()
+print :: FileSet -> IO ()
 print = TextIO.putStrLn . toText
 
 -- *
 
-fromFile :: FilePath -> Text -> Package
+fromFile :: FilePath -> Text -> FileSet
 fromFile path content =
-  Package [(path, content)]
+  FileSet [(path, content)]
 
 -- |
 -- Lift and resolve a module definition.
-fromModule :: [Name] -> Module -> Package
+fromModule :: [Name] -> Module -> FileSet
 fromModule ns (Module mod) =
-  Package [mod ns]
+  FileSet [mod ns]
 
 -- |
 -- Prepend a directory path to all contents of this package.
-inDir :: DirPath -> Package -> Package
-inDir path (Package contents) =
-  Package $ fmap (first (Paths.inDir path)) contents
+inDir :: DirPath -> FileSet -> FileSet
+inDir path (FileSet contents) =
+  FileSet $ fmap (first (Paths.inDir path)) contents
 
 -- *
 
