@@ -13,7 +13,7 @@ import CodegenKit.Prelude
 -- E.g., being exposed or hidden.
 data HaskellPackage
   = HaskellPackage
-      !(Acc (FilePath, Text))
+      !(Acc (FilePath, [Name] -> Text))
       -- ^ List of files.
       !(Acc [Name])
       -- ^ Exposed modules.
@@ -65,9 +65,17 @@ toFileSet =
 inNamespace :: [Name] -> HaskellPackage -> HaskellPackage
 inNamespace ns (HaskellPackage files exposed hidden) =
   HaskellPackage
-    (error "TODO")
-    (error "TODO")
-    (error "TODO")
+    files'
+    (fmap (mappend ns) exposed)
+    (fmap (mappend ns) hidden)
+  where
+    files' =
+      files & fmap (bimap prependPath prependModuleName)
+      where
+        prependPath =
+          Paths.inDir (moduleDirPath ns)
+        prependModuleName render =
+          render . mappend ns
 
 module_ ::
   -- | Module namespace.
@@ -77,3 +85,9 @@ module_ ::
   HaskellPackage
 module_ =
   error "TODO"
+
+-- * Helpers
+
+moduleDirPath :: [Name] -> DirPath
+moduleDirPath =
+  foldMap (fromString . toString . Name.toUpperCamelCaseText)
