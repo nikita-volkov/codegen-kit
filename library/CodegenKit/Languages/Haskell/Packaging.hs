@@ -68,3 +68,12 @@ inNamespace ns (HaskellPackage files exposed hidden) =
     (error "TODO")
     (error "TODO")
     (error "TODO")
+
+module_ ::
+  -- | Module namespace.
+  [Name] ->
+  -- | Module contents rendering function from compiled namespace.
+  ([Name] -> Text) ->
+  HaskellPackage
+module_ =
+  error "TODO"
