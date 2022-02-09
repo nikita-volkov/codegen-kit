@@ -11,8 +11,8 @@ import CodegenKit.Prelude
 -- A collection of modules with their requirements for
 -- the package configuration files.
 -- E.g., being exposed or hidden.
-data HaskellPackage
-  = HaskellPackage
+data Modules
+  = Modules
       !(Acc (FilePath, [Name] -> Text))
       -- ^ List of files.
       !(Acc [Name])
@@ -20,51 +20,51 @@ data HaskellPackage
       !(Acc [Name])
       -- ^ Hidden modules.
 
-instance Semigroup HaskellPackage where
-  HaskellPackage l1 l2 l3 <> HaskellPackage r1 r2 r3 =
-    HaskellPackage (l1 <> r1) (l2 <> r2) (l3 <> r3)
+instance Semigroup Modules where
+  Modules l1 l2 l3 <> Modules r1 r2 r3 =
+    Modules (l1 <> r1) (l2 <> r2) (l3 <> r3)
 
-instance Monoid HaskellPackage where
-  mempty = HaskellPackage mempty mempty mempty
+instance Monoid Modules where
+  mempty = Modules mempty mempty mempty
 
-instance ToString HaskellPackage where
+instance ToString Modules where
   toString = toString . toMultilineTextBuilder
 
-instance ToText HaskellPackage where
+instance ToText Modules where
   toText = toText . toMultilineTextBuilder
 
-instance ToTextBuilder HaskellPackage where
+instance ToTextBuilder Modules where
   toTextBuilder = toTextBuilder . toMultilineTextBuilder
 
-instance ToMultilineTextBuilder HaskellPackage where
+instance ToMultilineTextBuilder Modules where
   toMultilineTextBuilder = toMultilineTextBuilder . toFileSet
 
 -- **
 
-toExposedModuleSet :: HaskellPackage -> Set [Name]
-toExposedModuleSet (HaskellPackage files exposed hidden) =
+toExposedModuleSet :: Modules -> Set [Name]
+toExposedModuleSet (Modules files exposed hidden) =
   error "TODO"
 
 -- | Render cabal file contents.
 toCabalContents ::
   -- | Package name.
   Text ->
-  HaskellPackage ->
+  Modules ->
   Text
 toCabalContents =
   error "TODO"
 
 -- |
 -- Generate all package files including @.cabal@.
-toFileSet :: HaskellPackage -> Packaging.FileSet
+toFileSet :: Modules -> Packaging.FileSet
 toFileSet =
   error "TODO"
 
 -- **
 
-inNamespace :: [Name] -> HaskellPackage -> HaskellPackage
-inNamespace ns (HaskellPackage files exposed hidden) =
-  HaskellPackage
+inNamespace :: [Name] -> Modules -> Modules
+inNamespace ns (Modules files exposed hidden) =
+  Modules
     files'
     (fmap (mappend ns) exposed)
     (fmap (mappend ns) hidden)
@@ -82,7 +82,7 @@ module_ ::
   [Name] ->
   -- | Module contents rendering function from compiled namespace.
   ([Name] -> Text) ->
-  HaskellPackage
+  Modules
 module_ =
   error "TODO"
 
