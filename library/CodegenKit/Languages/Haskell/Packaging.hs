@@ -55,7 +55,7 @@ toCabalContents =
   error "TODO"
 
 -- |
--- Generate all package files including .cabal.
+-- Generate all package files including @.cabal@.
 toFileSet :: HaskellPackage -> Packaging.FileSet
 toFileSet =
   error "TODO"
