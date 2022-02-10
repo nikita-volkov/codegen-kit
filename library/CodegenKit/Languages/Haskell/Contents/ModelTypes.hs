@@ -1,4 +1,4 @@
-module CodegenKit.Languages.Haskell.Contents.Model where
+module CodegenKit.Languages.Haskell.Contents.ModelTypes where
 
 import qualified Coalmine.List as List
 import qualified Coalmine.MultilineTextBuilder as B
@@ -17,7 +17,7 @@ content ::
   Text
 content namespace sections =
   [i|
-    module $namespace.Model where
+    module $namespace.Types where
 
     import $namespace.Operators
     import qualified $namespace.Prelude as $preludeAlias

@@ -29,8 +29,8 @@ where
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
-import qualified CodegenKit.Languages.Haskell.Contents.Model as Model
 import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors as ModelAccessors
+import qualified CodegenKit.Languages.Haskell.Contents.ModelTypes as Model
 import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified Data.Map.Strict as Map
@@ -45,8 +45,8 @@ modules ::
   Packaging.Modules
 modules ns sections =
   mconcat
-    [ Packaging.module_ True "model" modelContent,
-      Packaging.module_ True "model-accessors" modelAccessorsContent
+    [ Packaging.module_ True "types" modelContent,
+      Packaging.module_ True "accessors" modelAccessorsContent
     ]
   where
     nsText =
