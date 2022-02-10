@@ -153,9 +153,12 @@ module_ ::
   Modules
 module_ exposed name contents =
   Modules
-    (pure (fromString . toString . Name.toUpperCamelCaseText $ name, contents))
+    (pure (filePath, contents))
     (if exposed then pure [name] else empty)
     (if exposed then empty else pure [name])
+  where
+    filePath =
+      fromString . toString . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
 
 -- * Helpers
 
