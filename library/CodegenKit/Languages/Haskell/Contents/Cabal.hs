@@ -3,9 +3,7 @@ module CodegenKit.Languages.Haskell.Contents.Cabal where
 import Coalmine.Inter
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.Languages.Haskell.Contents.Cabal.Layout as Layout
-import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
-import CodegenKit.Prelude hiding (Version, product, sum)
+import CodegenKit.Prelude hiding (Version)
 import qualified TextBuilder as B'
 
 -- *
@@ -18,14 +16,33 @@ cabal ::
   [ModuleRef] ->
   [Dependency] ->
   Builder
-cabal packageName synopsis version exposedModules hiddenModules dependencies =
-  Layout.cabal
-    packageName
-    synopsis
-    version
-    (Layout.moduleList . coerce $ exposedModules)
-    (Layout.moduleList . coerce $ hiddenModules)
-    (Layout.dependencyList . coerce $ dependencies)
+cabal packageName synopsis version exposedModuleList otherModuleList dependencyList =
+  [i|
+    cabal-version: 3.0
+
+    name: $packageName
+    synopsis: $synopsis
+    version: $version
+    build-type: Simple
+
+    library
+      hs-source-dirs: library
+      default-extensions: ApplicativeDo, BangPatterns, BinaryLiterals, BlockArguments, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, DuplicateRecordFields, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, HexFloatLiterals, LambdaCase, LiberalTypeSynonyms, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedStrings, PatternGuards, PatternSynonyms, ParallelListComp, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TupleSections, TypeApplications, TypeFamilies, TypeOperators, ViewPatterns
+      default-language: Haskell2010
+      exposed-modules:
+        $exposedModules
+      other-modules:
+        $otherModules
+      build-depends:
+        $dependencies
+  |]
+  where
+    exposedModules =
+      B.intercalate "\n" . coerce $ exposedModuleList
+    otherModules =
+      B.intercalate "\n" . coerce $ otherModuleList
+    dependencies =
+      B.intercalate ",\n" . coerce $ dependencyList
 
 -- *
 
@@ -40,8 +57,11 @@ newtype Dependency
   deriving (ToMultilineTextBuilder)
 
 rangeDependency :: PackageName -> Version -> Version -> Dependency
-rangeDependency =
-  error "TODO"
+rangeDependency name min max =
+  Dependency
+    [i|
+      $name >=$min && <$max
+    |]
 
 -- *
 
@@ -57,7 +77,8 @@ newtype Version
 
 version2 :: Word -> Word -> Version
 version2 a b =
-  Version $
-    Layout.version2
-      (B'.unsignedDecimal a)
-      (B'.unsignedDecimal b)
+  Version . B.uniline . mconcat $
+    [ B'.unsignedDecimal a,
+      ".",
+      B'.unsignedDecimal b
+    ]

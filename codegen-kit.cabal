@@ -26,7 +26,6 @@ library
   exposed-modules:
     CodegenKit.HaskellExpFormatter
     CodegenKit.Languages.Haskell.Contents.Cabal
-    CodegenKit.Languages.Haskell.Contents.Cabal.Layout
     CodegenKit.Languages.Haskell.Contents.Model
     CodegenKit.Languages.Haskell.Contents.ModelAccessors
     CodegenKit.Languages.Haskell.Contents.ModelAccessors.Templates
