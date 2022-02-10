@@ -29,7 +29,7 @@ baseOperators =
       ]
     contents nsNameList =
       [i|
-        module $namespace.BasePreludes.Operators
+        module $namespace.Operators
           ( -- * From "Control.Applicative"
             (Control.Applicative.*>),
             (Control.Applicative.<*),
