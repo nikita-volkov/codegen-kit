@@ -1,7 +1,20 @@
-module CodegenKit.Languages.Haskell.Packaging where
+module CodegenKit.Languages.Haskell.Packaging
+  ( -- *
+    toFileSet,
+
+    -- *
+    PackageName,
+    spinalPackageName,
+
+    -- *
+    Version,
+    version2,
+  )
+where
 
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
+import CodegenKit.Languages.Haskell.Contents.Cabal (PackageName, Version, spinalPackageName, version2)
 import qualified CodegenKit.Languages.Haskell.Contents.Cabal as CabalContents
 import qualified CodegenKit.Packaging as Packaging
 import CodegenKit.Prelude
@@ -34,14 +47,32 @@ toExposedModuleSet :: Modules -> Set [Name]
 toExposedModuleSet (Modules files exposed hidden) =
   error "TODO"
 
+toHiddenModuleSet :: Modules -> Set [Name]
+toHiddenModuleSet (Modules files exposed hidden) =
+  error "TODO"
+
 -- | Render cabal file contents.
 toCabalContents ::
   -- | Package name.
-  Name ->
+  PackageName ->
+  -- | Synopsis.
+  Text ->
+  Version ->
   Modules ->
   Text
-toCabalContents packageName (Modules _ exposed hidden) =
-  error "TODO"
+toCabalContents packageName synopsis version modules =
+  CabalContents.contents
+    packageName
+    synopsis
+    version
+    exposed
+    hidden
+    dependencies
+  where
+    exposed = fmap CabalContents.nameListModuleRef . toList . toExposedModuleSet $ modules
+    hidden = fmap CabalContents.nameListModuleRef . toList . toHiddenModuleSet $ modules
+    dependencies =
+      error "TODO"
 
 -- |
 -- Generate all package files including @.cabal@.
@@ -71,7 +102,9 @@ inNamespace ns (Modules files exposed hidden) =
           render . mappend ns
 
 module_ ::
-  -- | Module namespace.
+  -- | Is it exposed?
+  Bool ->
+  -- | Module reference.
   [Name] ->
   -- | Module contents rendering function from compiled namespace.
   ([Name] -> Text) ->

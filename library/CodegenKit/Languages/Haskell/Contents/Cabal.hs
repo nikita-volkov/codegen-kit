@@ -36,7 +36,7 @@ contents ::
   [ModuleRef] ->
   [ModuleRef] ->
   [Dependency] ->
-  Builder
+  Text
 contents packageName synopsis version exposedModuleList otherModuleList dependencyList =
   [i|
     cabal-version: 3.0
