@@ -2,6 +2,7 @@ module CodegenKit.Languages.Haskell.Packaging where
 
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
+import qualified CodegenKit.Languages.Haskell.Contents.Cabal as CabalContents
 import qualified CodegenKit.Packaging as Packaging
 import CodegenKit.Prelude
 
@@ -27,18 +28,6 @@ instance Semigroup HaskellPackage where
 instance Monoid HaskellPackage where
   mempty = HaskellPackage mempty mempty mempty
 
-instance ToString HaskellPackage where
-  toString = toString . toMultilineTextBuilder
-
-instance ToText HaskellPackage where
-  toText = toText . toMultilineTextBuilder
-
-instance ToTextBuilder HaskellPackage where
-  toTextBuilder = toTextBuilder . toMultilineTextBuilder
-
-instance ToMultilineTextBuilder HaskellPackage where
-  toMultilineTextBuilder = toMultilineTextBuilder . toFileSet
-
 -- **
 
 toExposedModuleSet :: HaskellPackage -> Set [Name]
@@ -48,15 +37,19 @@ toExposedModuleSet (HaskellPackage files exposed hidden) =
 -- | Render cabal file contents.
 toCabalContents ::
   -- | Package name.
-  Text ->
+  Name ->
   HaskellPackage ->
   Text
-toCabalContents =
+toCabalContents packageName (HaskellPackage _ exposed hidden) =
   error "TODO"
 
 -- |
 -- Generate all package files including @.cabal@.
-toFileSet :: HaskellPackage -> Packaging.FileSet
+toFileSet ::
+  -- | Package name.
+  Name ->
+  HaskellPackage ->
+  Packaging.FileSet
 toFileSet =
   error "TODO"
 
