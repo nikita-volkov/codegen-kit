@@ -46,11 +46,11 @@ instance Monoid Modules where
 
 toExposedModuleSet :: Modules -> Set [Name]
 toExposedModuleSet (Modules files exposed hidden) =
-  error "TODO"
+  fromList . toList $ exposed
 
 toHiddenModuleSet :: Modules -> Set [Name]
 toHiddenModuleSet (Modules files exposed hidden) =
-  error "TODO"
+  fromList . toList $ hidden
 
 -- | Render cabal file contents.
 toCabalContents ::
@@ -144,13 +144,16 @@ inNamespace ns (Modules files exposed hidden) =
 module_ ::
   -- | Is it exposed?
   Bool ->
-  -- | Module reference.
-  [Name] ->
+  -- | Module name.
+  Name ->
   -- | Module contents rendering function from compiled namespace.
   ([Name] -> Text) ->
   Modules
-module_ =
-  error "TODO"
+module_ exposed name contents =
+  Modules
+    (pure (fromString . toString . Name.toUpperCamelCaseText $ name, contents))
+    (if exposed then pure [name] else empty)
+    (if exposed then empty else pure [name])
 
 -- * Helpers
 

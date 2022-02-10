@@ -1,6 +1,6 @@
 module CodegenKit.Languages.Haskell.Packages.ModelAndUtils
   ( -- *
-    fileSet,
+    modules,
 
     -- *
     Section,
@@ -31,36 +31,28 @@ import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.Languages.Haskell.Contents.Model as Model
 import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors as ModelAccessors
-import CodegenKit.Packaging
+import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified Data.Map.Strict as Map
 import qualified TextBuilder as B'
 
 -- *
 
-fileSet ::
+modules ::
   -- | Namespace.
   [Name] ->
   [Section] ->
-  FileSet
-fileSet ns sections =
+  Packaging.Modules
+modules ns sections =
   mconcat
-    [ m "Model" model,
-      m "ModelAccessors" modelAccessors
+    [ Packaging.module_ True "model" modelContent,
+      Packaging.module_ True "model-accessors" modelAccessorsContent
     ]
   where
-    m modName contents =
-      fromFile
-        (Paths.inDir packageModulesDir $ fromString $ modName <> ".hs")
-        contents
-    packageModulesDir =
-      fromString . toString $ foldMap (flip mappend "/") nsBuilders
-    packageNamespace =
-      fromString . toString $ B'.intercalate "." nsBuilders
-    nsBuilders =
-      fmap Name.toUpperCamelCaseTextBuilder ns
-    model =
-      Model.content packageNamespace $ fmap section sections
+    nsText =
+      toText . B'.intercalate "." . fmap Name.toUpperCamelCaseTextBuilder
+    modelContent ns =
+      Model.content (nsText ns) $ fmap section sections
       where
         section (Section header decls) =
           Model.section header $ join $ fmap decl decls
@@ -83,9 +75,9 @@ fileSet ns sections =
                     where
                       modelMemberType (MemberType type_ _) =
                         type_
-    modelAccessors =
+    modelAccessorsContent ns =
       ModelAccessors.content
-        packageNamespace
+        (nsText ns)
         hasFieldConfigs
         hasVariantConfigs
       where
