@@ -22,7 +22,6 @@ module CodegenKit.Languages.Haskell.Contents.Cabal
   )
 where
 
-import Coalmine.Inter
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name

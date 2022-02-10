@@ -1,6 +1,5 @@
 module Tests.HaskellExpFormatter where
 
-import Coalmine.Inter
 import Coalmine.Prelude
 import Coalmine.Tasty
 import CodegenKit.HaskellExpFormatter

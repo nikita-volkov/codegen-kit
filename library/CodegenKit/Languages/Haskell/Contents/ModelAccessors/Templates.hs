@@ -6,7 +6,6 @@
 -- like using the \"where\" clause.
 module CodegenKit.Languages.Haskell.Contents.ModelAccessors.Templates where
 
-import Coalmine.Inter
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets

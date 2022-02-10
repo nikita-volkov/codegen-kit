@@ -3,7 +3,6 @@ module CodegenKit.Languages.Haskell.Contents.ModelAccessors
   )
 where
 
-import Coalmine.Inter
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors.Templates as Templates
