@@ -1,25 +1,28 @@
 module CodegenKit.Versioning
   ( -- *
+    VersionBounds (..),
+
+    -- *
+    Version (..),
   )
 where
 
+import qualified Coalmine.Range as Range
 import CodegenKit.Prelude
 import qualified TextBuilder
 
 data VersionBounds
   = VersionBounds
-      !Word
-      -- ^ Min bound version part 1.
-      !Word
-      -- ^ Min bound version part 2.
-      !Word
-      -- ^ Max bound version part 1.
-      !Word
-      -- ^ Max bound version part 2.
+      !Version
+      -- ^ Min bound.
+      !Version
+      -- ^ Max bound.
 
 instance Semigroup VersionBounds where
-  VersionBounds lMin1 lMin2 lMax1 lMax2 <> VersionBounds rMin1 rMin2 rMax1 rMax2 =
-    error "TODO"
+  VersionBounds lMin lMax <> VersionBounds rMin rMax =
+    case Range.Range lMin lMax <> Range.Range rMin rMax of
+      Range.Range min max ->
+        VersionBounds min max
 
 -- *
 
