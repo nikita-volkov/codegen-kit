@@ -8,11 +8,11 @@ module CodegenKit.Languages.Haskell.Packaging
     module_,
 
     -- *
-    CabalContents.Version,
-    CabalContents.listVersion,
+    dependency,
 
     -- *
-    Dependency (..),
+    CabalContents.Version,
+    CabalContents.listVersion,
   )
 where
 
@@ -22,6 +22,8 @@ import qualified CodegenKit.Languages.Haskell.Contents.Cabal as CabalContents
 import CodegenKit.Packaging (FileSet)
 import qualified CodegenKit.Packaging as Packaging
 import CodegenKit.Prelude
+import qualified CodegenKit.Versioning as Versioning
+import qualified Data.Map.Strict as Map
 
 -- *
 
@@ -37,23 +39,29 @@ data Modules
       -- ^ Exposed modules.
       !(Acc [Name])
       -- ^ Hidden modules.
+      !(Map Text Versioning.VersionBounds)
+      -- ^ Package dependencies.
 
 instance Semigroup Modules where
-  Modules l1 l2 l3 <> Modules r1 r2 r3 =
-    Modules (l1 <> r1) (l2 <> r2) (l3 <> r3)
+  Modules l1 l2 l3 l4 <> Modules r1 r2 r3 r4 =
+    Modules (l1 <> r1) (l2 <> r2) (l3 <> r3) (Map.unionWith (<>) l4 r4)
 
 instance Monoid Modules where
-  mempty = Modules mempty mempty mempty
+  mempty = Modules mempty mempty mempty mempty
 
 -- **
 
 toExposedModuleSet :: Modules -> Set [Name]
-toExposedModuleSet (Modules files exposed hidden) =
+toExposedModuleSet (Modules _ exposed _ _) =
   fromList . toList $ exposed
 
 toHiddenModuleSet :: Modules -> Set [Name]
-toHiddenModuleSet (Modules files exposed hidden) =
+toHiddenModuleSet (Modules _ _ hidden _) =
   fromList . toList $ hidden
+
+toDependencyList :: Modules -> [(Text, Versioning.VersionBounds)]
+toDependencyList (Modules _ _ _ deps) =
+  deps & Map.toAscList
 
 -- | Render cabal file contents.
 toCabalContents ::
@@ -76,21 +84,16 @@ toCabalContents packageName synopsis version modules =
     exposed = fmap CabalContents.nameListModuleRef . toList . toExposedModuleSet $ modules
     hidden = fmap CabalContents.nameListModuleRef . toList . toHiddenModuleSet $ modules
     dependencies =
-      [ d "base" 4 [12] 5 [],
-        d "bytestring" 0 [10] 0 [12],
-        d "containers" 0 [6] 0 [7],
-        d "scientific" 0 [3] 0 [4],
-        d "text" 1 [2] 3 [],
-        d "time" 1 [9] 2 [],
-        d "uuid" 1 [3] 2 [],
-        d "vector" 0 [12] 0 [13]
-      ]
-      where
-        d name minHead minTail maxHead maxTail =
-          CabalContents.rangeDependency
-            (CabalContents.spinalPackageName name)
-            (CabalContents.listVersion minHead minTail)
-            (CabalContents.listVersion maxHead maxTail)
+      toDependencyList modules
+        <&> \( name,
+               Versioning.VersionBounds
+                 (Versioning.Version minHead minTail)
+                 (Versioning.Version maxHead maxTail)
+               ) ->
+            CabalContents.rangeDependency
+              (CabalContents.plainPackageName name)
+              (CabalContents.listVersion minHead minTail)
+              (CabalContents.listVersion maxHead maxTail)
 
 toCabalFileSet :: Name -> Text -> CabalContents.Version -> Modules -> FileSet
 toCabalFileSet packageName synopsis version modules =
@@ -105,7 +108,7 @@ toCabalFileSet packageName synopsis version modules =
       toCabalContents packageName synopsis version modules
 
 toModulesFileSet :: DirPath -> Modules -> FileSet
-toModulesFileSet srcDirPath (Modules files _ _) =
+toModulesFileSet srcDirPath (Modules files _ _ _) =
   foldMap file files
   where
     file (filePath, render) =
@@ -132,11 +135,12 @@ toFileSet packageName synopsis version modules =
 -- **
 
 inNamespace :: [Name] -> Modules -> Modules
-inNamespace ns (Modules files exposed hidden) =
+inNamespace ns (Modules files exposed hidden dependencies) =
   Modules
     files'
     (fmap (mappend ns) exposed)
     (fmap (mappend ns) hidden)
+    dependencies
   where
     files' =
       files & fmap (bimap prependPath prependModuleName)
@@ -151,32 +155,30 @@ module_ ::
   Bool ->
   -- | Module name.
   Name ->
+  -- | Package dependencies.
+  [(Text, Versioning.VersionBounds)] ->
   -- | Module contents rendering function from compiled namespace.
   ([Name] -> Text) ->
   Modules
-module_ exposed name contents =
+module_ exposed name dependencies contents =
   Modules
     (pure (filePath, contents))
     (if exposed then pure [name] else empty)
     (if exposed then empty else pure [name])
+    (Map.fromListWith (<>) dependencies)
   where
     filePath =
       fromString . toString . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
 
 -- *
 
-data Dependency
-  = Dependency
-      !Text
-      -- ^ Package name.
-      !Word
-      -- ^ Min bound version part 1.
-      !Word
-      -- ^ Min bound version part 2.
-      !Word
-      -- ^ Max bound version part 1.
-      !Word
-      -- ^ Max bound version part 2.
+dependency :: Text -> Word -> [Word] -> Word -> [Word] -> (Text, Versioning.VersionBounds)
+dependency packageName minHead minTail maxHead maxTail =
+  ( packageName,
+    Versioning.VersionBounds
+      (Versioning.Version minHead minTail)
+      (Versioning.Version maxHead maxTail)
+  )
 
 -- * Helpers
 

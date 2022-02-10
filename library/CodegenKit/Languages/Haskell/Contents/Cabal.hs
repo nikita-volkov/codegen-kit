@@ -4,6 +4,7 @@ module CodegenKit.Languages.Haskell.Contents.Cabal
 
     -- *
     PackageName,
+    plainPackageName,
     spinalPackageName,
 
     -- *
@@ -70,6 +71,10 @@ contents packageName synopsis version exposedModuleList otherModuleList dependen
 newtype PackageName
   = PackageName Builder
   deriving (ToMultilineTextBuilder)
+
+plainPackageName :: Text -> PackageName
+plainPackageName =
+  PackageName . B.uniline . fromText
 
 spinalPackageName :: Name -> PackageName
 spinalPackageName =

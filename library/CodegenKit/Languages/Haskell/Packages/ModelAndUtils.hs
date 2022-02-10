@@ -45,10 +45,20 @@ modules ::
   Packaging.Modules
 modules ns sections =
   mconcat
-    [ Packaging.module_ True "types" modelContent,
-      Packaging.module_ True "accessors" modelAccessorsContent
+    [ Packaging.module_ True "types" deps modelContent,
+      Packaging.module_ True "accessors" deps modelAccessorsContent
     ]
   where
+    deps =
+      [ Packaging.dependency "base" 4 [12] 5 [],
+        Packaging.dependency "bytestring" 0 [10] 0 [12],
+        Packaging.dependency "containers" 0 [6] 0 [7],
+        Packaging.dependency "scientific" 0 [3] 0 [4],
+        Packaging.dependency "text" 1 [2] 3 [],
+        Packaging.dependency "time" 1 [9] 2 [],
+        Packaging.dependency "uuid" 1 [3] 2 [],
+        Packaging.dependency "vector" 0 [12] 0 [13]
+      ]
     nsText =
       toText . B'.intercalate "." . fmap Name.toUpperCamelCaseTextBuilder
     modelContent ns =
