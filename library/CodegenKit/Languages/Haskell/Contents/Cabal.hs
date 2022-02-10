@@ -8,6 +8,7 @@ module CodegenKit.Languages.Haskell.Contents.Cabal
 
     -- *
     Version,
+    listVersion,
     version2,
 
     -- *
@@ -81,13 +82,23 @@ newtype Version
   = Version Builder
   deriving (ToMultilineTextBuilder)
 
+listVersion :: Word -> [Word] -> Version
+listVersion head tail =
+  Version . B.uniline . B'.intercalate "."
+    . fmap B'.unsignedDecimal
+    $ head : tail
+
 version2 :: Word -> Word -> Version
 version2 a b =
-  Version . B.uniline . mconcat $
-    [ B'.unsignedDecimal a,
-      ".",
-      B'.unsignedDecimal b
-    ]
+  Version . B.uniline $
+    if b == 0
+      then B'.unsignedDecimal a
+      else
+        mconcat $
+          [ B'.unsignedDecimal a,
+            ".",
+            B'.unsignedDecimal b
+          ]
 
 -- *
 
