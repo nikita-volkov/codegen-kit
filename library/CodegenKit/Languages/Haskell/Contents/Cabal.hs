@@ -45,7 +45,6 @@ contents packageName synopsis version exposedModuleList otherModuleList dependen
     name: $packageName
     synopsis: $synopsis
     version: $version
-    build-type: Simple
 
     library
       hs-source-dirs: library

@@ -10,7 +10,6 @@ maintainer: Nikita Volkov <nikita.y.volkov@mail.ru>
 copyright: (c) 2022 Nikita Volkov
 license: MIT
 license-file: LICENSE
-build-type: Simple
 
 source-repository head
   type: git
