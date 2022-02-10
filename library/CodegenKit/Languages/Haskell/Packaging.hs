@@ -72,14 +72,15 @@ toCabalContents packageName synopsis version modules =
     exposed = fmap CabalContents.nameListModuleRef . toList . toExposedModuleSet $ modules
     hidden = fmap CabalContents.nameListModuleRef . toList . toHiddenModuleSet $ modules
     dependencies =
-      [ d "base" 4 12 5 0
+      [ d "base" 4 [12] 5 [],
+        d "bytestring" 0 [10] 0 [12]
       ]
       where
-        d name min1 min2 max1 max2 =
+        d name minHead minTail maxHead maxTail =
           CabalContents.rangeDependency
             (CabalContents.spinalPackageName name)
-            (CabalContents.version2 min1 min2)
-            (CabalContents.version2 max1 max2)
+            (CabalContents.listVersion minHead minTail)
+            (CabalContents.listVersion maxHead maxTail)
 
 -- |
 -- Generate all package files including @.cabal@.
