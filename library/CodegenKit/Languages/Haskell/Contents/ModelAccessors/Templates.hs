@@ -33,7 +33,7 @@ module_ namespace productFieldsContent sumVariantsContent =
     -- is enough to integrate with any data-structure.
     module ${namespace}.Accessors where
 
-    import qualified ${namespace}.Types as M
+    import qualified ${namespace}.Types as T
     import ${namespace}.Prelude
 
 
@@ -111,17 +111,17 @@ hasVariantClass ucVariantName =
 
 hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount =
   [i|
-    instance Has${ucFieldName}Field M.${ucProductName} where
-      type ${ucFieldName}FieldOf M.${ucProductName} = ${fieldTypeSig}
-      get${ucFieldName}Field (M.$ucProductName$allFields) =
+    instance Has${ucFieldName}Field T.${ucProductName} where
+      type ${ucFieldName}FieldOf T.${ucProductName} = ${fieldTypeSig}
+      get${ucFieldName}Field (T.$ucProductName$allFields) =
         $selectedFieldName
-      set${ucFieldName}Field value (M.$ucProductName$allFields) =
+      set${ucFieldName}Field value (T.$ucProductName$allFields) =
         $setExp
-      map${ucFieldName}Field map (M.$ucProductName$allFields) =
+      map${ucFieldName}Field map (T.$ucProductName$allFields) =
         $mapExp
-      traverse${ucFieldName}Field traverse (M.$ucProductName$allFields) =
+      traverse${ucFieldName}Field traverse (T.$ucProductName$allFields) =
         fmap
-          (\$selectedFieldName -> M.$ucProductName$allFields)
+          (\$selectedFieldName -> T.$ucProductName$allFields)
           (traverse $selectedFieldName)
   |]
   where
@@ -146,21 +146,21 @@ hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount 
 
 hasVariantInstance ucVariantName ucSumName variantSig =
   [i|
-    instance Has${ucVariantName}Variant M.${ucSumName} where
-      type ${ucVariantName}VariantOf M.${ucSumName} = ${variantSig}
+    instance Has${ucVariantName}Variant T.${ucSumName} where
+      type ${ucVariantName}VariantOf T.${ucSumName} = ${variantSig}
       lookup${ucVariantName}Variant a =
         case a of
-          M.${ucVariantName}${ucSumName} b -> Just b
+          T.${ucVariantName}${ucSumName} b -> Just b
           _ -> Nothing
-      from${ucVariantName}Variant = M.${ucVariantName}${ucSumName}
+      from${ucVariantName}Variant = T.${ucVariantName}${ucSumName}
       map${ucVariantName}Variant map a =
         case a of
-          M.${ucVariantName}${ucSumName} b ->
-            M.${ucVariantName}${ucSumName} (map b)
+          T.${ucVariantName}${ucSumName} b ->
+            T.${ucVariantName}${ucSumName} (map b)
           _ -> a
       traverse${ucVariantName}Variant traverse a =
         case a of
-          M.${ucVariantName}${ucSumName} b ->
-            fmap M.${ucVariantName}${ucSumName} (traverse b)
+          T.${ucVariantName}${ucSumName} b ->
+            fmap T.${ucVariantName}${ucSumName} (traverse b)
           _ -> pure a
   |]
