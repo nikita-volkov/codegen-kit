@@ -1,14 +1,35 @@
-module CodegenKit.Languages.Haskell.Contents.Cabal where
+module CodegenKit.Languages.Haskell.Contents.Cabal
+  ( -- *
+    contents,
+
+    -- *
+    PackageName,
+    spinalPackageName,
+
+    -- *
+    Version,
+    version2,
+
+    -- *
+    ModuleRef,
+    nameListModuleRef,
+
+    -- *
+    Dependency,
+    rangeDependency,
+  )
+where
 
 import Coalmine.Inter
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
+import qualified Coalmine.Name as Name
 import CodegenKit.Prelude hiding (Version)
 import qualified TextBuilder as B'
 
 -- *
 
-cabal ::
+contents ::
   PackageName ->
   Text ->
   Version ->
@@ -16,7 +37,7 @@ cabal ::
   [ModuleRef] ->
   [Dependency] ->
   Builder
-cabal packageName synopsis version exposedModuleList otherModuleList dependencyList =
+contents packageName synopsis version exposedModuleList otherModuleList dependencyList =
   [i|
     cabal-version: 3.0
 
@@ -46,28 +67,13 @@ cabal packageName synopsis version exposedModuleList otherModuleList dependencyL
 
 -- *
 
-newtype ModuleRef
-  = ModuleRef Builder
-  deriving (ToMultilineTextBuilder)
-
--- *
-
-newtype Dependency
-  = Dependency Builder
-  deriving (ToMultilineTextBuilder)
-
-rangeDependency :: PackageName -> Version -> Version -> Dependency
-rangeDependency name min max =
-  Dependency
-    [i|
-      $name >=$min && <$max
-    |]
-
--- *
-
 newtype PackageName
   = PackageName Builder
   deriving (ToMultilineTextBuilder)
+
+spinalPackageName :: Name -> PackageName
+spinalPackageName =
+  PackageName . B.uniline . Name.toSpinalCaseTextBuilder
 
 -- *
 
@@ -82,3 +88,26 @@ version2 a b =
       ".",
       B'.unsignedDecimal b
     ]
+
+-- *
+
+newtype ModuleRef
+  = ModuleRef Builder
+  deriving (ToMultilineTextBuilder)
+
+nameListModuleRef :: [Name] -> ModuleRef
+nameListModuleRef =
+  ModuleRef . B.uniline . B'.intercalate "." . fmap Name.toUpperCamelCaseTextBuilder
+
+-- *
+
+newtype Dependency
+  = Dependency Builder
+  deriving (ToMultilineTextBuilder)
+
+rangeDependency :: PackageName -> Version -> Version -> Dependency
+rangeDependency name min max =
+  Dependency
+    [i|
+      $name >=$min && <$max
+    |]
