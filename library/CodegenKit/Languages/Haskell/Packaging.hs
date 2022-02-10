@@ -73,7 +73,13 @@ toCabalContents packageName synopsis version modules =
     hidden = fmap CabalContents.nameListModuleRef . toList . toHiddenModuleSet $ modules
     dependencies =
       [ d "base" 4 [12] 5 [],
-        d "bytestring" 0 [10] 0 [12]
+        d "bytestring" 0 [10] 0 [12],
+        d "containers" 0 [6] 0 [7],
+        d "scientific" 0 [3] 0 [4],
+        d "text" 1 [2] 3 [],
+        d "time" 1 [9] 2 [],
+        d "uuid" 1 [3] 2 [],
+        d "vector" 0 [12] 0 [13]
       ]
       where
         d name minHead minTail maxHead maxTail =
