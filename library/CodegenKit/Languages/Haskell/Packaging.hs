@@ -10,6 +10,9 @@ module CodegenKit.Languages.Haskell.Packaging
     -- *
     CabalContents.Version,
     CabalContents.listVersion,
+
+    -- *
+    Dependency (..),
   )
 where
 
@@ -159,6 +162,21 @@ module_ exposed name contents =
   where
     filePath =
       fromString . toString . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
+
+-- *
+
+data Dependency
+  = Dependency
+      !Text
+      -- ^ Package name.
+      !Word
+      -- ^ Min bound version part 1.
+      !Word
+      -- ^ Min bound version part 2.
+      !Word
+      -- ^ Max bound version part 1.
+      !Word
+      -- ^ Max bound version part 2.
 
 -- * Helpers
 

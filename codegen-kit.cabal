@@ -28,6 +28,7 @@ library
     CodegenKit.Languages.Haskell.Contents.ModelAccessors
     CodegenKit.Languages.Haskell.Contents.ModelAccessors.Templates
     CodegenKit.Languages.Haskell.Contents.ModelTypes
+    CodegenKit.Languages.Haskell.Dependencies
     CodegenKit.Languages.Haskell.Packages.ModelAndUtils
     CodegenKit.Languages.Haskell.Packaging
     CodegenKit.Languages.Haskell.Snippets
