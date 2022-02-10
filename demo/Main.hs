@@ -16,7 +16,6 @@ main =
       modules
   where
     modules =
-      HaskellPackaging.inNamespace ["iso-8601"] $
-        mconcat
-          [ Iso8601ModelAndUtils.iso8601Modules
-          ]
+      HaskellPackaging.inNamespace [] . mconcat $
+        [ Iso8601ModelAndUtils.iso8601Modules
+        ]

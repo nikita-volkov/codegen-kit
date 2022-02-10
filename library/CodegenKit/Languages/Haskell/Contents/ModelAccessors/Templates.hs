@@ -111,17 +111,17 @@ hasVariantClass ucVariantName =
 
 hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount =
   [i|
-    instance Has${ucFieldName}Field ${ucProductName} where
-      type ${ucFieldName}FieldOf ${ucProductName} = ${fieldTypeSig}
-      get${ucFieldName}Field ($ucProductName$allFields) =
+    instance Has${ucFieldName}Field M.${ucProductName} where
+      type ${ucFieldName}FieldOf M.${ucProductName} = ${fieldTypeSig}
+      get${ucFieldName}Field (M.$ucProductName$allFields) =
         $selectedFieldName
-      set${ucFieldName}Field value ($ucProductName$allFields) =
+      set${ucFieldName}Field value (M.$ucProductName$allFields) =
         $setExp
-      map${ucFieldName}Field map ($ucProductName$allFields) =
+      map${ucFieldName}Field map (M.$ucProductName$allFields) =
         $mapExp
-      traverse${ucFieldName}Field traverse ($ucProductName$allFields) =
+      traverse${ucFieldName}Field traverse (M.$ucProductName$allFields) =
         fmap
-          (\$selectedFieldName -> $ucProductName$allFields)
+          (\$selectedFieldName -> M.$ucProductName$allFields)
           (traverse $selectedFieldName)
   |]
   where
@@ -146,8 +146,8 @@ hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount 
 
 hasVariantInstance ucVariantName ucSumName variantSig =
   [i|
-    instance Has${ucVariantName}Variant ${ucSumName} where
-      type ${ucVariantName}VariantOf ${ucSumName} = ${variantSig}
+    instance Has${ucVariantName}Variant M.${ucSumName} where
+      type ${ucVariantName}VariantOf M.${ucSumName} = ${variantSig}
       lookup${ucVariantName}Variant a =
         case a of
           M.${ucVariantName}${ucSumName} b -> Just b

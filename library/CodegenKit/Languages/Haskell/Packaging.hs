@@ -121,8 +121,10 @@ toFileSet ::
   Modules ->
   FileSet
 toFileSet packageName synopsis version modules =
-  toCabalFileSet packageName synopsis version modules
-    <> toModulesFileSet "library" modules
+  case inNamespace [packageName] modules of
+    modules ->
+      toCabalFileSet packageName synopsis version modules
+        <> toModulesFileSet "library" modules
 
 -- **
 
