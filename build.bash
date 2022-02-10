@@ -12,13 +12,13 @@ function build_and_test {
   stack build \
   --test \
   --fast \
-  --ghc-options "-j6 +RTS -A128m -n2m -RTS -fwarn-incomplete-patterns"
+  --ghc-options "-j +RTS -A128m -n2m -RTS -fwarn-incomplete-patterns"
 }
 
 function build {
   stack build \
   --fast \
-  --ghc-options "-j6 +RTS -A128m -n2m -RTS -fwarn-incomplete-patterns"
+  --ghc-options "-j +RTS -A128m -n2m -RTS -fwarn-incomplete-patterns"
 }
 
 function demo {
