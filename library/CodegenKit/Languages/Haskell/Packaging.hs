@@ -3,19 +3,20 @@ module CodegenKit.Languages.Haskell.Packaging
     toFileSet,
 
     -- *
-    PackageName,
-    spinalPackageName,
+    Modules,
+    inNamespace,
+    module_,
 
     -- *
-    Version,
-    version2,
+    CabalContents.Version,
+    CabalContents.listVersion,
   )
 where
 
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
-import CodegenKit.Languages.Haskell.Contents.Cabal (PackageName, Version, spinalPackageName, version2)
 import qualified CodegenKit.Languages.Haskell.Contents.Cabal as CabalContents
+import CodegenKit.Packaging (FileSet)
 import qualified CodegenKit.Packaging as Packaging
 import CodegenKit.Prelude
 
@@ -54,15 +55,15 @@ toHiddenModuleSet (Modules files exposed hidden) =
 -- | Render cabal file contents.
 toCabalContents ::
   -- | Package name.
-  PackageName ->
+  Name ->
   -- | Synopsis.
   Text ->
-  Version ->
+  CabalContents.Version ->
   Modules ->
   Text
 toCabalContents packageName synopsis version modules =
   CabalContents.contents
-    packageName
+    (CabalContents.spinalPackageName packageName)
     synopsis
     version
     exposed
@@ -88,15 +89,40 @@ toCabalContents packageName synopsis version modules =
             (CabalContents.listVersion minHead minTail)
             (CabalContents.listVersion maxHead maxTail)
 
+toCabalFileSet :: Name -> Text -> CabalContents.Version -> Modules -> FileSet
+toCabalFileSet packageName synopsis version modules =
+  Packaging.fromFile filePath contents
+  where
+    filePath =
+      fromString . toString
+        . flip mappend ".cabal"
+        . Name.toSpinalCaseTextBuilder
+        $ packageName
+    contents =
+      toCabalContents packageName synopsis version modules
+
+toModulesFileSet :: DirPath -> Modules -> FileSet
+toModulesFileSet srcDirPath (Modules files _ _) =
+  foldMap file files
+  where
+    file (filePath, render) =
+      Packaging.fromFile
+        (Paths.inDir srcDirPath filePath)
+        (render [])
+
 -- |
 -- Generate all package files including @.cabal@.
 toFileSet ::
   -- | Package name.
   Name ->
+  -- | Synopsis.
+  Text ->
+  CabalContents.Version ->
   Modules ->
-  Packaging.FileSet
-toFileSet =
-  error "TODO"
+  FileSet
+toFileSet packageName synopsis version modules =
+  toCabalFileSet packageName synopsis version modules
+    <> toModulesFileSet "library" modules
 
 -- **
 
