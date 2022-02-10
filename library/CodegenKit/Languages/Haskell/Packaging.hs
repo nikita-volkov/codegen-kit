@@ -12,35 +12,35 @@ import CodegenKit.Prelude
 -- A collection of modules with their requirements for
 -- the package configuration files.
 -- E.g., being exposed or hidden.
-data HaskellPackage
-  = HaskellPackage
-      !(Acc (FilePath, Text))
+data Modules
+  = Modules
+      !(Acc (FilePath, [Name] -> Text))
       -- ^ List of files.
       !(Acc [Name])
       -- ^ Exposed modules.
       !(Acc [Name])
       -- ^ Hidden modules.
 
-instance Semigroup HaskellPackage where
-  HaskellPackage l1 l2 l3 <> HaskellPackage r1 r2 r3 =
-    HaskellPackage (l1 <> r1) (l2 <> r2) (l3 <> r3)
+instance Semigroup Modules where
+  Modules l1 l2 l3 <> Modules r1 r2 r3 =
+    Modules (l1 <> r1) (l2 <> r2) (l3 <> r3)
 
-instance Monoid HaskellPackage where
-  mempty = HaskellPackage mempty mempty mempty
+instance Monoid Modules where
+  mempty = Modules mempty mempty mempty
 
 -- **
 
-toExposedModuleSet :: HaskellPackage -> Set [Name]
-toExposedModuleSet (HaskellPackage files exposed hidden) =
+toExposedModuleSet :: Modules -> Set [Name]
+toExposedModuleSet (Modules files exposed hidden) =
   error "TODO"
 
 -- | Render cabal file contents.
 toCabalContents ::
   -- | Package name.
   Name ->
-  HaskellPackage ->
+  Modules ->
   Text
-toCabalContents packageName (HaskellPackage _ exposed hidden) =
+toCabalContents packageName (Modules _ exposed hidden) =
   error "TODO"
 
 -- |
@@ -48,25 +48,39 @@ toCabalContents packageName (HaskellPackage _ exposed hidden) =
 toFileSet ::
   -- | Package name.
   Name ->
-  HaskellPackage ->
+  Modules ->
   Packaging.FileSet
 toFileSet =
   error "TODO"
 
 -- **
 
-inNamespace :: [Name] -> HaskellPackage -> HaskellPackage
-inNamespace ns (HaskellPackage files exposed hidden) =
-  HaskellPackage
-    (error "TODO")
-    (error "TODO")
-    (error "TODO")
+inNamespace :: [Name] -> Modules -> Modules
+inNamespace ns (Modules files exposed hidden) =
+  Modules
+    files'
+    (fmap (mappend ns) exposed)
+    (fmap (mappend ns) hidden)
+  where
+    files' =
+      files & fmap (bimap prependPath prependModuleName)
+      where
+        prependPath =
+          Paths.inDir (moduleDirPath ns)
+        prependModuleName render =
+          render . mappend ns
 
 module_ ::
   -- | Module namespace.
   [Name] ->
   -- | Module contents rendering function from compiled namespace.
   ([Name] -> Text) ->
-  HaskellPackage
+  Modules
 module_ =
   error "TODO"
+
+-- * Helpers
+
+moduleDirPath :: [Name] -> DirPath
+moduleDirPath =
+  foldMap (fromString . toString . Name.toUpperCamelCaseText)
