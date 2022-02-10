@@ -8,14 +8,18 @@ import qualified Demo.SamplesFor.ModelAndUtils.Iso8601 as Iso8601ModelAndUtils
 -- *
 
 main =
-  Packaging.print $
-    HaskellPackaging.toFileSet
-      "iso-8601"
-      ""
-      (HaskellPackaging.listVersion 0 [1])
-      modules
+  do
+    Packaging.print fileSet
+    Packaging.write . Packaging.inDir "demo-output" $ fileSet
   where
-    modules =
-      HaskellPackaging.inNamespace [] . mconcat $
-        [ Iso8601ModelAndUtils.iso8601Modules
-        ]
+    fileSet =
+      HaskellPackaging.toFileSet
+        "iso-8601"
+        ""
+        (HaskellPackaging.listVersion 0 [1])
+        modules
+      where
+        modules =
+          HaskellPackaging.inNamespace [] . mconcat $
+            [ Iso8601ModelAndUtils.iso8601Modules
+            ]
