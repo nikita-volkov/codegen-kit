@@ -8,6 +8,7 @@ module CodegenKit.Languages.Haskell.Packaging
     module_,
 
     -- *
+    Dependency,
     dependency,
 
     -- *
@@ -156,7 +157,7 @@ module_ ::
   -- | Module name.
   Name ->
   -- | Package dependencies.
-  [(Text, Versioning.VersionBounds)] ->
+  [Dependency] ->
   -- | Module contents rendering function from compiled namespace.
   ([Name] -> Text) ->
   Modules
@@ -165,20 +166,34 @@ module_ exposed name dependencies contents =
     (pure (filePath, contents))
     (if exposed then pure [name] else empty)
     (if exposed then empty else pure [name])
-    (Map.fromListWith (<>) dependencies)
+    (Map.fromListWith (<>) . fmap dependencyTuple $ dependencies)
   where
     filePath =
       fromString . toString . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
 
 -- *
 
-dependency :: Text -> Word -> [Word] -> Word -> [Word] -> (Text, Versioning.VersionBounds)
+data Dependency
+  = Dependency
+      !Text
+      !Versioning.VersionBounds
+
+-- **
+
+dependencyTuple :: Dependency -> (Text, Versioning.VersionBounds)
+dependencyTuple (Dependency a b) =
+  (a, b)
+
+-- **
+
+dependency :: Text -> Word -> [Word] -> Word -> [Word] -> Dependency
 dependency packageName minHead minTail maxHead maxTail =
-  ( packageName,
-    Versioning.VersionBounds
-      (Versioning.Version minHead minTail)
-      (Versioning.Version maxHead maxTail)
-  )
+  Dependency
+    packageName
+    ( Versioning.VersionBounds
+        (Versioning.Version minHead minTail)
+        (Versioning.Version maxHead maxTail)
+    )
 
 -- * Helpers
 
