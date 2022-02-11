@@ -125,7 +125,7 @@ hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount 
   where
     -- Helpers
     constructorExp fieldExp =
-      toMultilineTextBuilder ucProductName <> fields
+      "T." <> toMultilineTextBuilder ucProductName <> fields
       where
         fields =
           enumFromTo 0 (pred fieldsAmount)
