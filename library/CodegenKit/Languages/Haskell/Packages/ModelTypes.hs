@@ -336,7 +336,7 @@ preludeAlias :: B.Builder
 preludeAlias = "P"
 
 hashableAlias :: B.Builder
-hashableAlias = "H"
+hashableAlias = "Hashable"
 
 boxedVectorAlias :: B.Builder
 boxedVectorAlias = "BVec"
