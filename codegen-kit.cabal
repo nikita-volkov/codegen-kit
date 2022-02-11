@@ -24,16 +24,16 @@ library
   hs-source-dirs: library
   exposed-modules:
     CodegenKit.HaskellExpFormatter
-    CodegenKit.Languages.Haskell.Contents.Cabal
-    CodegenKit.Languages.Haskell.Dependencies
-    CodegenKit.Languages.Haskell.FileSets.Stack
-    CodegenKit.Languages.Haskell.ModuleSets.BasePreludes
-    CodegenKit.Languages.Haskell.ModuleSets.ModelAccessors
-    CodegenKit.Languages.Haskell.ModuleSets.ModelAccessors.Templates
-    CodegenKit.Languages.Haskell.ModuleSets.ModelAndUtils
-    CodegenKit.Languages.Haskell.ModuleSets.ModelTypes
-    CodegenKit.Languages.Haskell.Packaging
-    CodegenKit.Languages.Haskell.Snippets
+    CodegenKit.LanguageUtils.Haskell.Contents.Cabal
+    CodegenKit.LanguageUtils.Haskell.Dependencies
+    CodegenKit.LanguageUtils.Haskell.FileSets.Stack
+    CodegenKit.LanguageUtils.Haskell.ModuleSets.BasePreludes
+    CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAccessors
+    CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAccessors.Templates
+    CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAndUtils
+    CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelTypes
+    CodegenKit.LanguageUtils.Haskell.Packaging
+    CodegenKit.LanguageUtils.Haskell.Snippets
     CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:

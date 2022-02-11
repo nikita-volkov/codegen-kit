@@ -1,6 +1,6 @@
-module CodegenKit.Languages.Haskell.Dependencies where
+module CodegenKit.LanguageUtils.Haskell.Dependencies where
 
-import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
+import qualified CodegenKit.LanguageUtils.Haskell.Packaging as Packaging
 import CodegenKit.Prelude
 
 base, bytestring, containers, hashable, scientific, text, time, uuid, vector :: Packaging.Dependency

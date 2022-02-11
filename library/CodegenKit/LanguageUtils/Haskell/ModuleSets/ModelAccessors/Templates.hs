@@ -4,11 +4,11 @@
 -- This enforces the avoidance of complicated types,
 -- yet still allows implementation of complex cases using function-local defs,
 -- like using the \"where\" clause.
-module CodegenKit.Languages.Haskell.ModuleSets.ModelAccessors.Templates where
+module CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAccessors.Templates where
 
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
+import qualified CodegenKit.LanguageUtils.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 import qualified TextBuilder as B'
 

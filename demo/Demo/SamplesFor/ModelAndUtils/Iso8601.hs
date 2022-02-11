@@ -1,7 +1,7 @@
 module Demo.SamplesFor.ModelAndUtils.Iso8601 where
 
 import Coalmine.Inter
-import CodegenKit.Languages.Haskell.ModuleSets.ModelAndUtils
+import CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAndUtils
 
 -- *
 

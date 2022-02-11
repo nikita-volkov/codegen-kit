@@ -1,4 +1,4 @@
-module CodegenKit.Languages.Haskell.ModuleSets.BasePreludes
+module CodegenKit.LanguageUtils.Haskell.ModuleSets.BasePreludes
   ( -- *
     allName,
     operatorsName,
@@ -13,9 +13,9 @@ where
 
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
-import qualified CodegenKit.Languages.Haskell.Dependencies as Dependencies
-import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
-import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
+import qualified CodegenKit.LanguageUtils.Haskell.Dependencies as Dependencies
+import qualified CodegenKit.LanguageUtils.Haskell.Packaging as Packaging
+import qualified CodegenKit.LanguageUtils.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (all)
 import qualified TextBuilder as B'
 
