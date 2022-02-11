@@ -4,7 +4,7 @@
 -- This enforces the avoidance of complicated types,
 -- yet still allows implementation of complex cases using function-local defs,
 -- like using the \"where\" clause.
-module CodegenKit.Languages.Haskell.Packages.ModelAccessors.Templates where
+module CodegenKit.Languages.Haskell.ModuleSets.ModelAccessors.Templates where
 
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B

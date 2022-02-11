@@ -1,4 +1,4 @@
-module CodegenKit.Languages.Haskell.Packages.ModelTypes
+module CodegenKit.Languages.Haskell.ModuleSets.ModelTypes
   ( -- *
     moduleName,
 
@@ -27,7 +27,7 @@ import qualified Coalmine.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.HaskellExpFormatter as ExpFormatter
 import qualified CodegenKit.Languages.Haskell.Dependencies as Dependencies
-import qualified CodegenKit.Languages.Haskell.Packages.BasePreludes as BasePreludesPackage
+import qualified CodegenKit.Languages.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
 import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)

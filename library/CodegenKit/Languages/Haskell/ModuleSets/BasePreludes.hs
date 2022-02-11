@@ -1,4 +1,4 @@
-module CodegenKit.Languages.Haskell.Packages.BasePreludes
+module CodegenKit.Languages.Haskell.ModuleSets.BasePreludes
   ( -- *
     allName,
     operatorsName,

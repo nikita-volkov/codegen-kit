@@ -1,4 +1,4 @@
-module CodegenKit.Languages.Haskell.Packages.ModelAccessors
+module CodegenKit.Languages.Haskell.ModuleSets.ModelAccessors
   ( moduleName,
     modules,
   )
@@ -6,9 +6,9 @@ where
 
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.Languages.Haskell.Packages.BasePreludes as BasePreludesPackage
-import qualified CodegenKit.Languages.Haskell.Packages.ModelAccessors.Templates as Templates
-import qualified CodegenKit.Languages.Haskell.Packages.ModelTypes as ModelTypesPackage
+import qualified CodegenKit.Languages.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
+import qualified CodegenKit.Languages.Haskell.ModuleSets.ModelAccessors.Templates as Templates
+import qualified CodegenKit.Languages.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
 import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
