@@ -1,4 +1,4 @@
-module CodegenKit.LanguageUtils.Haskell.Contents.Cabal
+module CodegenKit.ByLanguage.Haskell.Contents.Cabal
   ( -- *
     contents,
 

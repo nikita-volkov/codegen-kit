@@ -1,4 +1,4 @@
-module CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAndUtils
+module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
   ( -- *
     modules,
 
@@ -30,11 +30,11 @@ import qualified Coalmine.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
-import qualified CodegenKit.LanguageUtils.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
-import qualified CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAccessors as ModelAccessorsPackage
-import qualified CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
-import qualified CodegenKit.LanguageUtils.Haskell.Packaging as Packaging
-import qualified CodegenKit.LanguageUtils.Haskell.Snippets as Snippets
+import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
+import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors as ModelAccessorsPackage
+import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
+import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
+import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified Data.Map.Strict as Map
 import qualified TextBuilder as B'

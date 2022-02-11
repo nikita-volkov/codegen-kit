@@ -23,17 +23,17 @@ library
   import: language-settings
   hs-source-dirs: library
   exposed-modules:
+    CodegenKit.ByLanguage.Haskell.Contents.Cabal
+    CodegenKit.ByLanguage.Haskell.Dependencies
+    CodegenKit.ByLanguage.Haskell.FileSets.Stack
+    CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes
+    CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors
+    CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors.Templates
+    CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
+    CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
+    CodegenKit.ByLanguage.Haskell.Packaging
+    CodegenKit.ByLanguage.Haskell.Snippets
     CodegenKit.HaskellExpFormatter
-    CodegenKit.LanguageUtils.Haskell.Contents.Cabal
-    CodegenKit.LanguageUtils.Haskell.Dependencies
-    CodegenKit.LanguageUtils.Haskell.FileSets.Stack
-    CodegenKit.LanguageUtils.Haskell.ModuleSets.BasePreludes
-    CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAccessors
-    CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAccessors.Templates
-    CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAndUtils
-    CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelTypes
-    CodegenKit.LanguageUtils.Haskell.Packaging
-    CodegenKit.LanguageUtils.Haskell.Snippets
     CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:

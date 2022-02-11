@@ -1,4 +1,4 @@
-module CodegenKit.LanguageUtils.Haskell.FileSets.Stack
+module CodegenKit.ByLanguage.Haskell.FileSets.Stack
   ( -- *
     fileSet,
   )

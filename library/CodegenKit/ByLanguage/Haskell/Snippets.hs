@@ -1,4 +1,4 @@
-module CodegenKit.LanguageUtils.Haskell.Snippets where
+module CodegenKit.ByLanguage.Haskell.Snippets where
 
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
