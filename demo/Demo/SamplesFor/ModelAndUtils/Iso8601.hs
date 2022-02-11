@@ -7,7 +7,6 @@ import CodegenKit.Languages.Haskell.Packages.ModelAndUtils
 
 iso8601Modules =
   modules
-    ["our", "demo"]
     [ section
         "ISO-8601"
         [ sum

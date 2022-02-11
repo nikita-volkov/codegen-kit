@@ -14,7 +14,7 @@ main =
     fileSet =
       HaskellPackaging.toFileSet
         "iso8601"
-        ""
+        "ISO-8601 model"
         (HaskellPackaging.listVersion 0 [1])
         modules
       where

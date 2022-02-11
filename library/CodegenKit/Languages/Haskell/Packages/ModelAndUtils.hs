@@ -41,12 +41,8 @@ import qualified TextBuilder as B'
 
 -- *
 
-modules ::
-  -- | Namespace.
-  [Name] ->
-  [Section] ->
-  Packaging.Modules
-modules ns sections =
+modules :: [Section] -> Packaging.Modules
+modules sections =
   mconcat
     [ BasePreludesPackage.all,
       BasePreludesPackage.dataTypes,
