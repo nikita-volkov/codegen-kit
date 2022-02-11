@@ -268,4 +268,4 @@ modelType :: Text -> MemberType
 modelType ucName =
   MemberType
     (ModelTypesPackage.modelType ucName)
-    ("M." <> ucName)
+    ("T." <> ucName)
