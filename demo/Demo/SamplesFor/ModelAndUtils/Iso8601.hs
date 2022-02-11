@@ -21,24 +21,6 @@ iso8601Modules =
               variant "ym" "" [modelType "Ym"],
               variant "md" "" [modelType "Md"]
             ],
-          sum
-            "ymd"
-            "ISO-8601 Year Month Day for representing a date."
-            [ variant
-                "separated"
-                "YYYY-MM-DD"
-                [ primitiveType "Int",
-                  primitiveType "Int",
-                  primitiveType "Int"
-                ],
-              variant
-                "unseparated"
-                "YYYYMMDD"
-                [ primitiveType "Int",
-                  primitiveType "Int",
-                  primitiveType "Int"
-                ]
-            ],
           product
             "ymd"
             "ISO-8601 Year Month Day for representing a date."
@@ -81,7 +63,7 @@ iso8601Modules =
             |]
             [ field
                 "separted"
-                "Whether the format contains dashes"
+                "Whether the format contains dashes."
                 (primitiveType "Bool"),
               field
                 "month"

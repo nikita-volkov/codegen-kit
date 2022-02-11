@@ -252,7 +252,13 @@ sumHashableInstance sumName variants =
           |]
           where
             variantIndexCode =
-              B.uniline . B'.decimal $ variantIndex
+              B.uniline . mconcat $
+                [ "(",
+                  B'.decimal variantIndex,
+                  " :: ",
+                  toTextBuilder preludeAlias,
+                  ".Int)"
+                ]
             memberNames =
               enumFromTo 0 (pred memberCount)
                 & fmap Snippets.alphabeticIndexName
@@ -348,4 +354,11 @@ hashSaltExp extends =
   "salt" <> foldMap extendCode extends
   where
     extendCode extend =
-      "\n  & flip " <> hashableAlias <> ".hashWithSalt " <> extend
+      mconcat
+        [ "\n  & ",
+          preludeAlias,
+          ".flip ",
+          hashableAlias,
+          ".hashWithSalt ",
+          extend
+        ]
