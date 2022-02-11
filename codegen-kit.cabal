@@ -23,9 +23,9 @@ library
   import: language-settings
   hs-source-dirs: library
   exposed-modules:
-    CodegenKit.HaskellExpFormatter
     CodegenKit.LanguageUtils.Haskell.Contents.Cabal
     CodegenKit.LanguageUtils.Haskell.Dependencies
+    CodegenKit.LanguageUtils.Haskell.ExpFormatter
     CodegenKit.LanguageUtils.Haskell.FileSets.Stack
     CodegenKit.LanguageUtils.Haskell.ModuleSets.BasePreludes
     CodegenKit.LanguageUtils.Haskell.ModuleSets.ModelAccessors

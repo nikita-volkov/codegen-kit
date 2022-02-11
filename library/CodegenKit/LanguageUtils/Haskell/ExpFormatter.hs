@@ -1,7 +1,7 @@
 -- |
 -- Smart haskell expressions formatter,
 -- taking care of parenthesis and indentation.
-module CodegenKit.HaskellExpFormatter where
+module CodegenKit.LanguageUtils.Haskell.ExpFormatter where
 
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.SimplePaths as Paths

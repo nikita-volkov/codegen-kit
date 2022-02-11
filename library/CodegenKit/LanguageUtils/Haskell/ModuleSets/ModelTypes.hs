@@ -25,8 +25,8 @@ where
 
 import qualified Coalmine.List as List
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.HaskellExpFormatter as ExpFormatter
 import qualified CodegenKit.LanguageUtils.Haskell.Dependencies as Dependencies
+import qualified CodegenKit.LanguageUtils.Haskell.ExpFormatter as ExpFormatter
 import qualified CodegenKit.LanguageUtils.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
 import qualified CodegenKit.LanguageUtils.Haskell.Packaging as Packaging
 import qualified CodegenKit.LanguageUtils.Haskell.Snippets as Snippets
