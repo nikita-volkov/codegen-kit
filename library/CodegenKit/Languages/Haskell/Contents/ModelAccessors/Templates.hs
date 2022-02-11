@@ -29,7 +29,7 @@ module_ namespace productFieldsContent sumVariantsContent =
     --
     -- Our approach here is to provide classes for each name of the product field
     -- and the sum variant appearing in the model. Just those two types of classes
-    -- is enough to integrate with any data-structure.
+    -- are enough to integrate with any data-structure.
     module ${namespace}.Accessors where
 
     import qualified ${namespace}.Types as T
