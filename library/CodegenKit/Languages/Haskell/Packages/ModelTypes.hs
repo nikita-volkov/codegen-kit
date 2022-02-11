@@ -1,33 +1,84 @@
-module CodegenKit.Languages.Haskell.Contents.ModelTypes where
+module CodegenKit.Languages.Haskell.Packages.ModelTypes
+  ( -- *
+    moduleName,
+
+    -- *
+    modules,
+
+    -- *
+    Section,
+    section,
+
+    -- *
+    Decl,
+    productAndInstances,
+    sumAndInstances,
+
+    -- *
+    Type,
+    primitiveType,
+    modelType,
+    boxedVectorType,
+    unboxedVectorType,
+  )
+where
 
 import qualified Coalmine.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.HaskellExpFormatter as ExpFormatter
+import qualified CodegenKit.Languages.Haskell.Dependencies as Dependencies
+import qualified CodegenKit.Languages.Haskell.Packages.BasePreludes as BasePreludesPackage
+import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 import qualified TextBuilder as B'
 
 -- *
 
-content ::
-  B.Builder ->
-  B.Builder ->
-  B.Builder ->
+moduleName :: Name
+moduleName = "types"
+
+-- *
+
+modules ::
   -- | Declaration sections.
   [Section] ->
+  Packaging.Modules
+modules sections =
+  Packaging.module_ True moduleName deps (content sections)
+  where
+    deps =
+      [ Dependencies.hashable,
+        Dependencies.vector
+      ]
+
+-- *
+
+content ::
+  -- | Declaration sections.
+  [Section] ->
+  -- | Namespace
+  [Name] ->
   Text
-content operatorsPreludeRef allPreludeRef moduleRef sections =
+content sections ns =
   [i|
     module $moduleRef where
 
     import $operatorsPreludeRef
     import qualified $allPreludeRef as $preludeAlias
+    import qualified Data.Hashable as $hashableAlias
     import qualified Data.Vector as $boxedVectorAlias
     import qualified Data.Vector.Unboxed as $unboxedVectorAlias
 
     $content
   |]
   where
+    moduleRef =
+      Snippets.moduleRef ns moduleName
+    operatorsPreludeRef =
+      Snippets.moduleRef ns BasePreludesPackage.operatorsName
+    allPreludeRef =
+      Snippets.moduleRef ns BasePreludesPackage.allName
     content =
       sections
         & coerce
@@ -130,7 +181,7 @@ productHashableInstance :: Text -> Int -> Decl
 productHashableInstance productName fieldAmount =
   Decl
     [i|
-      instance $preludeAlias.Hashable $productName where
+      instance $hashableAlias.Hashable $productName where
         hashWithSalt salt ($productName $fieldPatterns) =
           $exp
     |]
@@ -284,6 +335,9 @@ unboxedVectorType =
 preludeAlias :: B.Builder
 preludeAlias = "P"
 
+hashableAlias :: B.Builder
+hashableAlias = "H"
+
 boxedVectorAlias :: B.Builder
 boxedVectorAlias = "BVec"
 
@@ -294,4 +348,4 @@ hashSaltExp extends =
   "salt" <> foldMap extendCode extends
   where
     extendCode extend =
-      "\n  & " <> preludeAlias <> ".extendHash " <> extend
+      "\n  & flip " <> hashableAlias <> ".hashWithSalt " <> extend

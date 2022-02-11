@@ -25,12 +25,12 @@ library
   exposed-modules:
     CodegenKit.HaskellExpFormatter
     CodegenKit.Languages.Haskell.Contents.Cabal
-    CodegenKit.Languages.Haskell.Contents.ModelAccessors
-    CodegenKit.Languages.Haskell.Contents.ModelAccessors.Templates
-    CodegenKit.Languages.Haskell.Contents.ModelTypes
     CodegenKit.Languages.Haskell.Dependencies
     CodegenKit.Languages.Haskell.Packages.BasePreludes
+    CodegenKit.Languages.Haskell.Packages.ModelAccessors
+    CodegenKit.Languages.Haskell.Packages.ModelAccessors.Templates
     CodegenKit.Languages.Haskell.Packages.ModelAndUtils
+    CodegenKit.Languages.Haskell.Packages.ModelTypes
     CodegenKit.Languages.Haskell.Packaging
     CodegenKit.Languages.Haskell.Snippets
     CodegenKit.Packaging

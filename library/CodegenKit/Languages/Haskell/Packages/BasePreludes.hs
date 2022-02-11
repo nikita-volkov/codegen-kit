@@ -1,11 +1,13 @@
 module CodegenKit.Languages.Haskell.Packages.BasePreludes
   ( -- *
-    grouped,
+    allName,
+    operatorsName,
+    dataTypesName,
 
     -- *
     all,
-    operators,
     dataTypes,
+    operators,
   )
 where
 
@@ -19,17 +21,20 @@ import qualified TextBuilder as B'
 
 -- *
 
-grouped :: Packaging.Modules
-grouped =
-  Packaging.inNamespace ["base-preludes"] . mconcat $
-    [ all "all",
-      operators "operators",
-      dataTypes "data-types"
-    ]
+allName :: Name
+allName = "base-all"
 
-operators :: Name -> Packaging.Modules
-operators moduleName =
-  Packaging.module_ False moduleName deps contents
+dataTypesName :: Name
+dataTypesName = "base-data-types"
+
+operatorsName :: Name
+operatorsName = "base-operators"
+
+-- *
+
+operators :: Packaging.Modules
+operators =
+  Packaging.module_ False operatorsName deps contents
   where
     deps =
       [ Dependencies.base
@@ -111,11 +116,11 @@ operators moduleName =
 
       |]
       where
-        moduleRef = Snippets.moduleRef nsNameList moduleName
+        moduleRef = Snippets.moduleRef nsNameList operatorsName
 
-dataTypes :: Name -> Packaging.Modules
-dataTypes moduleName =
-  Packaging.module_ False moduleName deps contents
+dataTypes :: Packaging.Modules
+dataTypes =
+  Packaging.module_ False dataTypesName deps contents
   where
     deps =
       [ Dependencies.base
@@ -176,11 +181,11 @@ dataTypes moduleName =
 
       |]
       where
-        moduleRef = Snippets.moduleRef nsNameList moduleName
+        moduleRef = Snippets.moduleRef nsNameList dataTypesName
 
-all :: Name -> Packaging.Modules
-all moduleName =
-  Packaging.module_ False moduleName deps contents
+all :: Packaging.Modules
+all =
+  Packaging.module_ False allName deps contents
   where
     deps =
       [ Dependencies.base
@@ -268,4 +273,4 @@ all moduleName =
 
       |]
       where
-        moduleRef = Snippets.moduleRef nsNameList moduleName
+        moduleRef = Snippets.moduleRef nsNameList allName

@@ -30,9 +30,9 @@ import qualified Coalmine.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
-import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors as ModelAccessors
-import qualified CodegenKit.Languages.Haskell.Contents.ModelTypes as Model
 import qualified CodegenKit.Languages.Haskell.Packages.BasePreludes as BasePreludesPackage
+import qualified CodegenKit.Languages.Haskell.Packages.ModelAccessors as ModelAccessorsPackage
+import qualified CodegenKit.Languages.Haskell.Packages.ModelTypes as ModelTypesPackage
 import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
 import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
@@ -48,31 +48,23 @@ modules ::
   Packaging.Modules
 modules ns sections =
   mconcat
-    [ Packaging.inNamespace ["base-preludes"] . mconcat $
-        [ BasePreludesPackage.all "all",
-          BasePreludesPackage.dataTypes "data-types",
-          BasePreludesPackage.operators "operators"
-        ],
-      Packaging.inNamespace ["model"] . mconcat $
-        [ Packaging.module_ True "types" [] modelTypesContent,
-          Packaging.module_ True "accessors" [] modelAccessorsContent
-        ]
+    [ BasePreludesPackage.all,
+      BasePreludesPackage.dataTypes,
+      BasePreludesPackage.operators,
+      modelTypes,
+      modelAccessors
     ]
   where
-    modelTypesContent ns =
-      Model.content
-        (Snippets.moduleRef preludesNs "operators")
-        (Snippets.moduleRef preludesNs "all")
-        (Snippets.moduleRef ns "types")
+    modelTypes =
+      ModelTypesPackage.modules
         (fmap section sections)
       where
-        preludesNs = reverse . (:) "base-preludes" . drop 1 . reverse $ ns
         section (Section header decls) =
-          Model.section header $ join $ fmap decl decls
+          ModelTypesPackage.section header $ join $ fmap decl decls
           where
             decl = \case
               ProductDecl productName productDocs fields fieldsAmount ->
-                Model.productAndInstances productName productDocs modelFields
+                ModelTypesPackage.productAndInstances productName productDocs modelFields
                 where
                   modelFields =
                     fmap modelField fields
@@ -80,7 +72,7 @@ modules ns sections =
                       modelField (FieldSpec _ lcFieldName fieldDocs (MemberType sig _) _) =
                         (lcFieldName, fieldDocs, sig)
               SumDecl sumName sumDocs variants ->
-                Model.sumAndInstances sumName sumDocs $
+                ModelTypesPackage.sumAndInstances sumName sumDocs $
                   fmap constructor variants
                 where
                   constructor (Variant variantName variantDocs memberTypes) =
@@ -88,15 +80,11 @@ modules ns sections =
                     where
                       modelMemberType (MemberType type_ _) =
                         type_
-    modelAccessorsContent ns =
-      ModelAccessors.content
-        (Snippets.moduleRef preludesNs "all")
-        (Snippets.moduleRef ns "types")
-        (Snippets.moduleRef ns "accessors")
+    modelAccessors =
+      ModelAccessorsPackage.modules
         hasFieldConfigs
         hasVariantConfigs
       where
-        preludesNs = reverse . (:) "base-preludes" . drop 1 . reverse $ ns
         decls = do
           Section _ decls <- sections
           decls
@@ -263,7 +251,7 @@ variant name =
 
 data MemberType
   = MemberType
-      Model.Type
+      ModelTypesPackage.Type
       -- ^ Type for model.
       Text
       -- ^ Signature for accessors.
@@ -273,11 +261,11 @@ data MemberType
 primitiveType :: Text -> MemberType
 primitiveType ucName =
   MemberType
-    (Model.primitiveType ucName)
+    (ModelTypesPackage.primitiveType ucName)
     ucName
 
 modelType :: Text -> MemberType
 modelType ucName =
   MemberType
-    (Model.modelType ucName)
+    (ModelTypesPackage.modelType ucName)
     ("M." <> ucName)
