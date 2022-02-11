@@ -200,7 +200,8 @@ productAccessorIsLabelInstance productName fieldName (Type fieldType) fieldIndex
   Decl
     [i|
       instance (a ~ $fieldType) => $preludeAlias.IsLabel "$fieldName" ($productName -> a) where
-        fromLabel ($productName $fieldPatterns) = a
+        fromLabel ($productName $fieldPatterns) =
+          a
     |]
   where
     fieldPatterns =
@@ -235,6 +236,71 @@ productMapperIsLabelInstance productName fieldName (Type fieldType) fieldIndex f
         & fmap Snippets.alphabeticIndexName
 
 -- *
+
+sumMapperIsLabelInstance :: Text -> Text -> Text -> Text -> Decl
+sumMapperIsLabelInstance sumType variantName constructorName variantType =
+  Decl
+    [i|
+      instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" ((a -> a) -> $sumType -> $sumType) where
+        fromLabel map sum = case sum of
+          $constructorName a ->
+            $constructorName (map a)
+          _ ->
+            sum
+    |]
+
+sumTraverserIsLabelInstance sumType variantName constructorName variantType =
+  Decl
+    [i|
+      -- |
+      -- Label which produces a function that updates the contents of
+      -- the \"$variantName\" variant of '${sumType}' in an applicative context.
+      -- 
+      -- Exactly the same thing as the @Traversal@ from the \"lens\" library and is
+      -- directly compatible with it.
+      instance (a ~ $variantType, Applicative f) => $preludeAlias.IsLabel "$variantName" ((a -> f a) -> $sumType -> f $sumType) where
+        fromLabel traverse sum = case sum of
+          $constructorName a ->
+            $constructorName <$$> traverse a
+          _ ->
+            pure sum
+    |]
+
+sumConstructorIsLabelInstance sumType variantName constructorName variantType =
+  Decl
+    [i|
+      instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" (a -> $sumType) where
+        fromLabel =
+          $constructorName
+    |]
+
+sumExtractorIsLabelInstance sumType variantName constructorName variantType =
+  Decl
+    [i|
+      instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" ($sumType -> Maybe a) where
+        fromLabel sum = case sum of
+          $constructorName a ->
+            Just a
+          _ ->
+            Nothing
+    |]
+
+enumConstructorIsLabelInstance enumType variantName constructorName =
+  Decl
+    [i|
+      instance $preludeAlias.IsLabel "$variantName" $enumType where
+        fromLabel =
+          $constructorName
+    |]
+
+enumPredicateIsLabelInstance enumType variantName constructorName =
+  Decl
+    [i|
+      instance $preludeAlias.IsLabel "$variantName" ($enumType -> Bool) where
+        fromLabel enum = case enum of
+          $constructorName -> True
+          _ -> False
+    |]
 
 sumHashableInstance :: Text -> [(Text, Int)] -> Decl
 sumHashableInstance sumName variants =
