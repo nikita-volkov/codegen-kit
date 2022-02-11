@@ -46,8 +46,8 @@ modules ::
   Packaging.Modules
 modules ns sections =
   mconcat
-    [ CommonsPackage.basePreludes,
-      Packaging.module_ True "types" deps modelContent,
+    [ CommonsPackage.stdBasePreludes,
+      Packaging.module_ True "types" deps modelTypesContent,
       Packaging.module_ True "accessors" deps modelAccessorsContent
     ]
   where
@@ -63,7 +63,7 @@ modules ns sections =
       ]
     nsText =
       toText . B'.intercalate "." . fmap Name.toUpperCamelCaseTextBuilder
-    modelContent ns =
+    modelTypesContent ns =
       Model.content (nsText ns) $ fmap section sections
       where
         section (Section header decls) =

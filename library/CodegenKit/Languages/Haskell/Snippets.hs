@@ -49,3 +49,16 @@ alphabeticIndexName a =
 enumAlphabeticNames :: Int -> [B.Builder]
 enumAlphabeticNames =
   fmap alphabeticIndexName . enumFromTo 0 . pred
+
+-- *
+
+namespace :: [Name] -> B.Builder
+namespace =
+  B.uniline . B'.intercalate "." . fmap Name.toUpperCamelCaseTextBuilder
+
+moduleRef :: [Name] -> Name -> B.Builder
+moduleRef nsNameList moduleName =
+  B.uniline . mconcat $
+    [ foldMap (flip mappend "." . Name.toUpperCamelCaseTextBuilder) nsNameList,
+      Name.toUpperCamelCaseTextBuilder moduleName
+    ]

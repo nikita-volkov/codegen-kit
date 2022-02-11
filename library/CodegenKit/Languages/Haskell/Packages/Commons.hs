@@ -1,6 +1,10 @@
 module CodegenKit.Languages.Haskell.Packages.Commons
   ( -- *
-    basePreludes,
+    stdBasePreludes,
+
+    -- *
+    baseOperators,
+    baseDataTypes,
   )
 where
 
@@ -8,28 +12,29 @@ import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import qualified CodegenKit.Languages.Haskell.Dependencies as Dependencies
 import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
+import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified TextBuilder as B'
 
 -- *
 
-basePreludes :: Packaging.Modules
-basePreludes =
+stdBasePreludes :: Packaging.Modules
+stdBasePreludes =
   Packaging.inNamespace ["base-preludes"] . mconcat $
-    [ baseOperators,
-      baseDataTypes
+    [ baseOperators "operators",
+      baseDataTypes "data-types"
     ]
 
-baseOperators :: Packaging.Modules
-baseOperators =
-  Packaging.module_ False "operators" deps contents
+baseOperators :: Name -> Packaging.Modules
+baseOperators moduleName =
+  Packaging.module_ False moduleName deps contents
   where
     deps =
       [ Dependencies.base
       ]
     contents nsNameList =
       [i|
-        module $namespace.Operators
+        module $moduleRef
           ( -- * From "Control.Applicative"
             (Control.Applicative.*>),
             (Control.Applicative.<*),
@@ -96,12 +101,11 @@ baseOperators =
 
       |]
       where
-        namespace =
-          B.uniline $ B'.intercalate "." $ fmap Name.toUpperCamelCaseTextBuilder nsNameList
+        moduleRef = Snippets.moduleRef nsNameList moduleName
 
-baseDataTypes :: Packaging.Modules
-baseDataTypes =
-  Packaging.module_ False "data-types" deps contents
+baseDataTypes :: Name -> Packaging.Modules
+baseDataTypes moduleName =
+  Packaging.module_ False moduleName deps contents
   where
     deps =
       [ Dependencies.base
@@ -117,7 +121,7 @@ baseDataTypes =
         -- It is not abstraction integration wrappers,
         -- like 'Data.Semigroup.First'.
         -- It is not resource types like 'System.IO.Handle'.
-        module $namespace.DataTypes
+        module $moduleRef
           ( -- * From "Prelude"
             Prelude.Bool (..),
             Prelude.Char,
@@ -162,5 +166,4 @@ baseDataTypes =
 
       |]
       where
-        namespace =
-          B.uniline $ B'.intercalate "." $ fmap Name.toUpperCamelCaseTextBuilder nsNameList
+        moduleRef = Snippets.moduleRef nsNameList moduleName
