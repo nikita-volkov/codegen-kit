@@ -13,9 +13,9 @@ iso8601Modules =
         [ sum
             "calendar-date"
             [i|
-              - `YYYY-MM-DD` or `YYYYMMDD`
-              - `YYYY-MM` (but not `YYYYMM`)
-              - `--MM-DD` or `--MMDD`
+              - @YYYY-MM-DD@ or @YYYYMMDD@
+              - @YYYY-MM@ (but not @YYYYMM@)
+              - @--MM-DD@ or @--MMDD@
             |]
             [ variant "ymd" "" [modelType "Ymd"],
               variant "ym" "" [modelType "Ym"],
@@ -26,7 +26,7 @@ iso8601Modules =
             "ISO-8601 Year Month Day for representing a date."
             [ field
                 "separted"
-                "Whether the format contains dashes"
+                "Whether the format contains dashes."
                 (primitiveType "Bool"),
               field
                 "year"
@@ -43,7 +43,11 @@ iso8601Modules =
             ],
           product
             "ym"
-            "Year, month.\n`YYYY-MM`."
+            [i|
+              Year, month.
+
+              @YYYY-MM@
+            |]
             [ field
                 "year"
                 "Year."
@@ -58,8 +62,8 @@ iso8601Modules =
             [i|
               ISO-8601 Month Day for representing a date.
 
-              - `--MM-DD`
-              - `--MMDD`
+              - @--MM-DD@
+              - @--MMDD@
             |]
             [ field
                 "separted"
