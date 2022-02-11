@@ -33,6 +33,7 @@ library
     CodegenKit.Languages.Haskell.Packages.ModelAndUtils
     CodegenKit.Languages.Haskell.Packaging
     CodegenKit.Languages.Haskell.Snippets
+    CodegenKit.List
     CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:
