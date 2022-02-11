@@ -34,6 +34,9 @@ baseOperators moduleName =
       ]
     contents nsNameList =
       [i|
+        -- |
+        -- A collection of common operators provided across
+        -- various modules of the \"base\" package.
         module $moduleRef
           ( -- * From "Control.Applicative"
             (Control.Applicative.*>),
@@ -48,6 +51,10 @@ baseOperators moduleName =
             (Control.Monad.>>),
             (Control.Monad.>>=),
 
+            -- * From "Data.Bits"
+            (Data.Bits..&.),
+            (Data.Bits..|.),
+
             -- * From "Data.Bool"
             (Data.Bool.&&),
             (Data.Bool.||),
@@ -55,14 +62,14 @@ baseOperators moduleName =
             (Data.Eq.==),
 
             -- * From "Data.Function"
-            (Data.Function.$$),
+            (Data.Function.$),
             (Data.Function.&),
             (Data.Function..),
 
             -- * From "Data.Functor"
-            (Data.Functor.$$>),
-            (Data.Functor.<$$),
-            (Data.Functor.<$$>),
+            (Data.Functor.$>),
+            (Data.Functor.<$),
+            (Data.Functor.<$>),
             (Data.Functor.<&>),
 
             -- * From "Data.Ord"
@@ -78,7 +85,7 @@ baseOperators moduleName =
             (Data.Semigroup.<>),
 
             -- * From "Prelude"
-            (Prelude.$$!),
+            (Prelude.$!),
             (Prelude.*),
             (Prelude.+),
             (Prelude.-),
@@ -90,6 +97,7 @@ baseOperators moduleName =
 
         import qualified Control.Applicative
         import qualified Control.Monad
+        import qualified Data.Bits
         import qualified Data.Bool
         import qualified Data.Eq
         import qualified Data.Function
