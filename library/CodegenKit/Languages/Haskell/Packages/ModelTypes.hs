@@ -266,7 +266,7 @@ sumMapperIsLabelInstance sumType variantName constructorName (Type variantType) 
             sum
     |]
 
-sumTraverserIsLabelInstance sumType variantName constructorName variantType =
+sumTraverserIsLabelInstance sumType variantName constructorName (Type variantType) =
   Decl
     [i|
       -- |
@@ -280,10 +280,10 @@ sumTraverserIsLabelInstance sumType variantName constructorName variantType =
           $constructorName a ->
             $constructorName <$$> traverse a
           _ ->
-            pure sum
+            $preludeAlias.pure sum
     |]
 
-sumConstructorIsLabelInstance sumType variantName constructorName variantType =
+sumConstructorIsLabelInstance sumType variantName constructorName (Type variantType) =
   Decl
     [i|
       instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" (a -> $sumType) where
@@ -291,15 +291,15 @@ sumConstructorIsLabelInstance sumType variantName constructorName variantType =
           $constructorName
     |]
 
-sumExtractorIsLabelInstance sumType variantName constructorName variantType =
+sumExtractorIsLabelInstance sumType variantName constructorName (Type variantType) =
   Decl
     [i|
-      instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" ($sumType -> Maybe a) where
+      instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" ($sumType -> $preludeAlias.Maybe a) where
         fromLabel sum = case sum of
           $constructorName a ->
-            Just a
+            $preludeAlias.Just a
           _ ->
-            Nothing
+            $preludeAlias.Nothing
     |]
 
 enumConstructorIsLabelInstance enumType variantName constructorName =
@@ -313,10 +313,10 @@ enumConstructorIsLabelInstance enumType variantName constructorName =
 enumPredicateIsLabelInstance enumType variantName constructorName =
   Decl
     [i|
-      instance $preludeAlias.IsLabel "$variantName" ($enumType -> Bool) where
+      instance $preludeAlias.IsLabel "$variantName" ($enumType -> $preludeAlias.Bool) where
         fromLabel enum = case enum of
-          $constructorName -> True
-          _ -> False
+          $constructorName -> $preludeAlias.True
+          _ -> $preludeAlias.False
     |]
 
 sumHashableInstance :: Text -> [(Text, Int)] -> Decl
@@ -411,7 +411,14 @@ sumAndInstances sumName sumDocs variants =
         variantInstances (lcVariantName, ucVariantName, docs, memberTypes) =
           case memberTypes of
             [memberType] ->
-              [ sumMapperIsLabelInstance sumName lcVariantName constructorName memberType
+              [ sumMapperIsLabelInstance sumName lcVariantName constructorName memberType,
+                sumTraverserIsLabelInstance sumName lcVariantName constructorName memberType,
+                sumConstructorIsLabelInstance sumName lcVariantName constructorName memberType,
+                sumExtractorIsLabelInstance sumName lcVariantName constructorName memberType
+              ]
+            [] ->
+              [ enumConstructorIsLabelInstance sumName lcVariantName constructorName,
+                enumPredicateIsLabelInstance sumName lcVariantName constructorName
               ]
             _ ->
               []
