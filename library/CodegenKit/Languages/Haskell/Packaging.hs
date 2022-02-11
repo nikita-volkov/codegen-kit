@@ -149,7 +149,7 @@ inNamespace ns (Modules files exposed hidden dependencies) =
         prependPath =
           Paths.inDir (moduleDirPath ns)
         prependModuleName render =
-          render . mappend ns
+          render . flip mappend ns
 
 module_ ::
   -- | Is it exposed?
