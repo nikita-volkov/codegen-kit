@@ -26,6 +26,7 @@ library
     CodegenKit.HaskellExpFormatter
     CodegenKit.Languages.Haskell.Contents.Cabal
     CodegenKit.Languages.Haskell.Dependencies
+    CodegenKit.Languages.Haskell.FileSets.Stack
     CodegenKit.Languages.Haskell.Packages.BasePreludes
     CodegenKit.Languages.Haskell.Packages.ModelAccessors
     CodegenKit.Languages.Haskell.Packages.ModelAccessors.Templates

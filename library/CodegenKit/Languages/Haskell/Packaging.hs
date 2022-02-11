@@ -20,6 +20,7 @@ where
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.Languages.Haskell.Contents.Cabal as CabalContents
+import qualified CodegenKit.Languages.Haskell.FileSets.Stack as StackFileSet
 import CodegenKit.Packaging (FileSet)
 import qualified CodegenKit.Packaging as Packaging
 import CodegenKit.Prelude
@@ -130,8 +131,11 @@ toFileSet ::
 toFileSet packageName synopsis version modules =
   case inNamespace [packageName] modules of
     modules ->
-      toCabalFileSet packageName synopsis version modules
-        <> toModulesFileSet "library" modules
+      mconcat
+        [ StackFileSet.fileSet,
+          toCabalFileSet packageName synopsis version modules,
+          toModulesFileSet "library" modules
+        ]
 
 -- **
 
