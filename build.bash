@@ -25,6 +25,11 @@ function demo {
   stack exec demo
 }
 
+function clean_up {
+  rm -rf ./demo-output/
+}
+
+clean_up
 format
 build
 demo
