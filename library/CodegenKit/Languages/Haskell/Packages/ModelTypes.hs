@@ -254,8 +254,8 @@ productTraverserIsLabelInstance productName fieldName (Type fieldType) fieldInde
 
 -- *
 
-sumMapperIsLabelInstance :: Text -> Text -> Text -> Text -> Decl
-sumMapperIsLabelInstance sumType variantName constructorName variantType =
+sumMapperIsLabelInstance :: Text -> Text -> Text -> Type -> Decl
+sumMapperIsLabelInstance sumType variantName constructorName (Type variantType) =
   Decl
     [i|
       instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" ((a -> a) -> $sumType -> $sumType) where
@@ -387,21 +387,37 @@ productAndInstances productName productDocs fields =
 sumAndInstances ::
   Text ->
   Text ->
-  [(Text, Text, [Type])] ->
+  [(Text, Text, Text, [Type])] ->
   [Decl]
 sumAndInstances sumName sumDocs variants =
   typeDecl :
   hashableDecl :
-  []
+  isLabelInstanceDecls
   where
     typeDecl =
-      sum sumName sumDocs variants
+      sum sumName sumDocs $ fmap fromVariant variants
+      where
+        fromVariant (_, ucVariantName, docs, memberTypes) =
+          (ucVariantName, docs, memberTypes)
     hashableDecl =
       sumHashableInstance sumName $
-        fmap variant variants
+        fmap fromVariant variants
       where
-        variant (name, _, members) =
+        fromVariant (_, name, _, members) =
           (name, length members)
+    isLabelInstanceDecls =
+      variants >>= variantInstances
+      where
+        variantInstances (lcVariantName, ucVariantName, docs, memberTypes) =
+          case memberTypes of
+            [memberType] ->
+              [ sumMapperIsLabelInstance sumName lcVariantName constructorName memberType
+              ]
+            _ ->
+              []
+          where
+            constructorName =
+              ucVariantName <> sumName
 
 -- *
 

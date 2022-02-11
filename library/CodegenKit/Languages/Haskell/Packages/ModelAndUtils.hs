@@ -71,8 +71,8 @@ modules sections =
                 ModelTypesPackage.sumAndInstances sumName sumDocs $
                   fmap constructor variants
                 where
-                  constructor (Variant variantName variantDocs memberTypes) =
-                    (variantName, variantDocs, fmap modelMemberType memberTypes)
+                  constructor (Variant ucVariantName lcVariantName variantDocs memberTypes) =
+                    (lcVariantName, ucVariantName, variantDocs, fmap modelMemberType memberTypes)
                     where
                       modelMemberType (MemberType type_ _) =
                         type_
@@ -106,7 +106,7 @@ modules sections =
               SumDecl sumName sumDocs variants ->
                 foldr step exit variants variantRegistry
                 where
-                  step (Variant ucVariantName variantDocs memberTypes) next variantRegistry =
+                  step (Variant ucVariantName lcVariantName variantDocs memberTypes) next variantRegistry =
                     case memberTypes of
                       [] ->
                         -- TODO: Provide enum instances
@@ -235,13 +235,17 @@ data Variant
       Text
       -- ^ Uppercase name.
       Text
+      -- ^ Lowercase name.
+      Text
       -- ^ Docs.
       [MemberType]
       -- ^ Variant types.
 
 variant :: Name -> Text -> [MemberType] -> Variant
 variant name =
-  Variant (Name.toUpperCamelCaseText name)
+  Variant
+    (Name.toUpperCamelCaseText name)
+    (Name.toLowerCamelCaseText name)
 
 -- *
 
