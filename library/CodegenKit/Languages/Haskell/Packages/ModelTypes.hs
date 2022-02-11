@@ -235,6 +235,23 @@ productMapperIsLabelInstance productName fieldName (Type fieldType) fieldIndex f
       enumFromTo from (pred to)
         & fmap Snippets.alphabeticIndexName
 
+productTraverserIsLabelInstance productName fieldName (Type fieldType) fieldIndex fieldAmount =
+  Decl
+    [i|
+      instance (a ~ $fieldType, $preludeAlias.Functor f) => $preludeAlias.IsLabel "$fieldName" ((a -> f a) -> $productName -> f $productName) where
+        fromLabel traverse ($productName $varNames) =
+          traverse $selectedVarName <&> \$selectedVarName -> $productName $varNames
+    |]
+  where
+    varNames =
+      varNamesFromUpTo 0 fieldAmount
+        & B.intercalate " "
+    selectedVarName =
+      Snippets.alphabeticIndexName fieldIndex
+    varNamesFromUpTo from to =
+      enumFromTo from (pred to)
+        & fmap Snippets.alphabeticIndexName
+
 -- *
 
 sumMapperIsLabelInstance :: Text -> Text -> Text -> Text -> Decl
@@ -258,7 +275,7 @@ sumTraverserIsLabelInstance sumType variantName constructorName variantType =
       -- 
       -- Exactly the same thing as the @Traversal@ from the \"lens\" library and is
       -- directly compatible with it.
-      instance (a ~ $variantType, Applicative f) => $preludeAlias.IsLabel "$variantName" ((a -> f a) -> $sumType -> f $sumType) where
+      instance (a ~ $variantType, $preludeAlias.Applicative f) => $preludeAlias.IsLabel "$variantName" ((a -> f a) -> $sumType -> f $sumType) where
         fromLabel traverse sum = case sum of
           $constructorName a ->
             $constructorName <$$> traverse a
@@ -360,7 +377,8 @@ productAndInstances productName productDocs fields =
         & fmap
           ( \(i, (name, docs, type_)) ->
               [ productAccessorIsLabelInstance productName name type_ i size,
-                productMapperIsLabelInstance productName name type_ i size
+                productMapperIsLabelInstance productName name type_ i size,
+                productTraverserIsLabelInstance productName name type_ i size
               ]
           )
         & join
