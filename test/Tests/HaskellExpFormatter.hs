@@ -2,7 +2,7 @@ module Tests.HaskellExpFormatter where
 
 import Coalmine.Prelude
 import Coalmine.Tasty
-import CodegenKit.HaskellExpFormatter
+import CodegenKit.LanguageUtils.Haskell.ExpFormatter
 
 tests =
   [ testCase "" $ do

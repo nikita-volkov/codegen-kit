@@ -25,6 +25,7 @@ library
   exposed-modules:
     CodegenKit.ByLanguage.Haskell.Contents.Cabal
     CodegenKit.ByLanguage.Haskell.Dependencies
+    CodegenKit.ByLanguage.Haskell.ExpFormatter
     CodegenKit.ByLanguage.Haskell.FileSets.Stack
     CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors
@@ -33,7 +34,6 @@ library
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
     CodegenKit.ByLanguage.Haskell.Packaging
     CodegenKit.ByLanguage.Haskell.Snippets
-    CodegenKit.HaskellExpFormatter
     CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:
