@@ -237,7 +237,7 @@ sumHashableInstance :: Text -> [(Text, Int)] -> Decl
 sumHashableInstance sumName variants =
   Decl
     [i|
-      instance $preludeAlias.Hashable $sumName where
+      instance $hashableAlias.Hashable $sumName where
         hashWithSalt salt sum = case sum of
           $matches
     |]
