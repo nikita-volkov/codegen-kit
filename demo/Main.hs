@@ -9,7 +9,6 @@ import qualified Demo.SamplesFor.ModelAndUtils.Iso8601 as Iso8601ModelAndUtils
 
 main =
   do
-    Packaging.print fileSet
     Packaging.write . Packaging.inDir "demo-output" $ fileSet
   where
     fileSet =

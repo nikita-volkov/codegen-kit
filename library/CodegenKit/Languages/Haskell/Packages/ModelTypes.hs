@@ -204,8 +204,11 @@ productAccessorIsLabelInstance productName fieldName (Type fieldType) fieldIndex
     |]
   where
     fieldPatterns =
-      B.intercalate " " $
-        blanks 0 (pred fieldIndex) <> ["a"] <> blanks (succ fieldIndex) (pred fieldAmount)
+      B.intercalate " " . mconcat $
+        [ blanks 0 fieldIndex,
+          ["a"],
+          blanks (succ fieldIndex) fieldAmount
+        ]
       where
         blanks from to =
           replicate (to - from) "_"
