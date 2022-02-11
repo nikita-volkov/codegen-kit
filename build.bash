@@ -33,3 +33,6 @@ clean_up
 format
 build
 demo
+
+cd demo-output
+stack build
