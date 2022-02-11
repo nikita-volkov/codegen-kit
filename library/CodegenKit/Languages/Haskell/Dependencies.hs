@@ -11,7 +11,7 @@ bytestring =
 containers =
   Packaging.dependency "containers" 0 [6] 0 [7]
 hashable =
-  Packaging.dependency "hashable" 1 [4] 1 [5]
+  Packaging.dependency "hashable" 1 [3, 5] 1 [5]
 scientific =
   Packaging.dependency "scientific" 0 [3] 0 [4]
 text =
