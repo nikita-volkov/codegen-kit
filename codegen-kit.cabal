@@ -29,11 +29,10 @@ library
     CodegenKit.Languages.Haskell.Contents.ModelAccessors.Templates
     CodegenKit.Languages.Haskell.Contents.ModelTypes
     CodegenKit.Languages.Haskell.Dependencies
-    CodegenKit.Languages.Haskell.Packages.Commons
+    CodegenKit.Languages.Haskell.Packages.BasePreludes
     CodegenKit.Languages.Haskell.Packages.ModelAndUtils
     CodegenKit.Languages.Haskell.Packaging
     CodegenKit.Languages.Haskell.Snippets
-    CodegenKit.List
     CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:

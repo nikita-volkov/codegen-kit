@@ -12,11 +12,11 @@ import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 import qualified TextBuilder as B'
 
-module_ namespace productFieldsContent sumVariantsContent =
+module_ preludeModuleRef typesModuleRef moduleRef productFieldsContent sumVariantsContent =
   [i|
     -- |
     -- Definitions for all patterns of access to members of all types defined in
-    -- the "${namespace}.Model" module. E.g., setting a field value or mapping over a
+    -- the "${moduleRef}" module. E.g., setting a field value or mapping over a
     -- constructor type. 
     --
     -- This module completely resolves the \"records\" problem for all the types
@@ -30,11 +30,10 @@ module_ namespace productFieldsContent sumVariantsContent =
     -- Our approach here is to provide classes for each name of the product field
     -- and the sum variant appearing in the model. Just those two types of classes
     -- are enough to integrate with any data-structure.
-    module ${namespace}.Accessors where
+    module ${moduleRef} where
 
-    import qualified ${namespace}.Types as T
-    import ${namespace}.Prelude
-
+    import qualified ${typesModuleRef} as T
+    import ${preludeModuleRef}
 
     -- * Product Fields
 

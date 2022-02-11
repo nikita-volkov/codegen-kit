@@ -26,13 +26,15 @@ module CodegenKit.Languages.Haskell.Packages.ModelAndUtils
   )
 where
 
+import qualified Coalmine.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.Languages.Haskell.Contents.ModelAccessors as ModelAccessors
 import qualified CodegenKit.Languages.Haskell.Contents.ModelTypes as Model
-import qualified CodegenKit.Languages.Haskell.Packages.Commons as CommonsPackage
+import qualified CodegenKit.Languages.Haskell.Packages.BasePreludes as BasePreludesPackage
 import qualified CodegenKit.Languages.Haskell.Packaging as Packaging
+import qualified CodegenKit.Languages.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified Data.Map.Strict as Map
 import qualified TextBuilder as B'
@@ -46,26 +48,25 @@ modules ::
   Packaging.Modules
 modules ns sections =
   mconcat
-    [ CommonsPackage.stdBasePreludes,
-      Packaging.module_ True "types" deps modelTypesContent,
-      Packaging.module_ True "accessors" deps modelAccessorsContent
+    [ Packaging.inNamespace ["base-preludes"] . mconcat $
+        [ BasePreludesPackage.all "all",
+          BasePreludesPackage.dataTypes "data-types",
+          BasePreludesPackage.operators "operators"
+        ],
+      Packaging.inNamespace ["model"] . mconcat $
+        [ Packaging.module_ True "types" [] modelTypesContent,
+          Packaging.module_ True "accessors" [] modelAccessorsContent
+        ]
     ]
   where
-    deps =
-      [ Packaging.dependency "base" 4 [12] 5 [],
-        Packaging.dependency "bytestring" 0 [10] 0 [12],
-        Packaging.dependency "containers" 0 [6] 0 [7],
-        Packaging.dependency "scientific" 0 [3] 0 [4],
-        Packaging.dependency "text" 1 [2] 3 [],
-        Packaging.dependency "time" 1 [9] 2 [],
-        Packaging.dependency "uuid" 1 [3] 2 [],
-        Packaging.dependency "vector" 0 [12] 0 [13]
-      ]
-    nsText =
-      toText . B'.intercalate "." . fmap Name.toUpperCamelCaseTextBuilder
     modelTypesContent ns =
-      Model.content (nsText ns) $ fmap section sections
+      Model.content
+        (Snippets.moduleRef preludesNs "operators")
+        (Snippets.moduleRef preludesNs "all")
+        (Snippets.moduleRef ns "types")
+        (fmap section sections)
       where
+        preludesNs = reverse . (:) "base-preludes" . drop 1 . reverse $ ns
         section (Section header decls) =
           Model.section header $ join $ fmap decl decls
           where
@@ -89,10 +90,13 @@ modules ns sections =
                         type_
     modelAccessorsContent ns =
       ModelAccessors.content
-        (nsText ns)
+        (Snippets.moduleRef preludesNs "all")
+        (Snippets.moduleRef ns "types")
+        (Snippets.moduleRef ns "accessors")
         hasFieldConfigs
         hasVariantConfigs
       where
+        preludesNs = reverse . (:) "base-preludes" . drop 1 . reverse $ ns
         decls = do
           Section _ decls <- sections
           decls

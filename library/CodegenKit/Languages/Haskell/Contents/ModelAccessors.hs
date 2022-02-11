@@ -11,13 +11,17 @@ import CodegenKit.Prelude hiding (product, sum)
 -- *
 
 content ::
-  Text ->
+  B.Builder ->
+  B.Builder ->
+  B.Builder ->
   [(Text, Text, [(Text, Text, Int, Int)])] ->
   [(Text, [(Text, Text)])] ->
   Text
-content namespace hasFieldConfigs hasVariantConfigs =
+content preludeModuleRef typesModuleRef moduleRef hasFieldConfigs hasVariantConfigs =
   Templates.module_
-    namespace
+    preludeModuleRef
+    typesModuleRef
+    moduleRef
     ( hasFieldConfigs
         & fmap
           ( \(lcFieldName, ucFieldName, instanceConfigs) ->

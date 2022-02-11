@@ -10,17 +10,18 @@ import qualified TextBuilder as B'
 -- *
 
 content ::
-  -- | Namespace.
-  Text ->
+  B.Builder ->
+  B.Builder ->
+  B.Builder ->
   -- | Declaration sections.
   [Section] ->
   Text
-content namespace sections =
+content operatorsPreludeRef allPreludeRef moduleRef sections =
   [i|
-    module $namespace.Types where
+    module $moduleRef where
 
-    import $namespace.Operators
-    import qualified $namespace.Prelude as $preludeAlias
+    import $operatorsPreludeRef
+    import qualified $allPreludeRef as $preludeAlias
     import qualified Data.Vector as $boxedVectorAlias
     import qualified Data.Vector.Unboxed as $unboxedVectorAlias
 
