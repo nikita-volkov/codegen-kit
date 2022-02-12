@@ -1,4 +1,4 @@
-module CodegenKit.DependencyManagement
+module CodegenKit.Dependencies
   ( -- *
     Dependencies,
 
