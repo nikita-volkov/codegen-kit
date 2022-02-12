@@ -34,6 +34,7 @@ library
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
     CodegenKit.ByLanguage.Haskell.Packaging
     CodegenKit.ByLanguage.Haskell.Snippets
+    CodegenKit.DependencyManagement
     CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:
