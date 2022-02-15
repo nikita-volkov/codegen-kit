@@ -10,6 +10,7 @@ module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
     Decl,
     product,
     sum,
+    alias,
 
     -- *
     Field,
@@ -72,6 +73,8 @@ modules sections =
                     where
                       modelMemberType (MemberType type_ _) =
                         type_
+              AliasDecl name docs (MemberType signature _) ->
+                [ModelTypesPackage.alias name docs signature]
     modelAccessors =
       ModelAccessorsPackage.modules
         hasFieldConfigs
@@ -121,6 +124,8 @@ modules sections =
                         error "TODO: Multimember variant"
                   exit variantRegistry =
                     next fieldRegistry variantRegistry
+              AliasDecl _ _ _ ->
+                next fieldRegistry variantRegistry
             exit ::
               Map Text (Text, [(Text, Text, Int, Int)]) ->
               Map Text [(Text, Text)] ->
@@ -177,6 +182,12 @@ data Decl
       -- ^ Docs.
       [Variant]
       -- ^ Variants.
+  | AliasDecl
+      Text
+      -- ^ Uppercase name.
+      Text
+      -- ^ Docs.
+      MemberType
 
 product :: Name -> Text -> [Field] -> Decl
 product name docs fields =
@@ -192,6 +203,11 @@ product name docs fields =
 sum :: Name -> Text -> [Variant] -> Decl
 sum name =
   SumDecl
+    (Name.toUpperCamelCaseText name)
+
+alias :: Name -> Text -> MemberType -> Decl
+alias name =
+  AliasDecl
     (Name.toUpperCamelCaseText name)
 
 -- *
