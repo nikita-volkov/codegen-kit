@@ -23,7 +23,7 @@ module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
   )
 where
 
-import qualified Coalmine.List as List
+import qualified Coalmine.BaseExtras.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.ByLanguage.Haskell.Dependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.ExpFormatter as ExpFormatter

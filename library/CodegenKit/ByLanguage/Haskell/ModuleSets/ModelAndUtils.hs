@@ -26,7 +26,7 @@ module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
   )
 where
 
-import qualified Coalmine.List as List
+import qualified Coalmine.BaseExtras.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import qualified Coalmine.SimplePaths as Paths
