@@ -129,13 +129,11 @@ toFileSet ::
   Modules ->
   FileSet
 toFileSet packageName synopsis version modules =
-  case inNamespace [packageName] modules of
-    modules ->
-      mconcat
-        [ StackFileSet.fileSet,
-          toCabalFileSet packageName synopsis version modules,
-          toModulesFileSet "library" modules
-        ]
+  mconcat
+    [ StackFileSet.fileSet,
+      toCabalFileSet packageName synopsis version modules,
+      toModulesFileSet "library" modules
+    ]
 
 -- **
 

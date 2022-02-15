@@ -14,13 +14,13 @@ main =
   where
     fileSet =
       HaskellPackaging.toFileSet
-        "iso8601"
+        "fmt-packs-formatica-iso8601-v1"
         "ISO-8601 model"
         (HaskellPackaging.listVersion 0 [1])
         modules
       where
         modules =
-          mconcat $
+          HaskellPackaging.inNamespace ["fmt-packs", "formatica", "iso8601", "v1"] . mconcat $
             [ BasePreludesPackage.all,
               BasePreludesPackage.dataTypes,
               BasePreludesPackage.operators,
