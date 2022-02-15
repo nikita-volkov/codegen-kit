@@ -21,8 +21,5 @@ main =
       where
         modules =
           HaskellPackaging.inNamespace ["fmt-packs", "formatica", "iso8601", "v1"] . mconcat $
-            [ BasePreludesPackage.all,
-              BasePreludesPackage.dataTypes,
-              BasePreludesPackage.operators,
-              Iso8601ModelAndUtils.iso8601Modules
+            [ Iso8601ModelAndUtils.iso8601Modules
             ]

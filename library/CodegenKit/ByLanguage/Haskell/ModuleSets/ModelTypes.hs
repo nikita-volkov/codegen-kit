@@ -48,7 +48,8 @@ modules sections =
   Packaging.module_ True moduleName deps (content sections)
   where
     deps =
-      [ Dependencies.hashable,
+      [ Dependencies.basePrelude,
+        Dependencies.hashable,
         Dependencies.vector
       ]
 
@@ -64,8 +65,8 @@ content sections ns =
   [i|
     module $moduleRef where
 
-    import $operatorsPreludeRef
-    import qualified $allPreludeRef as $preludeAlias
+    import BasePrelude.Operators
+    import qualified BasePrelude as $preludeAlias
     import qualified Data.Hashable as $hashableAlias
     import qualified Data.Vector as $boxedVectorAlias
     import qualified Data.Vector.Unboxed as $unboxedVectorAlias

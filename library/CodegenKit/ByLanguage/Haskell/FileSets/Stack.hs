@@ -23,4 +23,6 @@ contents :: Text
 contents =
   [i|
     resolver: nightly-2022-02-07
+    extra-deps:
+      - base-prelude-1.6
   |]

@@ -3,9 +3,11 @@ module CodegenKit.ByLanguage.Haskell.Dependencies where
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
 import CodegenKit.Prelude
 
-base, bytestring, containers, hashable, scientific, text, time, uuid, vector :: Packaging.Dependency
+base, basePrelude, bytestring, containers, hashable, scientific, text, time, uuid, vector :: Packaging.Dependency
 base =
   Packaging.dependency "base" 4 [12] 5 []
+basePrelude =
+  Packaging.dependency "base-prelude" 1 [6] 2 []
 bytestring =
   Packaging.dependency "bytestring" 0 [10] 0 [12]
 containers =

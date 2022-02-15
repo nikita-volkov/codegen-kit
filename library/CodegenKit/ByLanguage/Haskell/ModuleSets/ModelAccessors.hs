@@ -6,6 +6,7 @@ where
 
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
+import qualified CodegenKit.ByLanguage.Haskell.Dependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors.Templates as Templates
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
@@ -26,11 +27,14 @@ modules ::
   [(Text, [(Text, Text)])] ->
   Packaging.Modules
 modules hasFieldConfigs hasVariantConfigs =
-  Packaging.module_ True moduleName [] contentByNs
+  Packaging.module_ True moduleName deps contentByNs
   where
+    deps =
+      [ Dependencies.basePrelude
+      ]
     contentByNs ns =
       content
-        (Snippets.moduleRef ns BasePreludesPackage.allName)
+        "BasePrelude"
         (Snippets.moduleRef ns ModelTypesPackage.moduleName)
         (Snippets.moduleRef ns moduleName)
         hasFieldConfigs
