@@ -10,11 +10,11 @@ packages:
     git: https://github.com/nikita-volkov/coalmine
     pantry-tree:
       size: 4162
-      sha256: 7451e8beb33988e0842b80058afd09e956047009c36ea370041d43ae2488d003
-    commit: 78ff4cf19cea67945e3a882228fc6482320dd74e
+      sha256: c894465732a256f00b8e863865b769b2df86d300a11ed71e757dae99f0f75d83
+    commit: 10e161e8cf5b34e1a0f56ba595bb334d87e3d619
   original:
     git: https://github.com/nikita-volkov/coalmine
-    commit: 78ff4cf19cea67945e3a882228fc6482320dd74e
+    commit: 10e161e8cf5b34e1a0f56ba595bb334d87e3d619
 - completed:
     name: fx
     version: '0.5'
