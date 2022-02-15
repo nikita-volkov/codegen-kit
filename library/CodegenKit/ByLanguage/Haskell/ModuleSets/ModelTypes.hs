@@ -13,6 +13,7 @@ module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
     Decl,
     productAndInstances,
     sumAndInstances,
+    alias,
 
     -- *
     Type,
@@ -175,6 +176,16 @@ sum sumName haddock variants =
           [i|
             $preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord
           |]
+
+alias :: Text -> Text -> Type -> Decl
+alias name haddock (Type signature) =
+  Decl
+    [i|
+      ${haddockPrefix}type $name = $signature
+    |]
+  where
+    haddockPrefix =
+      Snippets.prefixHaddockWithNewline haddock
 
 -- * Product instances
 
