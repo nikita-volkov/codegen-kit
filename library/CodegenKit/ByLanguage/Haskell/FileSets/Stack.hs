@@ -5,6 +5,7 @@ module CodegenKit.ByLanguage.Haskell.FileSets.Stack
     -- *
     ExtraDep,
     hackageExtraDep,
+    githubExtraDep,
   )
 where
 
@@ -58,3 +59,13 @@ hackageExtraDep name versionHead versionTail =
           B'.unsignedDecimal versionHead,
           foldMap (mappend "." . B'.unsignedDecimal) versionTail
         ]
+
+githubExtraDep :: Text -> Text -> Text -> Text -> ExtraDep
+githubExtraDep name user repo commitHash =
+  ExtraDep name splice
+  where
+    splice =
+      [i|
+        - git: https://github.com/$user/$repo
+          commit: $commitHash
+      |]
