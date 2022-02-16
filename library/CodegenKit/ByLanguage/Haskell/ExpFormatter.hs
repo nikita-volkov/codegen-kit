@@ -7,7 +7,7 @@ import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.SimplePaths as Paths
 import CodegenKit.Prelude
 import qualified Data.Text as Text
-import qualified TextBuilder as B'
+import qualified TextBuilderDev as B'
 
 -- *
 

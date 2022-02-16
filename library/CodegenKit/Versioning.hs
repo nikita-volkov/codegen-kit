@@ -9,7 +9,7 @@ where
 
 import qualified Coalmine.Range as Range
 import CodegenKit.Prelude
-import qualified TextBuilder
+import qualified TextBuilderDev as TextBuilder
 
 data VersionBounds
   = VersionBounds

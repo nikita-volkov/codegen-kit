@@ -37,7 +37,7 @@ import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified Data.Map.Strict as Map
-import qualified TextBuilder as B'
+import qualified TextBuilderDev as B'
 
 -- *
 

@@ -32,7 +32,7 @@ import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePr
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
-import qualified TextBuilder as B'
+import qualified TextBuilderDev as B'
 
 -- *
 

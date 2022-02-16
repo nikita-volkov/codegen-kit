@@ -48,7 +48,7 @@ library
     domain,
     extra,
     rerebase,
-    text-builder,
+    text-builder-dev,
 
 test-suite test
   import: language-settings

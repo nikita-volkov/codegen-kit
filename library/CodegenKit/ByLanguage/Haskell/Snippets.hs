@@ -4,7 +4,7 @@ import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import CodegenKit.Prelude
 import qualified Data.Text as Text
-import qualified TextBuilder as B'
+import qualified TextBuilderDev as B'
 
 -- |
 -- Multiline Haddock in the prefix position.

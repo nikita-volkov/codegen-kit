@@ -15,7 +15,7 @@ import qualified Coalmine.Name as Name
 import qualified CodegenKit.Packaging as Packaging
 import CodegenKit.Prelude hiding (Version)
 import qualified Data.List.Extra as ListExtra
-import qualified TextBuilder as B'
+import qualified TextBuilderDev as B'
 
 -- *
 

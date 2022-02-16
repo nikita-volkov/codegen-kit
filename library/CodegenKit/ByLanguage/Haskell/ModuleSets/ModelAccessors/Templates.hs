@@ -10,7 +10,7 @@ import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
-import qualified TextBuilder as B'
+import qualified TextBuilderDev as B'
 
 module_ preludeModuleRef typesModuleRef moduleRef productFieldsContent sumVariantsContent =
   [i|

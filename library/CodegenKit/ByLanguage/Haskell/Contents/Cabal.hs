@@ -26,7 +26,7 @@ import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import CodegenKit.Prelude hiding (Version)
-import qualified TextBuilder as B'
+import qualified TextBuilderDev as B'
 
 -- *
 

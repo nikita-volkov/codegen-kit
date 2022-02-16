@@ -12,7 +12,7 @@ import qualified CodegenKit.ByLanguage.Haskell.Dependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (all)
-import qualified TextBuilder as B'
+import qualified TextBuilderDev as B'
 
 -- *
 
