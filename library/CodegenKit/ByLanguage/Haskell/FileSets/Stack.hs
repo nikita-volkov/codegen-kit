@@ -42,15 +42,13 @@ contents extraDepList =
 data ExtraDep = ExtraDep
   { -- | Name. For ordering.
     extraDepName :: Text,
-    -- | Minimal nightly resolver date, where it is present.
-    extraDepMinimalResolverDate :: Maybe Day,
     -- | Definition.
     extraDepSplice :: Builder
   }
 
-hackageExtraDep :: Text -> Maybe Day -> Word -> [Word] -> ExtraDep
-hackageExtraDep name resolverDate versionHead versionTail =
-  ExtraDep name resolverDate splice
+hackageExtraDep :: Text -> Word -> [Word] -> ExtraDep
+hackageExtraDep name versionHead versionTail =
+  ExtraDep name splice
   where
     splice =
       B.uniline . mconcat $
