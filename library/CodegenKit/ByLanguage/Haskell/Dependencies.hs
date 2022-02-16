@@ -5,22 +5,22 @@ import CodegenKit.Prelude
 
 base, basePrelude, bytestring, containers, hashable, scientific, text, time, uuid, vector :: Packaging.Dependency
 base =
-  Packaging.dependency "base" 4 [12] 5 []
+  Packaging.dependency "base" 4 [12] 5 [] []
 basePrelude =
-  Packaging.dependency "base-prelude" 1 [6] 2 []
+  Packaging.dependency "base-prelude" 1 [6] 2 [] []
 bytestring =
-  Packaging.dependency "bytestring" 0 [10] 0 [12]
+  Packaging.dependency "bytestring" 0 [10] 0 [12] []
 containers =
-  Packaging.dependency "containers" 0 [6] 0 [7]
+  Packaging.dependency "containers" 0 [6] 0 [7] []
 hashable =
-  Packaging.dependency "hashable" 1 [3, 5] 1 [5]
+  Packaging.dependency "hashable" 1 [3, 5] 1 [5] []
 scientific =
-  Packaging.dependency "scientific" 0 [3] 0 [4]
+  Packaging.dependency "scientific" 0 [3] 0 [4] []
 text =
-  Packaging.dependency "text" 1 [2] 3 []
+  Packaging.dependency "text" 1 [2] 3 [] []
 time =
-  Packaging.dependency "time" 1 [9] 2 []
+  Packaging.dependency "time" 1 [9] 2 [] []
 uuid =
-  Packaging.dependency "uuid" 1 [3] 2 []
+  Packaging.dependency "uuid" 1 [3] 2 [] []
 vector =
-  Packaging.dependency "vector" 0 [12] 0 [13]
+  Packaging.dependency "vector" 0 [12] 0 [13] []
