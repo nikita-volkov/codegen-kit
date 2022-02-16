@@ -14,6 +14,11 @@ module CodegenKit.ByLanguage.Haskell.Packaging
     -- *
     CabalContents.Version,
     CabalContents.listVersion,
+
+    -- *
+    StackExtraDep,
+    hackageStackExtraDep,
+    githubStackExtraDep,
   )
 where
 
@@ -214,12 +219,12 @@ dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
 
 newtype StackExtraDep = StackExtraDep StackFileSet.ExtraDep
 
-hackageExtraDep :: Text -> Word -> [Word] -> StackExtraDep
-hackageExtraDep =
+hackageStackExtraDep :: Text -> Word -> [Word] -> StackExtraDep
+hackageStackExtraDep =
   coerce StackFileSet.hackageExtraDep
 
-githubExtraDep :: Text -> Text -> Text -> Text -> StackExtraDep
-githubExtraDep =
+githubStackExtraDep :: Text -> Text -> Text -> Text -> StackExtraDep
+githubStackExtraDep =
   coerce StackFileSet.githubExtraDep
 
 -- * Helpers

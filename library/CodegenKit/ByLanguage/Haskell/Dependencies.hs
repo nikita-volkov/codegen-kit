@@ -12,6 +12,13 @@ basePrelude =
 bytestring =
   dependency "bytestring" 0 [10] 0 [12] []
 
+coalmine =
+  dependency "coalmine" 0 [1] 0 [2] stackDeps
+  where
+    stackDeps =
+      [ githubStackExtraDep "coalmine" "nikita-volkov" "coalmine" "4241525781fb72b9b15f30932a44e45f6ab76442"
+      ]
+
 containers =
   dependency "containers" 0 [6] 0 [7] []
 
