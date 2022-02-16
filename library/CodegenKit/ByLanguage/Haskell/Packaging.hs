@@ -182,7 +182,9 @@ module_ exposed name dependencies contents =
 data Dependency
   = Dependency
       !Text
+      -- ^ Package name.
       !Versioning.VersionBounds
+      -- ^ Package version bounds.
 
 -- **
 
