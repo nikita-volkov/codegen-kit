@@ -1,26 +1,34 @@
 module CodegenKit.ByLanguage.Haskell.Dependencies where
 
-import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
+import CodegenKit.ByLanguage.Haskell.Packaging
 import CodegenKit.Prelude
 
-base, basePrelude, bytestring, containers, hashable, scientific, text, time, uuid, vector :: Packaging.Dependency
 base =
-  Packaging.dependency "base" 4 [12] 5 [] []
+  dependency "base" 4 [12] 5 [] []
+
 basePrelude =
-  Packaging.dependency "base-prelude" 1 [6] 2 [] []
+  dependency "base-prelude" 1 [6] 2 [] []
+
 bytestring =
-  Packaging.dependency "bytestring" 0 [10] 0 [12] []
+  dependency "bytestring" 0 [10] 0 [12] []
+
 containers =
-  Packaging.dependency "containers" 0 [6] 0 [7] []
+  dependency "containers" 0 [6] 0 [7] []
+
 hashable =
-  Packaging.dependency "hashable" 1 [3, 5] 1 [5] []
+  dependency "hashable" 1 [3, 5] 1 [5] []
+
 scientific =
-  Packaging.dependency "scientific" 0 [3] 0 [4] []
+  dependency "scientific" 0 [3] 0 [4] []
+
 text =
-  Packaging.dependency "text" 1 [2] 3 [] []
+  dependency "text" 1 [2] 3 [] []
+
 time =
-  Packaging.dependency "time" 1 [9] 2 [] []
+  dependency "time" 1 [9] 2 [] []
+
 uuid =
-  Packaging.dependency "uuid" 1 [3] 2 [] []
+  dependency "uuid" 1 [3] 2 [] []
+
 vector =
-  Packaging.dependency "vector" 0 [12] 0 [13] []
+  dependency "vector" 0 [12] 0 [13] []
