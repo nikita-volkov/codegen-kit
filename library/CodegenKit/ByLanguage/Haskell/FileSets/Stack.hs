@@ -1,6 +1,10 @@
 module CodegenKit.ByLanguage.Haskell.FileSets.Stack
   ( -- *
     fileSet,
+
+    -- *
+    ExtraDep,
+    hackageExtraDep,
   )
 where
 
@@ -13,15 +17,44 @@ import qualified TextBuilder as B'
 
 -- *
 
-fileSet :: Packaging.FileSet
+fileSet :: [ExtraDep] -> Packaging.FileSet
 fileSet =
-  Packaging.fromFile "stack.yaml" contents
+  Packaging.fromFile "stack.yaml" . contents
 
 -- *
 
-contents :: Text
-contents =
+contents :: [ExtraDep] -> Text
+contents extraDepList =
   [i|
     resolver: nightly-2022-02-16
     extra-deps:
+      $extraDepsSplice
   |]
+  where
+    extraDepsSplice =
+      B.intercalate "\n"
+        . fmap (\(ExtraDep _ x) -> x)
+        . sortWith (\(ExtraDep x _) -> x)
+        $ extraDepList
+
+-- *
+
+data ExtraDep
+  = ExtraDep
+      !Text
+      -- ^ Name. For ordering.
+      !Builder
+      -- ^ Definition.
+
+hackageExtraDep :: Text -> Word -> [Word] -> ExtraDep
+hackageExtraDep name versionHead versionTail =
+  ExtraDep name definition
+  where
+    definition =
+      B.uniline . mconcat $
+        [ "- ",
+          fromText name,
+          "-",
+          B'.unsignedDecimal versionHead,
+          foldMap (mappend "." . B'.unsignedDecimal) versionTail
+        ]

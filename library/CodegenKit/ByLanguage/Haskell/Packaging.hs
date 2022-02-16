@@ -118,6 +118,10 @@ toModulesFileSet srcDirPath (Modules files _ _ _) =
         (Paths.inDir srcDirPath filePath)
         (render [])
 
+toStackExtraDeps :: Modules -> [StackFileSet.ExtraDep]
+toStackExtraDeps =
+  error "TODO"
+
 -- |
 -- Generate all package files including @.cabal@.
 toFileSet ::
@@ -130,7 +134,7 @@ toFileSet ::
   FileSet
 toFileSet packageName synopsis version modules =
   mconcat
-    [ StackFileSet.fileSet,
+    [ StackFileSet.fileSet (toStackExtraDeps modules),
       toCabalFileSet packageName synopsis version modules,
       toModulesFileSet "library" modules
     ]
