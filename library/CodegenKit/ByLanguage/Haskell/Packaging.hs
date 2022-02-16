@@ -16,9 +16,9 @@ module CodegenKit.ByLanguage.Haskell.Packaging
     CabalContents.listVersion,
 
     -- *
-    StackExtraDep,
-    hackageStackExtraDep,
-    githubStackExtraDep,
+    PackageLocation,
+    hackagePackageLocation,
+    githubPackageLocation,
   )
 where
 
@@ -205,7 +205,7 @@ dependencyTuple (Dependency a b _) =
 
 -- **
 
-dependency :: Text -> Word -> [Word] -> Word -> [Word] -> [StackExtraDep] -> Dependency
+dependency :: Text -> Word -> [Word] -> Word -> [Word] -> [PackageLocation] -> Dependency
 dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
   Dependency
     packageName
@@ -217,14 +217,16 @@ dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
 
 -- *
 
-newtype StackExtraDep = StackExtraDep StackFileSet.ExtraDep
+-- |
+-- How to acquire the source code of the package.
+newtype PackageLocation = PackageLocation StackFileSet.ExtraDep
 
-hackageStackExtraDep :: Text -> Word -> [Word] -> StackExtraDep
-hackageStackExtraDep =
+hackagePackageLocation :: Text -> Word -> [Word] -> PackageLocation
+hackagePackageLocation =
   coerce StackFileSet.hackageExtraDep
 
-githubStackExtraDep :: Text -> Text -> Text -> Text -> StackExtraDep
-githubStackExtraDep =
+githubPackageLocation :: Text -> Text -> Text -> Text -> PackageLocation
+githubPackageLocation =
   coerce StackFileSet.githubExtraDep
 
 -- * Helpers
