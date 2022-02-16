@@ -53,12 +53,12 @@ packages:
     version: '0.7'
     git: https://github.com/nikita-volkov/text-builder
     pantry-tree:
-      size: 742
-      sha256: 8bd5b90c2d932770db7ee8ed8d8df1a3e35d9f9de0aaf4170ddffaaa6963d1d0
-    commit: 78b676ed8f042e28dfef92c882b3b47d7e2391da
+      size: 797
+      sha256: 42b96cd2ac2adb708bb5201d81a78bfc8403c394a64da987381e4258c3f9069c
+    commit: be6fe917e8a8a30823d13ece141b299d4d2e8cee
   original:
     git: https://github.com/nikita-volkov/text-builder
-    commit: 78b676ed8f042e28dfef92c882b3b47d7e2391da
+    commit: be6fe917e8a8a30823d13ece141b299d4d2e8cee
 - completed:
     hackage: aeson-value-parser-0.19.6@sha256:ccd8424b17fd5608c3f1f7e51c7d4b77ff64cd409b51387759d27fc0e6e419bc,2054
     pantry-tree:

@@ -9,6 +9,6 @@ extra-deps:
   - git: https://github.com/nikita-volkov/yaml-unscrambler
     commit: f27bcefc76e3e7181ee4b73a4c34407729fa8be5
   - git: https://github.com/nikita-volkov/text-builder
-    commit: 78b676ed8f042e28dfef92c882b3b47d7e2391da
+    commit: be6fe917e8a8a30823d13ece141b299d4d2e8cee
   - aeson-value-parser-0.19.6
   - vector-extras-0.2.6
