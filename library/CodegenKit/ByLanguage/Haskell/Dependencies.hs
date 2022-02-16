@@ -16,7 +16,13 @@ coalmine =
   dependency "coalmine" 0 [1] 0 [2] stackDeps
   where
     stackDeps =
-      [ githubStackExtraDep "coalmine" "nikita-volkov" "coalmine" "4241525781fb72b9b15f30932a44e45f6ab76442"
+      [ githubStackExtraDep "coalmine" "nikita-volkov" "coalmine" "637c01270b3d2254124d24231d0b7a5c3e0db602",
+        githubStackExtraDep "fx" "nikita-volkov" "fx" "f3947e32f8cc3c764ab8ee48581f2e1f35d3bcdb",
+        githubStackExtraDep "moore-machines" "nikita-volkov" "moore-machines" "7e95c33b203a1cfe42dbc0e0de3cec8e6fe94290",
+        hackageStackExtraDep "vector-extras" 0 [2, 6],
+        hackageStackExtraDep "text-builder-dev" 0 [2],
+        hackageStackExtraDep "yaml-unscrambler" 0 [1, 0, 8],
+        hackageStackExtraDep "aeson-value-parser" 0 [19, 6]
       ]
 
 containers =
