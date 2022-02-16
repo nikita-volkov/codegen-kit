@@ -14,6 +14,7 @@ import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import qualified CodegenKit.Packaging as Packaging
 import CodegenKit.Prelude hiding (Version)
+import qualified Data.List.Extra as ListExtra
 import qualified TextBuilder as B'
 
 -- *
@@ -35,7 +36,7 @@ contents extraDepList =
     extraDepsSplice =
       B.intercalate "\n"
         . fmap extraDepSplice
-        . sortWith extraDepName
+        . ListExtra.nubSortOn extraDepName
         $ extraDepList
 
 -- *

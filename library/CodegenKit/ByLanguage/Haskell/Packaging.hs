@@ -43,26 +43,28 @@ data Modules
       -- ^ Hidden modules.
       !(Map Text Versioning.VersionBounds)
       -- ^ Package dependencies.
+      ![StackFileSet.ExtraDep]
+      -- ^ Stack dependencies.
 
 instance Semigroup Modules where
-  Modules l1 l2 l3 l4 <> Modules r1 r2 r3 r4 =
-    Modules (l1 <> r1) (l2 <> r2) (l3 <> r3) (Map.unionWith (<>) l4 r4)
+  Modules l1 l2 l3 l4 l5 <> Modules r1 r2 r3 r4 r5 =
+    Modules (l1 <> r1) (l2 <> r2) (l3 <> r3) (Map.unionWith (<>) l4 r4) (l5 <> r5)
 
 instance Monoid Modules where
-  mempty = Modules mempty mempty mempty mempty
+  mempty = Modules mempty mempty mempty mempty mempty
 
 -- **
 
 toExposedModuleSet :: Modules -> Set [Name]
-toExposedModuleSet (Modules _ exposed _ _) =
+toExposedModuleSet (Modules _ exposed _ _ _) =
   fromList . toList $ exposed
 
 toHiddenModuleSet :: Modules -> Set [Name]
-toHiddenModuleSet (Modules _ _ hidden _) =
+toHiddenModuleSet (Modules _ _ hidden _ _) =
   fromList . toList $ hidden
 
 toDependencyList :: Modules -> [(Text, Versioning.VersionBounds)]
-toDependencyList (Modules _ _ _ deps) =
+toDependencyList (Modules _ _ _ deps _) =
   deps & Map.toAscList
 
 -- | Render cabal file contents.
@@ -110,7 +112,7 @@ toCabalFileSet packageName synopsis version modules =
       toCabalContents packageName synopsis version modules
 
 toModulesFileSet :: DirPath -> Modules -> FileSet
-toModulesFileSet srcDirPath (Modules files _ _ _) =
+toModulesFileSet srcDirPath (Modules files _ _ _ _) =
   foldMap file files
   where
     file (filePath, render) =
@@ -119,8 +121,8 @@ toModulesFileSet srcDirPath (Modules files _ _ _) =
         (render [])
 
 toStackExtraDeps :: Modules -> [StackFileSet.ExtraDep]
-toStackExtraDeps =
-  error "TODO"
+toStackExtraDeps (Modules _ _ _ _ x) =
+  x
 
 -- |
 -- Generate all package files including @.cabal@.
@@ -142,12 +144,13 @@ toFileSet packageName synopsis version modules =
 -- **
 
 inNamespace :: [Name] -> Modules -> Modules
-inNamespace ns (Modules files exposed hidden dependencies) =
+inNamespace ns (Modules files exposed hidden dependencies stackExtraDeps) =
   Modules
     files'
     (fmap (mappend ns) exposed)
     (fmap (mappend ns) hidden)
     dependencies
+    stackExtraDeps
   where
     files' =
       files & fmap (bimap prependPath prependModuleName)
@@ -173,6 +176,7 @@ module_ exposed name dependencies contents =
     (if exposed then pure [name] else empty)
     (if exposed then empty else pure [name])
     (Map.fromListWith (<>) . fmap dependencyTuple $ dependencies)
+    (foldMap (\(Dependency _ _ x) -> x) dependencies)
   where
     filePath =
       fromString . toString . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
@@ -185,23 +189,38 @@ data Dependency
       -- ^ Package name.
       !Versioning.VersionBounds
       -- ^ Package version bounds.
+      ![StackFileSet.ExtraDep]
+      -- ^ Extra dependencies for stack.
 
 -- **
 
 dependencyTuple :: Dependency -> (Text, Versioning.VersionBounds)
-dependencyTuple (Dependency a b) =
+dependencyTuple (Dependency a b _) =
   (a, b)
 
 -- **
 
-dependency :: Text -> Word -> [Word] -> Word -> [Word] -> Dependency
-dependency packageName minHead minTail maxHead maxTail =
+dependency :: Text -> Word -> [Word] -> Word -> [Word] -> [StackExtraDep] -> Dependency
+dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
   Dependency
     packageName
     ( Versioning.VersionBounds
         (Versioning.Version minHead minTail)
         (Versioning.Version maxHead maxTail)
     )
+    (coerce stackExtraDeps)
+
+-- *
+
+newtype StackExtraDep = StackExtraDep StackFileSet.ExtraDep
+
+hackageExtraDep :: Text -> Word -> [Word] -> StackExtraDep
+hackageExtraDep =
+  coerce StackFileSet.hackageExtraDep
+
+githubExtraDep :: Text -> Text -> Text -> Text -> StackExtraDep
+githubExtraDep =
+  coerce StackFileSet.githubExtraDep
 
 -- * Helpers
 

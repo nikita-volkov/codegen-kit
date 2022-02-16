@@ -46,6 +46,7 @@ library
     coalmine,
     directory,
     domain,
+    extra,
     rerebase,
     text-builder,
 
