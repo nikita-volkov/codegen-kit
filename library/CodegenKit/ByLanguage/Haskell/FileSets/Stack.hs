@@ -33,24 +33,26 @@ contents extraDepList =
   where
     extraDepsSplice =
       B.intercalate "\n"
-        . fmap (\(ExtraDep _ x) -> x)
-        . sortWith (\(ExtraDep x _) -> x)
+        . fmap extraDepSplice
+        . sortWith extraDepName
         $ extraDepList
 
 -- *
 
-data ExtraDep
-  = ExtraDep
-      !Text
-      -- ^ Name. For ordering.
-      !Builder
-      -- ^ Definition.
+data ExtraDep = ExtraDep
+  { -- | Name. For ordering.
+    extraDepName :: Text,
+    -- | Minimal nightly resolver date, where it is present.
+    extraDepMinimalResolverDate :: Maybe Day,
+    -- | Definition.
+    extraDepSplice :: Builder
+  }
 
-hackageExtraDep :: Text -> Word -> [Word] -> ExtraDep
-hackageExtraDep name versionHead versionTail =
-  ExtraDep name definition
+hackageExtraDep :: Text -> Maybe Day -> Word -> [Word] -> ExtraDep
+hackageExtraDep name resolverDate versionHead versionTail =
+  ExtraDep name resolverDate splice
   where
-    definition =
+    splice =
       B.uniline . mconcat $
         [ "- ",
           fromText name,
