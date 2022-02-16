@@ -22,7 +22,6 @@ fileSet =
 contents :: Text
 contents =
   [i|
-    resolver: nightly-2022-02-07
+    resolver: nightly-2022-02-16
     extra-deps:
-      - base-prelude-1.6
   |]
