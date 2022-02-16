@@ -10,22 +10,22 @@ packages:
     git: https://github.com/nikita-volkov/coalmine
     pantry-tree:
       size: 4162
-      sha256: c894465732a256f00b8e863865b769b2df86d300a11ed71e757dae99f0f75d83
-    commit: 10e161e8cf5b34e1a0f56ba595bb334d87e3d619
+      sha256: cff25a75b5a95bf8750abd2bc963b9772e9088bf08d5c2f7da475ce052e81b57
+    commit: 4241525781fb72b9b15f30932a44e45f6ab76442
   original:
     git: https://github.com/nikita-volkov/coalmine
-    commit: 10e161e8cf5b34e1a0f56ba595bb334d87e3d619
+    commit: 4241525781fb72b9b15f30932a44e45f6ab76442
 - completed:
     name: fx
     version: '0.5'
     git: https://github.com/nikita-volkov/fx
     pantry-tree:
-      size: 382
-      sha256: 7d17198abdf4889ad3a86b50080205f87b7ad1b9bf7709231150cb573da09731
-    commit: a612390cf54c37150c367324b154170921b98318
+      size: 481
+      sha256: c7e3247e7aaefa9a0d400868ecccabb3b381f5d15dd349a4124e6aff7344c1d8
+    commit: f3947e32f8cc3c764ab8ee48581f2e1f35d3bcdb
   original:
     git: https://github.com/nikita-volkov/fx
-    commit: a612390cf54c37150c367324b154170921b98318
+    commit: f3947e32f8cc3c764ab8ee48581f2e1f35d3bcdb
 - completed:
     name: moore-machines
     version: '0.1'
@@ -39,15 +39,15 @@ packages:
     commit: 7e95c33b203a1cfe42dbc0e0de3cec8e6fe94290
 - completed:
     name: yaml-unscrambler
-    version: 0.1.0.4
+    version: 0.1.0.6
     git: https://github.com/nikita-volkov/yaml-unscrambler
     pantry-tree:
-      size: 1369
-      sha256: 253656899fba7db0ad2c0bcd6f10e451226fbd4e6a43db08a01aacf6036a53f3
-    commit: 630840e20698389f30a75d5af5c0b8ba249f5600
+      size: 1419
+      sha256: 60db6c0930d2aae503984c44fb7869718aad0a25a6d703b92f689676f6015586
+    commit: f27bcefc76e3e7181ee4b73a4c34407729fa8be5
   original:
     git: https://github.com/nikita-volkov/yaml-unscrambler
-    commit: 630840e20698389f30a75d5af5c0b8ba249f5600
+    commit: f27bcefc76e3e7181ee4b73a4c34407729fa8be5
 - completed:
     name: text-builder
     version: '0.7'
@@ -60,26 +60,12 @@ packages:
     git: https://github.com/nikita-volkov/text-builder
     commit: 78b676ed8f042e28dfef92c882b3b47d7e2391da
 - completed:
-    hackage: aeson-2.0.3.0@sha256:130bda8e10dc6dd159b79b306abb10025d7f8b5d9cbc2f7d6d7e6768a0272058,5845
-    pantry-tree:
-      size: 38191
-      sha256: bccfc5a7259a27aad7e4193f367c3d7d67799f42632fdcb90241c1e9fbb0cf40
-  original:
-    hackage: aeson-2.0.3.0
-- completed:
     hackage: aeson-value-parser-0.19.6@sha256:ccd8424b17fd5608c3f1f7e51c7d4b77ff64cd409b51387759d27fc0e6e419bc,2054
     pantry-tree:
       size: 454
       sha256: a2fa5c7577470e6472dcc9f9c3826486bfabce337149555a5297c11807bfe993
   original:
     hackage: aeson-value-parser-0.19.6
-- completed:
-    hackage: yaml-0.11.7.0@sha256:bdc72a1f2eb7adc85d3dc8ff8b19d82319d3a4f2dd6847d1d161071cab6390c2,4936
-    pantry-tree:
-      size: 2044
-      sha256: 78740da227b412af7f63fbf277e47ea22a797e8ce18912d5450f9e88376b49ba
-  original:
-    hackage: yaml-0.11.7.0
 - completed:
     hackage: vector-extras-0.2.6@sha256:695f171936613b45b37de497ab26cba772616e43b09d9c39f0008d168c1f7064,1883
     pantry-tree:
@@ -89,7 +75,7 @@ packages:
     hackage: vector-extras-0.2.6
 snapshots:
 - completed:
-    size: 634925
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/2/7.yaml
-    sha256: eccf3b87cf7521eb8e7704c2efbb579d2074a0a76c7b961e0f07b98b3079ada5
-  original: nightly-2022-02-07
+    size: 608667
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/2/16.yaml
+    sha256: 84b803d5d1e8a364b5aa65386a40650d8b2a1df97cb23d51acd82f5d790f69df
+  original: nightly-2022-02-16

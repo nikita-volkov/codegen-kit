@@ -1,16 +1,14 @@
-resolver: nightly-2022-02-07
+resolver: nightly-2022-02-16
 extra-deps:
   - git: https://github.com/nikita-volkov/coalmine
-    commit: 10e161e8cf5b34e1a0f56ba595bb334d87e3d619
+    commit: 4241525781fb72b9b15f30932a44e45f6ab76442
   - git: https://github.com/nikita-volkov/fx
-    commit: a612390cf54c37150c367324b154170921b98318
+    commit: f3947e32f8cc3c764ab8ee48581f2e1f35d3bcdb
   - git: https://github.com/nikita-volkov/moore-machines
     commit: 7e95c33b203a1cfe42dbc0e0de3cec8e6fe94290
   - git: https://github.com/nikita-volkov/yaml-unscrambler
-    commit: 630840e20698389f30a75d5af5c0b8ba249f5600
+    commit: f27bcefc76e3e7181ee4b73a4c34407729fa8be5
   - git: https://github.com/nikita-volkov/text-builder
     commit: 78b676ed8f042e28dfef92c882b3b47d7e2391da
-  - aeson-2.0.3.0
   - aeson-value-parser-0.19.6
-  - yaml-0.11.7.0
   - vector-extras-0.2.6
