@@ -31,7 +31,7 @@ function clean_up {
 
 clean_up
 format
-build
+build_and_test
 demo
 
 cd demo-output
