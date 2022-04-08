@@ -48,6 +48,7 @@ library
     domain,
     extra,
     rerebase,
+    structure-kit,
     text-builder-dev,
 
 test-suite test

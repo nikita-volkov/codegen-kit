@@ -7,8 +7,8 @@ module CodegenKit.Versioning
   )
 where
 
-import qualified Coalmine.Range as Range
 import CodegenKit.Prelude
+import qualified StructureKit.Range as Range
 import qualified TextBuilderDev as TextBuilder
 
 data VersionBounds
