@@ -1,8 +1,8 @@
-resolver: nightly-2022-04-08
+resolver: nightly-2022-04-21
 
 extra-deps:
   - git: https://github.com/nikita-volkov/coalmine
-    commit: 8c4fe2f6829885730eafa571a572d18f56789edf
+    commit: b7fa0eb873ecd4b46280e67838167a3d8c8db2a6
   - git: https://github.com/nikita-volkov/fx
     commit: f3947e32f8cc3c764ab8ee48581f2e1f35d3bcdb
   - git: https://github.com/nikita-volkov/moore-machines
@@ -15,3 +15,5 @@ extra-deps:
   - domain-cereal-0.1
   - leb128-cereal-1.2
   - vector-extras-0.2.6
+  - text-builder-dev-0.3
+  - yaml-unscrambler-0.1.0.10

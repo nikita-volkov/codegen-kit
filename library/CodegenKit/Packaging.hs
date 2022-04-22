@@ -32,24 +32,15 @@ import qualified System.Directory as Directory
 newtype FileSet = FileSet [(FilePath, Text)]
   deriving (Semigroup, Monoid)
 
-instance ToString FileSet where
-  toString = toString . toMultilineTextBuilder
-
-instance ToText FileSet where
-  toText = toText . toMultilineTextBuilder
-
-instance ToTextBuilder FileSet where
-  toTextBuilder = toTextBuilder . toMultilineTextBuilder
-
-instance ToMultilineTextBuilder FileSet where
-  toMultilineTextBuilder (FileSet package) =
+instance PrettyPrinting FileSet where
+  toPrettyBuilder (FileSet package) =
     B.intercalate "\n\n" $ fmap renderFile package
     where
       renderFile (path, contents) =
         mconcat
-          [ toMultilineTextBuilder $ toTextBuilder path,
+          [ toPrettyBuilder path,
             ":",
-            B.indent 2 $ mappend "\n" $ toMultilineTextBuilder contents
+            B.indent 2 $ mappend "\n" $ fromText contents
           ]
 
 -- * Execution
@@ -59,11 +50,11 @@ write (FileSet files) =
   traverse_ (uncurry writeFileCreatingDirs) files
   where
     writeFileCreatingDirs path contents = do
-      Directory.createDirectoryIfMissing True $ toString $ Paths.filePathDir path
-      TextIO.writeFile (toString path) contents
+      Directory.createDirectoryIfMissing True $ printCompactAsString $ Paths.filePathDir path
+      TextIO.writeFile (printCompactAsString path) contents
 
 print :: FileSet -> IO ()
-print = TextIO.putStrLn . toText
+print = printPrettyToStdOut
 
 -- *
 

@@ -9,7 +9,6 @@ where
 
 import CodegenKit.Prelude
 import qualified StructureKit.Range as Range
-import qualified TextBuilderDev as TextBuilder
 
 data VersionBounds
   = VersionBounds
@@ -28,28 +27,20 @@ instance Semigroup VersionBounds where
 
 data Version
   = Version !Word ![Word]
-  deriving (Eq)
+  deriving (Eq, Show)
 
 instance Ord Version where
   compare l r =
     compare (versionParts l) (versionParts r)
 
-instance ToTextBuilder Version where
-  toTextBuilder (Version h t) =
-    TextBuilder.unsignedDecimal h
-      <> foldMap (mappend "." . TextBuilder.unsignedDecimal) t
+instance CompactPrinting Version where
+  toCompactBuilder (Version h t) =
+    toCompactBuilder h
+      <> foldMap (mappend "." . toCompactBuilder) t
 
-instance ToMultilineTextBuilder Version where
-  toMultilineTextBuilder =
-    toMultilineTextBuilder . toTextBuilder
-
-instance ToText Version where
-  toText =
-    toText . toTextBuilder
-
-instance ToString Version where
-  toString =
-    toString . toTextBuilder
+instance PrettyPrinting Version where
+  toPrettyBuilder =
+    toMultilineTextBuilder . toCompactBuilder
 
 versionParts :: Version -> [Word]
 versionParts (Version head tail) =
