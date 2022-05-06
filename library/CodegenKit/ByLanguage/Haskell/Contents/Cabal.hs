@@ -1,22 +1,22 @@
 module CodegenKit.ByLanguage.Haskell.Contents.Cabal
-  ( -- *
+  ( -- * --
     contents,
 
-    -- *
+    -- * --
     PackageName,
     plainPackageName,
     spinalPackageName,
 
-    -- *
+    -- * --
     Version,
     listVersion,
     version2,
 
-    -- *
+    -- * --
     ModuleRef,
     nameListModuleRef,
 
-    -- *
+    -- * --
     Dependency,
     rangeDependency,
   )
@@ -28,7 +28,7 @@ import qualified Coalmine.Name as Name
 import CodegenKit.Prelude hiding (Version)
 import qualified TextBuilderDev as B'
 
--- *
+-- * --
 
 contents ::
   PackageName ->
@@ -65,7 +65,7 @@ contents packageName synopsis version exposedModuleList otherModuleList dependen
     dependencies =
       B.intercalate ",\n" . coerce $ dependencyList
 
--- *
+-- * --
 
 newtype PackageName
   = PackageName Builder
@@ -79,7 +79,7 @@ spinalPackageName :: Name -> PackageName
 spinalPackageName =
   PackageName . B.uniline . Name.toSpinalCaseTextBuilder
 
--- *
+-- * --
 
 newtype Version
   = Version Builder
@@ -103,7 +103,7 @@ version2 a b =
             B'.unsignedDecimal b
           ]
 
--- *
+-- * --
 
 newtype ModuleRef
   = ModuleRef Builder
@@ -113,7 +113,7 @@ nameListModuleRef :: [Name] -> ModuleRef
 nameListModuleRef =
   ModuleRef . B.uniline . B'.intercalate "." . fmap Name.toUpperCamelCaseTextBuilder
 
--- *
+-- * --
 
 newtype Dependency
   = Dependency Builder

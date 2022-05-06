@@ -3,7 +3,7 @@ module Demo.SamplesFor.ModelAndUtils.Iso8601 where
 import Coalmine.Inter
 import CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
 
--- *
+-- * --
 
 iso8601Modules =
   modules

@@ -1,21 +1,21 @@
 module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
-  ( -- *
+  ( -- * --
     moduleName,
 
-    -- *
+    -- * --
     modules,
 
-    -- *
+    -- * --
     Section,
     section,
 
-    -- *
+    -- * --
     Decl,
     productAndInstances,
     sumAndInstances,
     alias,
 
-    -- *
+    -- * --
     Type,
     primitiveType,
     modelType,
@@ -34,12 +34,12 @@ import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 import qualified TextBuilderDev as B'
 
--- *
+-- * --
 
 moduleName :: Name
 moduleName = "types"
 
--- *
+-- * --
 
 modules ::
   -- | Declaration sections.
@@ -54,7 +54,7 @@ modules sections =
         Dependencies.vector
       ]
 
--- *
+-- * --
 
 content ::
   -- | Declaration sections.
@@ -86,7 +86,7 @@ content sections ns =
         & coerce
         & B.intercalate "\n\n"
 
--- *
+-- * --
 
 newtype Section = Section B.Builder
 
@@ -107,7 +107,7 @@ section heading declarations =
     declarationsCode =
       B.intercalate "\n\n" $ coerce declarations
 
--- *
+-- * --
 
 newtype Decl = Decl B.Builder
 
@@ -264,7 +264,7 @@ productTraverserIsLabelInstance productName fieldName (Type fieldType) fieldInde
       enumFromTo from (pred to)
         & fmap Snippets.alphabeticIndexName
 
--- *
+-- * --
 
 sumMapperIsLabelInstance :: Text -> Text -> Text -> Type -> Decl
 sumMapperIsLabelInstance sumType variantName constructorName (Type variantType) =
@@ -367,7 +367,7 @@ sumHashableInstance sumName variants =
                 variantIndexCode :
                 memberNames
 
--- *
+-- * --
 
 productAndInstances ::
   Text ->
@@ -438,7 +438,7 @@ sumAndInstances sumName sumDocs variants =
             constructorName =
               ucVariantName <> sumName
 
--- *
+-- * --
 
 newtype Type = Type B.Builder
 

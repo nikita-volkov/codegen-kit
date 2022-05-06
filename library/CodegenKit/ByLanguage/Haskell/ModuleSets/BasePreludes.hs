@@ -1,10 +1,10 @@
 module CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes
-  ( -- *
+  ( -- * --
     allName,
     operatorsName,
     dataTypesName,
 
-    -- *
+    -- * --
     all,
     dataTypes,
     operators,
@@ -19,7 +19,7 @@ import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (all)
 import qualified TextBuilderDev as B'
 
--- *
+-- * --
 
 allName :: Name
 allName = "base-all"
@@ -30,7 +30,7 @@ dataTypesName = "base-data-types"
 operatorsName :: Name
 operatorsName = "base-operators"
 
--- *
+-- * --
 
 operators :: Packaging.Modules
 operators =

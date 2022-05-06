@@ -36,7 +36,7 @@ suffixHaddockWithNewline :: Text -> B.Builder
 suffixHaddockWithNewline =
   filtered (not . B.null) (mappend "\n") . suffixHaddock
 
--- *
+-- * --
 
 decimalIndexName :: Int -> B.Builder
 decimalIndexName =
@@ -50,7 +50,7 @@ enumAlphabeticNames :: Int -> [B.Builder]
 enumAlphabeticNames =
   fmap alphabeticIndexName . enumFromTo 0 . pred
 
--- *
+-- * --
 
 namespace :: [Name] -> B.Builder
 namespace =

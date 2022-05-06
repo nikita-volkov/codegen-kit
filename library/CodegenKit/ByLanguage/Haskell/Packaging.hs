@@ -1,21 +1,21 @@
 module CodegenKit.ByLanguage.Haskell.Packaging
-  ( -- *
+  ( -- * --
     toFileSet,
 
-    -- *
+    -- * --
     Modules,
     inNamespace,
     module_,
 
-    -- *
+    -- * --
     Dependency,
     dependency,
 
-    -- *
+    -- * --
     CabalContents.Version,
     CabalContents.listVersion,
 
-    -- *
+    -- * --
     PackageLocation,
     hackagePackageLocation,
     githubPackageLocation,
@@ -32,7 +32,7 @@ import CodegenKit.Prelude
 import qualified CodegenKit.Versioning as Versioning
 import qualified Data.Map.Strict as Map
 
--- *
+-- * --
 
 -- |
 -- A collection of modules with their requirements for
@@ -58,7 +58,7 @@ instance Semigroup Modules where
 instance Monoid Modules where
   mempty = Modules mempty mempty mempty mempty mempty
 
--- **
+-- ** --
 
 toExposedModuleSet :: Modules -> Set [Name]
 toExposedModuleSet (Modules _ exposed _ _ _) =
@@ -146,7 +146,7 @@ toFileSet packageName synopsis version modules =
       toModulesFileSet "library" modules
     ]
 
--- **
+-- ** --
 
 inNamespace :: [Name] -> Modules -> Modules
 inNamespace ns (Modules files exposed hidden dependencies stackExtraDeps) =
@@ -186,7 +186,7 @@ module_ exposed name dependencies contents =
     filePath =
       fromString . toString . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
 
--- *
+-- * --
 
 data Dependency
   = Dependency
@@ -197,13 +197,13 @@ data Dependency
       ![StackFileSet.ExtraDep]
       -- ^ Extra dependencies for stack.
 
--- **
+-- ** --
 
 dependencyTuple :: Dependency -> (Text, Versioning.VersionBounds)
 dependencyTuple (Dependency a b _) =
   (a, b)
 
--- **
+-- ** --
 
 dependency :: Text -> Word -> [Word] -> Word -> [Word] -> [PackageLocation] -> Dependency
 dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
@@ -215,7 +215,7 @@ dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
     )
     (coerce stackExtraDeps)
 
--- *
+-- * --
 
 -- |
 -- How to acquire the source code of the package.

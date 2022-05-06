@@ -1,8 +1,8 @@
 module CodegenKit.ByLanguage.Haskell.FileSets.Stack
-  ( -- *
+  ( -- * --
     fileSet,
 
-    -- *
+    -- * --
     ExtraDep,
     hackageExtraDep,
     githubExtraDep,
@@ -17,13 +17,13 @@ import CodegenKit.Prelude hiding (Version)
 import qualified Data.List.Extra as ListExtra
 import qualified TextBuilderDev as B'
 
--- *
+-- * --
 
 fileSet :: [ExtraDep] -> Packaging.FileSet
 fileSet =
   Packaging.fromFile "stack.yaml" . contents
 
--- *
+-- * --
 
 contents :: [ExtraDep] -> Text
 contents extraDepList =
@@ -39,7 +39,7 @@ contents extraDepList =
         . ListExtra.nubSortOn extraDepName
         $ extraDepList
 
--- *
+-- * --
 
 data ExtraDep = ExtraDep
   { -- | Name. For ordering.

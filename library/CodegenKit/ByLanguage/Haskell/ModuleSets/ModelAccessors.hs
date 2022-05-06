@@ -14,13 +14,13 @@ import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 
--- *
+-- * --
 
 moduleName :: Name
 moduleName =
   "accessors"
 
--- *
+-- * --
 
 modules ::
   [(Text, Text, [(Text, Text, Int, Int)])] ->
@@ -69,7 +69,7 @@ content preludeModuleRef typesModuleRef moduleRef hasFieldConfigs hasVariantConf
         & B.intercalate "\n\n"
     )
 
--- *
+-- * --
 
 hasFieldDecls lcFieldName ucFieldName instanceConfigs =
   Templates.hasFieldClass lcFieldName ucFieldName :

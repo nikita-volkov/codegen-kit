@@ -9,7 +9,7 @@ import CodegenKit.Prelude
 import qualified Data.Text as Text
 import qualified TextBuilderDev as B'
 
--- *
+-- * --
 
 groupedExp :: Exp -> B.Builder
 groupedExp (Exp needsGrouping isMultiline content) =
@@ -29,13 +29,13 @@ ungroupedExp :: Exp -> B.Builder
 ungroupedExp (Exp _ _ content) =
   content
 
--- **
+-- ** --
 
 isMultiline :: Exp -> Bool
 isMultiline (Exp _ isMultiline _) =
   isMultiline
 
--- *
+-- * --
 
 data Exp
   = Exp
@@ -158,7 +158,7 @@ multilinePostAppChain baseExp chain =
   Exp True True $
     groupedExp baseExp <> B.indent 2 (foldMap (mappend "\n& " . B.indent 4 . groupedExp) chain)
 
--- *
+-- * --
 
 apChain ::
   -- | Prelude namespace.
@@ -178,8 +178,8 @@ apChain preludeNs constructor params =
             ungroupedExp (reference preludeNs "pure") <> " " <> groupedExp constructor
     [param]
       | not (isMultiline constructor || isMultiline param) ->
-        Exp True False $
-          groupedExp constructor <> " <$> " <> groupedExp param
+          Exp True False $
+            groupedExp constructor <> " <$> " <> groupedExp param
     _ ->
       Exp True True $
         groupedExp constructor

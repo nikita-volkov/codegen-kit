@@ -1,26 +1,26 @@
 module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
-  ( -- *
+  ( -- * --
     modules,
 
-    -- *
+    -- * --
     Section,
     section,
 
-    -- *
+    -- * --
     Decl,
     product,
     sum,
     alias,
 
-    -- *
+    -- * --
     Field,
     field,
 
-    -- *
+    -- * --
     Variant,
     variant,
 
-    -- *
+    -- * --
     MemberType,
     primitiveType,
     modelType,
@@ -39,7 +39,7 @@ import CodegenKit.Prelude hiding (Product, Sum, product, sum)
 import qualified Data.Map.Strict as Map
 import qualified TextBuilderDev as B'
 
--- *
+-- * --
 
 modules :: [Section] -> Packaging.Modules
 modules sections =
@@ -145,7 +145,7 @@ modules sections =
                 hasVariant =
                   Map.toAscList variantRegistry
 
--- *
+-- * --
 
 data Section
   = Section
@@ -163,7 +163,7 @@ section ::
 section =
   Section
 
--- *
+-- * --
 
 data Decl
   = ProductDecl
@@ -210,7 +210,7 @@ alias name =
   AliasDecl
     (Name.toUpperCamelCaseText name)
 
--- *
+-- * --
 
 data FieldSpec
   = FieldSpec
@@ -225,7 +225,7 @@ data FieldSpec
       Int
       -- ^ Field index.
 
--- *
+-- * --
 
 newtype Field
   = Field (Int -> FieldSpec)
@@ -240,7 +240,7 @@ field name docs type_ =
       type_
       index
 
--- *
+-- * --
 
 data Variant
   = Variant
@@ -259,7 +259,7 @@ variant name =
     (Name.toUpperCamelCaseText name)
     (Name.toLowerCamelCaseText name)
 
--- *
+-- * --
 
 data MemberType
   = MemberType

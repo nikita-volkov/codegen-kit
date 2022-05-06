@@ -1,5 +1,5 @@
 module CodegenKit.ByLanguage.Haskell.Modules.BasePrelude
-  ( -- *
+  ( -- * --
     name,
     dependencies,
     content,
@@ -14,7 +14,7 @@ import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (all)
 import qualified TextBuilderDev as B'
 
--- *
+-- * --
 
 -- |
 -- Module name.
@@ -26,7 +26,7 @@ dependencies =
   [ Dependencies.base
   ]
 
--- *
+-- * --
 
 content :: Text -> Text
 content namespace =

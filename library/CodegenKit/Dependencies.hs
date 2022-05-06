@@ -1,11 +1,11 @@
 module CodegenKit.Dependencies
-  ( -- *
+  ( -- * --
     Dependencies,
 
-    -- **
+    -- ** --
     toList,
 
-    -- **
+    -- ** --
     singleton,
   )
 where
@@ -15,7 +15,7 @@ import CodegenKit.Prelude hiding (singleton, toList)
 import qualified CodegenKit.Versioning as Versioning
 import qualified Data.Map.Strict as Map
 
--- *
+-- * --
 
 newtype Dependencies
   = Dependencies (Map Text Versioning.VersionBounds)
@@ -29,13 +29,13 @@ instance Monoid Dependencies where
   mempty =
     Dependencies mempty
 
--- **
+-- ** --
 
 toList :: Dependencies -> [(Text, Versioning.VersionBounds)]
 toList =
   Map.toAscList . coerce
 
--- **
+-- ** --
 
 singleton :: Text -> Word -> [Word] -> Word -> [Word] -> Dependencies
 singleton packageName minHead minTail maxHead maxTail =

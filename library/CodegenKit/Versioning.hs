@@ -1,8 +1,8 @@
 module CodegenKit.Versioning
-  ( -- *
+  ( -- * --
     VersionBounds (..),
 
-    -- *
+    -- * --
     Version (..),
   )
 where
@@ -23,7 +23,7 @@ instance Semigroup VersionBounds where
       Range.Range min max ->
         VersionBounds min max
 
--- *
+-- * --
 
 data Version
   = Version !Word ![Word]

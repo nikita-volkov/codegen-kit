@@ -1,17 +1,17 @@
 module CodegenKit.Packaging
-  ( -- *
+  ( -- * --
     FileSet (..),
 
     -- ** Execution
     write,
     print,
 
-    -- **
+    -- ** --
     fromFile,
     fromModule,
     inDir,
 
-    -- *
+    -- * --
     Module (..),
   )
 where
@@ -22,7 +22,7 @@ import CodegenKit.Prelude hiding (inDir, print)
 import qualified Data.Text.IO as TextIO
 import qualified System.Directory as Directory
 
--- *
+-- * --
 
 -- |
 -- Brings all variations of rendering to order by defining
@@ -56,7 +56,7 @@ write (FileSet files) =
 print :: FileSet -> IO ()
 print = printPrettyToStdOut
 
--- *
+-- * --
 
 fromFile :: FilePath -> Text -> FileSet
 fromFile path content =
@@ -74,7 +74,7 @@ inDir :: DirPath -> FileSet -> FileSet
 inDir path (FileSet contents) =
   FileSet $ fmap (first (Paths.inDir path)) contents
 
--- *
+-- * --
 
 -- |
 -- Module file-name and content generated given the namespace provided by the user.
