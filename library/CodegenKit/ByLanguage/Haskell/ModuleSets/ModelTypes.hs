@@ -158,8 +158,8 @@ sum sumName haddock variants =
                 Snippets.prefixHaddockWithNewline docs,
                 B.indent 2 $
                   mconcat
-                    [ fromText ucVariantName,
-                      fromText sumName,
+                    [ from @Text ucVariantName,
+                      from @Text sumName,
                       foldMap memberCode memberTypes
                     ]
               ]
@@ -444,11 +444,11 @@ newtype Type = Type B.Builder
 
 primitiveType :: Text -> Type
 primitiveType =
-  Type . mappend preludeAlias . mappend "." . fromText
+  Type . mappend preludeAlias . mappend "." . from @Text
 
 modelType :: Text -> Type
 modelType =
-  Type . fromText
+  Type . from @Text
 
 boxedVectorType :: Type -> Type
 boxedVectorType =

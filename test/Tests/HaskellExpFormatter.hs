@@ -9,7 +9,7 @@ tests =
       let expected =
             "( aa\n    <* [ bbb,\n         cc <* ddd\n       ]\n)"
           actual =
-            toText $
+            to @Text $
               groupedExp
                 ( infixBinOp
                     "<*"
@@ -25,5 +25,5 @@ tests =
       assertEqual
         ""
         "\"a\\n\\\n\\b\""
-        (toText (groupedExp (stringLiteral "a\nb")))
+        (to @Text (groupedExp (stringLiteral "a\nb")))
   ]

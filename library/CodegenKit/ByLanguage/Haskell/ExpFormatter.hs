@@ -59,7 +59,7 @@ infixBinOp operator l r =
               2
               ( mconcat
                   [ "\n",
-                    fromText operator,
+                    from @Text operator,
                     " ",
                     B.indent
                       (Text.length operator + 1)
@@ -72,7 +72,7 @@ infixBinOp operator l r =
         mconcat
           [ groupedExp l,
             " ",
-            fromText operator,
+            from @Text operator,
             " ",
             groupedExp r
           ]
@@ -81,13 +81,13 @@ reference :: Text -> Text -> Exp
 reference qualification reference =
   Exp False False $
     if Text.null qualification
-      then fromText reference
-      else fromText qualification <> "." <> fromText reference
+      then from @Text reference
+      else from @Text qualification <> "." <> from @Text reference
 
 intLiteral :: Integral a => a -> Exp
 intLiteral int =
   Exp False False $
-    toMultilineTextBuilder $ B'.decimal int
+    to $ B'.decimal int
 
 stringLiteral :: Text -> Exp
 stringLiteral text =
@@ -105,7 +105,7 @@ stringLiteral text =
           "\""
         ]
     processedLines =
-      fmap fromText
+      fmap (from @Text)
         . Text.lines
         . Text.pack
         . join

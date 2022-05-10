@@ -40,7 +40,7 @@ instance PrettyPrinting FileSet where
         mconcat
           [ toPrettyBuilder path,
             ":",
-            B.indent 2 $ mappend "\n" $ fromText contents
+            B.indent 2 $ mappend "\n" $ from @Text contents
           ]
 
 -- * Execution

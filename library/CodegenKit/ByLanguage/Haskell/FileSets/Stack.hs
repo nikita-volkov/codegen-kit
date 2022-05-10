@@ -28,7 +28,7 @@ fileSet =
 contents :: [ExtraDep] -> Text
 contents extraDepList =
   [i|
-    resolver: nightly-2022-02-16
+    resolver: nightly-2022-05-05
     extra-deps:
       $extraDepsSplice
   |]
@@ -55,7 +55,7 @@ hackageExtraDep name versionHead versionTail =
     splice =
       B.uniline . mconcat $
         [ "- ",
-          fromText name,
+          from @Text name,
           "-",
           B'.unsignedDecimal versionHead,
           foldMap (mappend "." . B'.unsignedDecimal) versionTail

@@ -73,7 +73,7 @@ newtype PackageName
 
 plainPackageName :: Text -> PackageName
 plainPackageName =
-  PackageName . B.uniline . fromText
+  PackageName . B.uniline . from @Text
 
 spinalPackageName :: Name -> PackageName
 spinalPackageName =

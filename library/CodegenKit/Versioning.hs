@@ -40,7 +40,7 @@ instance CompactPrinting Version where
 
 instance PrettyPrinting Version where
   toPrettyBuilder =
-    toMultilineTextBuilder . toCompactBuilder
+    to . toCompactBuilder
 
 versionParts :: Version -> [Word]
 versionParts (Version head tail) =

@@ -1,19 +1,19 @@
-resolver: nightly-2022-04-21
+resolver: nightly-2022-05-05
 
 extra-deps:
   - git: https://github.com/nikita-volkov/coalmine
-    commit: b7fa0eb873ecd4b46280e67838167a3d8c8db2a6
+    commit: b801762921aa3edae6806f40e3f4a19e4634cda9
   - git: https://github.com/nikita-volkov/fx
     commit: f3947e32f8cc3c764ab8ee48581f2e1f35d3bcdb
   - git: https://github.com/nikita-volkov/moore-machines
     commit: 7e95c33b203a1cfe42dbc0e0de3cec8e6fe94290
   - git: https://github.com/nikita-volkov/structure-kit
     commit: 91b7073d78ed413aa6666fa13c4a5ac941bc75e2
+  - git: https://github.com/nikita-volkov/isomorphism-class
+    commit: c53b9ddb018a2c2bba88facf658ce29da7cbf9ba
   - aeson-value-parser-0.19.6
   - cereal-unordered-containers-0.1
   - domain-aeson-0.1
   - domain-cereal-0.1
   - leb128-cereal-1.2
   - vector-extras-0.2.6
-  - text-builder-dev-0.3
-  - yaml-unscrambler-0.1.0.10

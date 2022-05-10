@@ -12,7 +12,7 @@ prefixHaddock :: Text -> B.Builder
 prefixHaddock =
   mappend "-- |"
     . foldMap (mappend "\n-- ")
-    . fmap fromText
+    . fmap (from @Text)
     . Text.lines
 
 -- |
@@ -27,7 +27,7 @@ suffixHaddock :: Text -> B.Builder
 suffixHaddock =
   mappend "-- ^"
     . foldMap (mappend "\n-- ")
-    . fmap fromText
+    . fmap (from @Text)
     . Text.lines
 
 -- |

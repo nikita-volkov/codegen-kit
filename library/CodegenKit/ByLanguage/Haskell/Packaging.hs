@@ -109,7 +109,7 @@ toCabalFileSet packageName synopsis version modules =
   Packaging.fromFile filePath contents
   where
     filePath =
-      fromString . toString
+      fromString . to
         . flip mappend ".cabal"
         . Name.toSpinalCaseTextBuilder
         $ packageName
@@ -184,7 +184,7 @@ module_ exposed name dependencies contents =
     (foldMap (\(Dependency _ _ x) -> x) dependencies)
   where
     filePath =
-      fromString . toString . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
+      fromString . to . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
 
 -- * --
 
@@ -233,4 +233,4 @@ githubPackageLocation =
 
 moduleDirPath :: [Name] -> DirPath
 moduleDirPath =
-  foldMap (fromString . toString . Name.toUpperCamelCaseText)
+  foldMap (fromString . to . Name.toUpperCamelCaseText)
