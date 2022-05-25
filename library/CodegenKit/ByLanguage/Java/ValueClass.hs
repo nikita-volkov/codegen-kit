@@ -1,7 +1,22 @@
-module CodegenKit.ByLanguage.Java.ValueClass where
+module CodegenKit.ByLanguage.Java.ValueClass
+  ( module_,
+    Decl,
+    classDecl,
+    Param,
+    param,
+  )
+where
 
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude hiding (intercalate)
+
+module_ :: Text -> Decl -> Text
+module_ namespace (Decl decl) =
+  [i|
+    package $namespace;
+
+    $decl
+  |]
 
 data Decl
   = Decl Builder
@@ -14,32 +29,28 @@ classDecl name params =
         $propertyDecls
 
         public $name($constructorArgs) {
-          $fieldAssignments
+          $propertyAssignments
         }
       }
     |]
   where
     propertyDecls =
-      intercalate "\n" . fmap propertyDecl $ params
-      where
-        propertyDecl (Param name type_ _) =
-          [i|public final $type_ $name;|]
-    fieldAssignments =
-      intercalate "\n" . fmap fieldAssignment $ params
-      where
-        fieldAssignment (Param name _ _) =
-          [i|this.$name = $name;|]
+      intercalate "\n" . fmap paramPropertyDecl $ params
+    propertyAssignments =
+      intercalate "\n" . fmap paramAssignment $ params
     constructorArgs =
-      intercalate ", " . fmap arg $ params
-      where
-        arg (Param name type_ _) =
-          [i|$type_ $name|]
+      intercalate ", " . fmap paramArg $ params
 
-data Param
-  = Param
-      !Text
-      -- ^ Name.
-      !Text
-      -- ^ Type.
-      !Text
-      -- ^ Description.
+-- | Renderings of param in all contexts.
+data Param = Param
+  { paramPropertyDecl :: Builder,
+    paramAssignment :: Builder,
+    paramArg :: Builder
+  }
+
+param :: Text -> Text -> Param
+param name type_ =
+  Param
+    [i|public final $type_ $name;|]
+    [i|this.$name = $name;|]
+    [i|$type_ $name|]
