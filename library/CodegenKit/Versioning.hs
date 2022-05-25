@@ -38,8 +38,8 @@ instance CompactPrinting Version where
     toCompactBuilder h
       <> foldMap (mappend "." . toCompactBuilder) t
 
-instance PrettyPrinting Version where
-  toPrettyBuilder =
+instance BroadPrinting Version where
+  toBroadBuilder =
     to . toCompactBuilder
 
 versionParts :: Version -> [Word]

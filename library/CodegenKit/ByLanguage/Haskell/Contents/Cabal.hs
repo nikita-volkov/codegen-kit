@@ -69,7 +69,7 @@ contents packageName synopsis version exposedModuleList otherModuleList dependen
 
 newtype PackageName
   = PackageName Builder
-  deriving (PrettyPrinting)
+  deriving (BroadPrinting)
 
 plainPackageName :: Text -> PackageName
 plainPackageName =
@@ -83,7 +83,7 @@ spinalPackageName =
 
 newtype Version
   = Version Builder
-  deriving (PrettyPrinting)
+  deriving (BroadPrinting)
 
 listVersion :: Word -> [Word] -> Version
 listVersion head tail =
@@ -107,7 +107,7 @@ version2 a b =
 
 newtype ModuleRef
   = ModuleRef Builder
-  deriving (PrettyPrinting)
+  deriving (BroadPrinting)
 
 nameListModuleRef :: [Name] -> ModuleRef
 nameListModuleRef =
@@ -117,7 +117,7 @@ nameListModuleRef =
 
 newtype Dependency
   = Dependency Builder
-  deriving (PrettyPrinting)
+  deriving (BroadPrinting)
 
 rangeDependency :: PackageName -> Version -> Version -> Dependency
 rangeDependency name min max =

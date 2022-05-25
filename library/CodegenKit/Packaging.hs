@@ -32,13 +32,13 @@ import qualified System.Directory as Directory
 newtype FileSet = FileSet [(FilePath, Text)]
   deriving (Semigroup, Monoid)
 
-instance PrettyPrinting FileSet where
-  toPrettyBuilder (FileSet package) =
+instance BroadPrinting FileSet where
+  toBroadBuilder (FileSet package) =
     B.intercalate "\n\n" $ fmap renderFile package
     where
       renderFile (path, contents) =
         mconcat
-          [ toPrettyBuilder path,
+          [ toBroadBuilder path,
             ":",
             B.indent 2 $ mappend "\n" $ from @Text contents
           ]
@@ -54,7 +54,7 @@ write (FileSet files) =
       TextIO.writeFile (printCompactAsString path) contents
 
 print :: FileSet -> IO ()
-print = printPrettyToStdOut
+print = printBroadToStdOut
 
 -- * --
 
