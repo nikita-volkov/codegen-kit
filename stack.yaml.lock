@@ -7,13 +7,13 @@ packages:
 - completed:
     name: coalmine
     pantry-tree:
-      sha256: 013b51510acf2532c87fefbdcce8f8de61d5a3c69b7dc4a067a1d33790aebe2c
+      sha256: 671ba150384f34a8f71ce625657d8a1e7c8df53e66359deb52c42caf10624793
       size: 7438
-    commit: b801762921aa3edae6806f40e3f4a19e4634cda9
+    commit: 25c3f9f69391676b7611c2d3dd08e304c0f3755b
     git: https://github.com/nikita-volkov/coalmine
     version: '0.1'
   original:
-    commit: b801762921aa3edae6806f40e3f4a19e4634cda9
+    commit: 25c3f9f69391676b7611c2d3dd08e304c0f3755b
     git: https://github.com/nikita-volkov/coalmine
 - completed:
     name: fx
@@ -38,6 +38,17 @@ packages:
     commit: 7e95c33b203a1cfe42dbc0e0de3cec8e6fe94290
     git: https://github.com/nikita-volkov/moore-machines
 - completed:
+    name: isomorphism-class
+    pantry-tree:
+      sha256: 772cd5d9a535ac383d82984a03c706a32d9f0edb20829cdadd5b116efccd3a24
+      size: 608
+    commit: 6030243b4e2c28ab3c010b5f06cb6514d70f9c35
+    git: https://github.com/nikita-volkov/isomorphism-class
+    version: '0.1'
+  original:
+    commit: 6030243b4e2c28ab3c010b5f06cb6514d70f9c35
+    git: https://github.com/nikita-volkov/isomorphism-class
+- completed:
     name: structure-kit
     pantry-tree:
       sha256: 2745af5f319b058122c012e2207a2ee4723828aeb946544fdc5100fcb4dcd62b
@@ -48,17 +59,6 @@ packages:
   original:
     commit: 91b7073d78ed413aa6666fa13c4a5ac941bc75e2
     git: https://github.com/nikita-volkov/structure-kit
-- completed:
-    name: isomorphism-class
-    pantry-tree:
-      sha256: 5be94d13b0501b634a7f3a57ab12888d2a517977763fd62afd7797d0b05fb0ab
-      size: 414
-    commit: c53b9ddb018a2c2bba88facf658ce29da7cbf9ba
-    git: https://github.com/nikita-volkov/isomorphism-class
-    version: '0.1'
-  original:
-    commit: c53b9ddb018a2c2bba88facf658ce29da7cbf9ba
-    git: https://github.com/nikita-volkov/isomorphism-class
 - completed:
     pantry-tree:
       sha256: a2fa5c7577470e6472dcc9f9c3826486bfabce337149555a5297c11807bfe993
@@ -103,7 +103,7 @@ packages:
     hackage: vector-extras-0.2.6
 snapshots:
 - completed:
-    sha256: 42b5030fc96fe064d61c662330df4d0369c0ab48648ca2a51705cf26b32550a0
-    size: 572782
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/5/5.yaml
-  original: nightly-2022-05-05
+    sha256: 40f6a33be1035ebe9212ddb920aa2cbe28b92dacd829cde6a3150ca2fa9cbbd1
+    size: 573643
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/5/14.yaml
+  original: nightly-2022-05-14
