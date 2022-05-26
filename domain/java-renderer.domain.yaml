@@ -1,0 +1,29 @@
+
+Library:
+  product:
+    group: Text
+    artifact: Text
+    modules: |
+      [Module]
+
+Module:
+  product:
+    localNamespace: Text
+    content: 
+      sum:
+        class: Class
+
+Class:
+  product:
+    name: Text
+    template:
+      sum:
+        product: |
+          [CompositeElement]
+        sum: |
+          [CompositeElement]
+
+CompositeElement:
+  product:
+    name: Text
+    type: Text

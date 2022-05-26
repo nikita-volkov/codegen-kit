@@ -10,13 +10,15 @@ maintainer: Nikita Volkov <nikita.y.volkov@mail.ru>
 copyright: (c) 2022 Nikita Volkov
 license: MIT
 license-file: LICENSE
+extra-source-files:
+  domain/*.domain.yaml
 
 source-repository head
   type: git
   location: git://github.com/nikita-volkov/codegen-kit.git
 
 common language-settings
-  default-extensions: BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedLabels, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators, ViewPatterns
+  default-extensions: BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedLabels, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators, UndecidableInstances, ViewPatterns
   default-language: Haskell2010
 
 library
@@ -39,6 +41,7 @@ library
     CodegenKit.ByLanguage.Haskell.Snippets
     CodegenKit.ByLanguage.Java.Dsl
     CodegenKit.Dependencies
+    CodegenKit.JavaRenderer.Model
     CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:
