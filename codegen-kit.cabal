@@ -65,8 +65,9 @@ test-suite test
     codegen-kit,
     rerebase <2,
 
-executable demo
+test-suite demo
   import: language-settings
+  type: exitcode-stdio-1.0
   hs-source-dirs: demo
   main-is: Main.hs
   other-modules:
