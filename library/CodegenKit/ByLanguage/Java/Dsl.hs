@@ -121,8 +121,8 @@ textClassName text =
 newtype ClassDecl
   = ClassDecl (Builder -> Builder)
 
-valueClass :: [Param] -> ClassDecl
-valueClass params =
+productClass :: [ProductElement] -> ClassDecl
+productClass params =
   ClassDecl $ \name ->
     [i|
       public final class $name {
@@ -135,24 +135,23 @@ valueClass params =
     |]
   where
     propertyDecls =
-      intercalate "\n" . fmap paramPropertyDecl $ params
+      intercalate "\n" . fmap productElementPropertyDecl $ params
     propertyAssignments =
-      intercalate "\n" . fmap paramAssignment $ params
+      intercalate "\n" . fmap productElementAssignment $ params
     constructorArgs =
-      intercalate ", " . fmap paramArg $ params
+      intercalate ", " . fmap productElementArg $ params
 
 -- * --
 
--- | Renderings of param in all contexts.
-data Param = Param
-  { paramPropertyDecl :: Builder,
-    paramAssignment :: Builder,
-    paramArg :: Builder
+data ProductElement = ProductElement
+  { productElementPropertyDecl :: Builder,
+    productElementAssignment :: Builder,
+    productElementArg :: Builder
   }
 
-param :: Text -> Text -> Param
+param :: Text -> Text -> ProductElement
 param name type_ =
-  Param
+  ProductElement
     [i|public final $type_ $name;|]
     [i|this.$name = $name;|]
     [i|$type_ $name|]
