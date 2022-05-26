@@ -10,7 +10,7 @@ where
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude hiding (intercalate)
 
-contents :: Text -> Decl -> Text
+contents :: Builder -> Decl -> Builder
 contents namespace (Decl decl) =
   [i|
     package $namespace;
@@ -21,7 +21,7 @@ contents namespace (Decl decl) =
 data Decl
   = Decl Builder
 
-classDecl :: Text -> [Param] -> Decl
+classDecl :: Builder -> [Param] -> Decl
 classDecl name params =
   Decl $
     [i|

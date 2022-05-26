@@ -45,6 +45,7 @@ library
   other-modules:
     CodegenKit.Prelude
   build-depends:
+    attoparsec,
     coalmine,
     directory,
     domain,
