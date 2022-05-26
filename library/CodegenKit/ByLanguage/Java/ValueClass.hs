@@ -1,5 +1,5 @@
 module CodegenKit.ByLanguage.Java.ValueClass
-  ( module_,
+  ( contents,
     Decl,
     classDecl,
     Param,
@@ -10,8 +10,8 @@ where
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude hiding (intercalate)
 
-module_ :: Text -> Decl -> Text
-module_ namespace (Decl decl) =
+contents :: Text -> Decl -> Text
+contents namespace (Decl decl) =
   [i|
     package $namespace;
 
