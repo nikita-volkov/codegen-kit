@@ -9,11 +9,33 @@ import qualified StructureKit.Charset as Charset
 
 -- * --
 
-classModuleFile :: ClassDecl -> Namespace -> ClassName -> (Path, Text)
-classModuleFile code namespace name =
-  ( classFilePath namespace name,
-    classModuleCode code namespace name
-  )
+-- |
+-- Render the whole package as a list of files.
+libraryPackage ::
+  -- | Group.
+  Text ->
+  -- | Artifact.
+  Text ->
+  -- | Content modules.
+  [Module] ->
+  [(Path, Text)]
+libraryPackage =
+  error "TODO"
+
+-- * --
+
+data Module = Module
+  { modulePath :: Path,
+    moduleCode :: Text
+  }
+
+classModule :: ClassDecl -> Namespace -> ClassName -> Module
+classModule code namespace name =
+  Module
+    (classFilePath namespace name)
+    (classModuleCode code namespace name)
+
+-- * --
 
 classModuleCode :: ClassDecl -> Namespace -> ClassName -> Text
 classModuleCode (ClassDecl runClassDecl) Namespace {..} ClassName {..} =
