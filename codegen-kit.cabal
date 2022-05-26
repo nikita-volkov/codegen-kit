@@ -37,8 +37,7 @@ library
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
     CodegenKit.ByLanguage.Haskell.Packaging
     CodegenKit.ByLanguage.Haskell.Snippets
-    CodegenKit.ByLanguage.Java.ClassModule
-    CodegenKit.ByLanguage.Java.ValueClass
+    CodegenKit.ByLanguage.Java.Dsl
     CodegenKit.Dependencies
     CodegenKit.Packaging
     CodegenKit.Versioning

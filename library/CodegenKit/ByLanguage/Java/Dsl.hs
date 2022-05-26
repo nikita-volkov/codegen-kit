@@ -1,8 +1,7 @@
-module CodegenKit.ByLanguage.Java.ClassModule where
+module CodegenKit.ByLanguage.Java.Dsl where
 
 import Coalmine.EvenSimplerPaths (Path)
 import Coalmine.MultilineTextBuilder
-import qualified CodegenKit.ByLanguage.Java.ValueClass as ValueClass
 import CodegenKit.Prelude hiding (intercalate)
 import qualified Data.Attoparsec.Text as Attoparsec
 import qualified Data.Text as Text
@@ -10,15 +9,21 @@ import qualified StructureKit.Charset as Charset
 
 -- * --
 
-classModuleFile :: ClassModule -> Namespace -> ClassName -> (Path, Text)
+classModuleFile :: ClassDecl -> Namespace -> ClassName -> (Path, Text)
 classModuleFile code namespace name =
   ( classFilePath namespace name,
     classModuleCode code namespace name
   )
 
-classModuleCode :: ClassModule -> Namespace -> ClassName -> Text
-classModuleCode (ClassModule code) namespace name =
-  to $ code (namespaceCode namespace) (classNameCode name)
+classModuleCode :: ClassDecl -> Namespace -> ClassName -> Text
+classModuleCode (ClassDecl runClassDecl) Namespace {..} ClassName {..} =
+  [i|
+    package $namespaceCode;
+
+    $decl
+  |]
+  where
+    decl = runClassDecl classNameCode
 
 classFilePath :: Namespace -> ClassName -> Path
 classFilePath namespace name =
@@ -78,11 +83,41 @@ textClassName text =
 
 -- * --
 
-newtype ClassModule
-  = ClassModule (Builder -> Builder -> Builder)
+newtype ClassDecl
+  = ClassDecl (Builder -> Builder)
 
-valueClass :: [ValueClass.Param] -> ClassModule
+valueClass :: [Param] -> ClassDecl
 valueClass params =
-  ClassModule $ \namespace className ->
-    ValueClass.contents namespace $
-      ValueClass.classDecl className params
+  ClassDecl $ \name ->
+    [i|
+      public final class $name {
+        $propertyDecls
+
+        public $name($constructorArgs) {
+          $propertyAssignments
+        }
+      }
+    |]
+  where
+    propertyDecls =
+      intercalate "\n" . fmap paramPropertyDecl $ params
+    propertyAssignments =
+      intercalate "\n" . fmap paramAssignment $ params
+    constructorArgs =
+      intercalate ", " . fmap paramArg $ params
+
+-- * --
+
+-- | Renderings of param in all contexts.
+data Param = Param
+  { paramPropertyDecl :: Builder,
+    paramAssignment :: Builder,
+    paramArg :: Builder
+  }
+
+param :: Text -> Text -> Param
+param name type_ =
+  Param
+    [i|public final $type_ $name;|]
+    [i|this.$name = $name;|]
+    [i|$type_ $name|]
