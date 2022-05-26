@@ -19,11 +19,16 @@ Class:
     template:
       sum:
         product: |
-          [CompositeElement]
+          [ProductElement]
         sum: |
-          [CompositeElement]
+          [SumElement]
 
-CompositeElement:
+ProductElement:
+  product:
+    name: Text
+    type: Text
+
+SumElement:
   product:
     name: Text
     type: Text
