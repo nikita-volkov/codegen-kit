@@ -5,13 +5,17 @@ import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude hiding (intercalate)
 import qualified Data.Attoparsec.Text as Attoparsec
 import qualified Data.Text as Text
+import qualified Data.Text.IO as TextIO
 import qualified StructureKit.Charset as Charset
 
 -- * --
 
 writePackage :: Path -> Package -> IO ()
-writePackage =
-  error "TODO"
+writePackage dirPath Package {..} =
+  forM_ packageFiles $ \(filePath, fileContent) ->
+    TextIO.writeFile
+      (printCompactAsString (dirPath <> filePath))
+      fileContent
 
 renderPackage :: Package -> [(Path, Text)]
 renderPackage = packageFiles
