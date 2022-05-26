@@ -9,17 +9,30 @@ import qualified StructureKit.Charset as Charset
 
 -- * --
 
+writePackage :: Path -> Package -> IO ()
+writePackage =
+  error "TODO"
+
+renderPackage :: Package -> [(Path, Text)]
+renderPackage = packageFiles
+
+-- * --
+
+data Package = Package
+  { packageFiles :: [(Path, Text)]
+  }
+
 -- |
--- Render the whole package as a list of files.
-libraryPackage ::
+-- Package modules as a library Maven project.
+library ::
   -- | Group.
   Text ->
   -- | Artifact.
   Text ->
   -- | Content modules.
   [Module] ->
-  [(Path, Text)]
-libraryPackage =
+  Package
+library =
   error "TODO"
 
 -- * --
