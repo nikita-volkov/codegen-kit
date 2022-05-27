@@ -7,13 +7,13 @@ packages:
 - completed:
     name: coalmine
     pantry-tree:
-      sha256: ed70956049ea588346329787522b30801090f3344cae7a0d70a08b0fe975cab9
+      sha256: 24f744732eda8b9558f1141079a0701a9bea114fdea66b6f5026b907b5cabffb
       size: 7438
-    commit: 22e5969a9beb3853e0aa2f568f23b60dfa4ed627
+    commit: 6ff65c9bb9b147f98f618e307e0efc452b142b50
     git: https://github.com/nikita-volkov/coalmine
     version: '0.1'
   original:
-    commit: 22e5969a9beb3853e0aa2f568f23b60dfa4ed627
+    commit: 6ff65c9bb9b147f98f618e307e0efc452b142b50
     git: https://github.com/nikita-volkov/coalmine
 - completed:
     name: fx
@@ -51,13 +51,13 @@ packages:
 - completed:
     name: structure-kit
     pantry-tree:
-      sha256: 2745af5f319b058122c012e2207a2ee4723828aeb946544fdc5100fcb4dcd62b
-      size: 3499
-    commit: 91b7073d78ed413aa6666fa13c4a5ac941bc75e2
+      sha256: 0f0097bfbca861b0e3a1cf8e39811e59fa608614f7b723a9bd5d6ff736b49a49
+      size: 3500
+    commit: 25191e675725457c36b643fee52f40fdd72e2533
     git: https://github.com/nikita-volkov/structure-kit
     version: '0.1'
   original:
-    commit: 91b7073d78ed413aa6666fa13c4a5ac941bc75e2
+    commit: 25191e675725457c36b643fee52f40fdd72e2533
     git: https://github.com/nikita-volkov/structure-kit
 - completed:
     pantry-tree:
@@ -103,7 +103,7 @@ packages:
     hackage: vector-extras-0.2.6
 snapshots:
 - completed:
-    sha256: 40f6a33be1035ebe9212ddb920aa2cbe28b92dacd829cde6a3150ca2fa9cbbd1
-    size: 573643
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/5/14.yaml
-  original: nightly-2022-05-14
+    sha256: 5955badf83941fb44f6ee27d37111f95a8c5ec455a5c4dcfc8ef11e436a0612b
+    size: 590825
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/5/27.yaml
+  original: nightly-2022-05-27

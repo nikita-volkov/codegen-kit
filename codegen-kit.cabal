@@ -39,6 +39,8 @@ library
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
     CodegenKit.ByLanguage.Haskell.Packaging
     CodegenKit.ByLanguage.Haskell.Snippets
+    CodegenKit.ByLanguage.Java.Attoparsec
+    CodegenKit.ByLanguage.Java.Charsets
     CodegenKit.ByLanguage.Java.Dsl
     CodegenKit.Dependencies
     CodegenKit.JavaRenderer
