@@ -7,13 +7,13 @@ packages:
 - completed:
     name: coalmine
     pantry-tree:
-      sha256: 013b51510acf2532c87fefbdcce8f8de61d5a3c69b7dc4a067a1d33790aebe2c
+      sha256: 24f744732eda8b9558f1141079a0701a9bea114fdea66b6f5026b907b5cabffb
       size: 7438
-    commit: b801762921aa3edae6806f40e3f4a19e4634cda9
+    commit: 6ff65c9bb9b147f98f618e307e0efc452b142b50
     git: https://github.com/nikita-volkov/coalmine
     version: '0.1'
   original:
-    commit: b801762921aa3edae6806f40e3f4a19e4634cda9
+    commit: 6ff65c9bb9b147f98f618e307e0efc452b142b50
     git: https://github.com/nikita-volkov/coalmine
 - completed:
     name: fx
@@ -38,27 +38,27 @@ packages:
     commit: 7e95c33b203a1cfe42dbc0e0de3cec8e6fe94290
     git: https://github.com/nikita-volkov/moore-machines
 - completed:
-    name: structure-kit
-    pantry-tree:
-      sha256: 2745af5f319b058122c012e2207a2ee4723828aeb946544fdc5100fcb4dcd62b
-      size: 3499
-    commit: 91b7073d78ed413aa6666fa13c4a5ac941bc75e2
-    git: https://github.com/nikita-volkov/structure-kit
-    version: '0.1'
-  original:
-    commit: 91b7073d78ed413aa6666fa13c4a5ac941bc75e2
-    git: https://github.com/nikita-volkov/structure-kit
-- completed:
     name: isomorphism-class
     pantry-tree:
-      sha256: 5be94d13b0501b634a7f3a57ab12888d2a517977763fd62afd7797d0b05fb0ab
-      size: 414
-    commit: c53b9ddb018a2c2bba88facf658ce29da7cbf9ba
+      sha256: 772cd5d9a535ac383d82984a03c706a32d9f0edb20829cdadd5b116efccd3a24
+      size: 608
+    commit: 6030243b4e2c28ab3c010b5f06cb6514d70f9c35
     git: https://github.com/nikita-volkov/isomorphism-class
     version: '0.1'
   original:
-    commit: c53b9ddb018a2c2bba88facf658ce29da7cbf9ba
+    commit: 6030243b4e2c28ab3c010b5f06cb6514d70f9c35
     git: https://github.com/nikita-volkov/isomorphism-class
+- completed:
+    name: structure-kit
+    pantry-tree:
+      sha256: 0f0097bfbca861b0e3a1cf8e39811e59fa608614f7b723a9bd5d6ff736b49a49
+      size: 3500
+    commit: 25191e675725457c36b643fee52f40fdd72e2533
+    git: https://github.com/nikita-volkov/structure-kit
+    version: '0.1'
+  original:
+    commit: 25191e675725457c36b643fee52f40fdd72e2533
+    git: https://github.com/nikita-volkov/structure-kit
 - completed:
     pantry-tree:
       sha256: a2fa5c7577470e6472dcc9f9c3826486bfabce337149555a5297c11807bfe993
@@ -103,7 +103,7 @@ packages:
     hackage: vector-extras-0.2.6
 snapshots:
 - completed:
-    sha256: 42b5030fc96fe064d61c662330df4d0369c0ab48648ca2a51705cf26b32550a0
-    size: 572782
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/5/5.yaml
-  original: nightly-2022-05-05
+    sha256: 5955badf83941fb44f6ee27d37111f95a8c5ec455a5c4dcfc8ef11e436a0612b
+    size: 590825
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/5/27.yaml
+  original: nightly-2022-05-27
