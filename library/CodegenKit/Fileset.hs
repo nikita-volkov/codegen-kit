@@ -41,6 +41,7 @@ instance BroadPrinting Fileset where
 
 -- * Execution
 
+-- | Write to file system.
 write :: Fileset -> IO ()
 write (Fileset files) =
   traverse_ (uncurry writeFileCreatingDirs) files
@@ -49,6 +50,7 @@ write (Fileset files) =
       Paths.createDirsTo path
       TextIO.writeFile (printCompactAsString path) contents
 
+-- | Output to 'stdout'.
 print :: Fileset -> IO ()
 print = printBroadToStdOut
 
