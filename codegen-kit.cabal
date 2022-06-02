@@ -41,6 +41,7 @@ library
     CodegenKit.ByLanguage.Haskell.Snippets
     CodegenKit.ByLanguage.Java.Attoparsec
     CodegenKit.ByLanguage.Java.Charsets
+    CodegenKit.ByLanguage.Java.Code
     CodegenKit.ByLanguage.Java.Dsl
     CodegenKit.Dependencies
     CodegenKit.Fileset
