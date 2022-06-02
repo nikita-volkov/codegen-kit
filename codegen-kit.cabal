@@ -44,6 +44,8 @@ library
     CodegenKit.ByLanguage.Java.Code
     CodegenKit.ByLanguage.Java.Dsl
     CodegenKit.ByLanguage.Java.HashCodeBuilderDsl
+    CodegenKit.ByLanguage.Java.HashCodeBuilderDsl.Snippets
+    CodegenKit.ByLanguage.Java.ToJsonBuilderDsl
     CodegenKit.Dependencies
     CodegenKit.Fileset
     CodegenKit.JavaRenderer

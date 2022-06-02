@@ -8,37 +8,6 @@ import qualified TextBuilderDev
 
 type Code = Builder
 
--- * Hashing
-
-classHashStaticProperty :: Code -> Code
-classHashStaticProperty className =
-  [j|
-    /**
-     * Serves as the starting point for {@link $className#hashCode()}.
-     */
-    private final static int classHash = $className.class.hashCode();
-  |]
-
-unitHashCodeMethod :: Code
-unitHashCodeMethod =
-  [j|
-    public int hashCode() {
-      return classHash;
-    }
-  |]
-
-statementsHashCodeMethod :: [Code] -> Code
-statementsHashCodeMethod statements =
-  [j|
-    public int hashCode() {
-      int hash = classHash;$statementsCode
-      return hash;
-    }
-  |]
-  where
-    statementsCode =
-      foldMap (mappend "\n") statements
-
 -- * --
 
 fieldParamDoc :: Code -> Code -> Code

@@ -19,7 +19,7 @@ module CodegenKit.ByLanguage.Java.HashCodeBuilderDsl
 where
 
 import Coalmine.MultilineTextBuilder
-import qualified CodegenKit.ByLanguage.Java.Code as Code
+import qualified CodegenKit.ByLanguage.Java.HashCodeBuilderDsl.Snippets as Snippets
 import CodegenKit.Prelude
 import qualified Data.HashSet as HashSet
 
@@ -41,13 +41,13 @@ hashCodeSnippets className fields =
     [] ->
       HashCodeSnippets
         mempty
-        (Code.classHashStaticProperty className)
-        (Code.unitHashCodeMethod)
+        (Snippets.classHashStaticProperty className)
+        (Snippets.unitHashCodeMethod)
     _ ->
       HashCodeSnippets
         (HashSet.unions . fmap fieldImports $ fields)
-        (Code.classHashStaticProperty className)
-        (Code.statementsHashCodeMethod . fmap fieldHashUpdateStatements $ fields)
+        (Snippets.classHashStaticProperty className)
+        (Snippets.statementsHashCodeMethod . fmap fieldHashUpdateStatements $ fields)
 
 -- * Field
 
@@ -70,11 +70,11 @@ hashExpField hashExp =
 
 byteField :: Builder -> Field
 byteField name =
-  hashExpField [j|(int) $name|]
+  hashExpField [j|(int) this.$name|]
 
 shortField :: Builder -> Field
 shortField name =
-  hashExpField [j|(int) $name|]
+  hashExpField [j|(int) this.$name|]
 
 intField :: Builder -> Field
 intField name =
@@ -82,11 +82,11 @@ intField name =
 
 longField :: Builder -> Field
 longField name =
-  hashExpField [j|(int) ($name ^ ($name >>> 32))|]
+  hashExpField [j|(int) (this.$name ^ (this.$name >>> 32))|]
 
 floatField :: Builder -> Field
 floatField name =
-  hashExpField [j|Float.floatToIntBits($name)|]
+  hashExpField [j|Float.floatToIntBits(this.$name)|]
 
 doubleField :: Builder -> Field
 doubleField name =
@@ -94,32 +94,32 @@ doubleField name =
     mempty
     [j|
       {
-        long bits = Double.doubleToLongBits($name);
+        long bits = Double.doubleToLongBits(this.$name);
         hash = (hash << 5) - hash + (int) (bits ^ (bits >>> 32));
       }
     |]
 
 booleanField :: Builder -> Field
 booleanField name =
-  hashExpField [j|$name ? 1231 : 1237|]
+  hashExpField [j|this.$name ? 1231 : 1237|]
 
 charField :: Builder -> Field
 charField name =
-  hashExpField [j|(int) $name|]
+  hashExpField [j|(int) this.$name|]
 
 arrayField :: Builder -> Field
 arrayField name =
   addFieldImport "java.util.Arrays" $
-    hashExpField [j|Arrays.hashCode($name)|]
+    hashExpField [j|Arrays.hashCode(this.$name)|]
 
 objectField :: Builder -> Field
 objectField name =
   Field
     mempty
     [j|
-      if ($name == null) {
+      if (this.$name == null) {
         hash = (hash << 5) - hash;
       } else {
-        hash = (hash << 5) - hash + $name.hashCode();
+        hash = (hash << 5) - hash + this.$name.hashCode();
       }
     |]
