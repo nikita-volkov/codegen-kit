@@ -1,4 +1,4 @@
--- | Dump code snippets. No logic. Only care about layout.
+-- | Dumb code snippets. No logic. Only care about layout.
 module CodegenKit.ByLanguage.Java.Code where
 
 import Coalmine.MultilineTextBuilder
@@ -26,6 +26,18 @@ unitHashCodeMethod =
       return classHash;
     }
   |]
+
+statementsHashCodeMethod :: [Code] -> Code
+statementsHashCodeMethod statements =
+  [j|
+    public int hashCode() {
+      int hash = classHash;$statementsCode
+      return hash;
+    }
+  |]
+  where
+    statementsCode =
+      foldMap (mappend "\n") statements
 
 -- * --
 

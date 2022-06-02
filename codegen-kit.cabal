@@ -43,6 +43,7 @@ library
     CodegenKit.ByLanguage.Java.Charsets
     CodegenKit.ByLanguage.Java.Code
     CodegenKit.ByLanguage.Java.Dsl
+    CodegenKit.ByLanguage.Java.HashCodeBuilderDsl
     CodegenKit.Dependencies
     CodegenKit.Fileset
     CodegenKit.JavaRenderer
