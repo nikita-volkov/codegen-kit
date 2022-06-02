@@ -23,7 +23,7 @@ import qualified CodegenKit.ByLanguage.Java.Code as Code
 import CodegenKit.Prelude
 import qualified Data.HashSet as HashSet
 
--- * Field
+-- * --
 
 data HashCodeSnippets = HashCodeSnippets
   { hashCodeSnippetsImports :: HashSet Text,
