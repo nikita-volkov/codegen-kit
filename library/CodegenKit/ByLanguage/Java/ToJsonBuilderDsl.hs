@@ -10,6 +10,7 @@ module CodegenKit.ByLanguage.Java.ToJsonBuilderDsl
     Field,
     intField,
     longField,
+    floatField,
     doubleField,
     stringField,
     dateField,
@@ -77,6 +78,14 @@ intField name =
 
 longField :: Builder -> Field
 longField name =
+  namedField
+    name
+    [j|
+      builder.append(this.$name);
+    |]
+
+floatField :: Builder -> Field
+floatField name =
   namedField
     name
     [j|
