@@ -5,8 +5,6 @@ module CodegenKit.ByLanguage.Java.HashCodeBuilderDsl
 
     -- * Field
     Field,
-    addFieldImport,
-    hashExpField,
     byteField,
     shortField,
     intField,
