@@ -120,6 +120,7 @@ objectField name =
       if (this.$name == null) {
         hash = (hash << 5) - hash;
       } else {
+        hash = (hash << 5) - hash + 1;
         hash = (hash << 5) - hash + this.$name.hashCode();
       }
     |]
