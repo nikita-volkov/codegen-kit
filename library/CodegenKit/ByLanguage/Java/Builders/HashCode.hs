@@ -78,7 +78,7 @@ shortField name =
 
 intField :: Builder -> Field
 intField name =
-  hashExpField name
+  hashExpField [j|this.$name|]
 
 longField :: Builder -> Field
 longField name =
