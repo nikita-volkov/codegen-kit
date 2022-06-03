@@ -46,6 +46,7 @@ library
     CodegenKit.ByLanguage.Java.EqualsBuilderDsl
     CodegenKit.ByLanguage.Java.HashCodeBuilderDsl
     CodegenKit.ByLanguage.Java.HashCodeBuilderDsl.Snippets
+    CodegenKit.ByLanguage.Java.JavaDocBuilderDsl
     CodegenKit.ByLanguage.Java.ToJsonBuilderDsl
     CodegenKit.Dependencies
     CodegenKit.Fileset
