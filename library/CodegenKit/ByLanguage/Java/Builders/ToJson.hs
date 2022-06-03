@@ -114,7 +114,9 @@ dateFieldType :: FieldType
 dateFieldType =
   FieldType "Date" $ \name ref ->
     [j|
+      builder.append('"');
       builder.append($ref.toString());
+      builder.append('"');
     |]
 
 optionalFieldType :: FieldType -> FieldType
