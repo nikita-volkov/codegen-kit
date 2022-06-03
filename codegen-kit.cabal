@@ -44,6 +44,7 @@ library
     CodegenKit.ByLanguage.Java.Builders.HashCode
     CodegenKit.ByLanguage.Java.Builders.HashCode.Snippets
     CodegenKit.ByLanguage.Java.Builders.JavaDoc
+    CodegenKit.ByLanguage.Java.Builders.ProductClass
     CodegenKit.ByLanguage.Java.Builders.ToJson
     CodegenKit.ByLanguage.Java.Charsets
     CodegenKit.ByLanguage.Java.Code
