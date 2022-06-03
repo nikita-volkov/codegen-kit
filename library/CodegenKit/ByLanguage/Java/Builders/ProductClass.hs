@@ -161,7 +161,7 @@ field FieldName {..} Type {..} =
     [i|this.$valueNameBuilder = $valueNameBuilder;|]
     [i|$typeCode $valueNameBuilder|]
     (typeHashCodeField valueNameBuilder)
-    (typeToJsonField valueNameBuilder)
+    (ToJsonBuilder.field valueNameBuilder typeToJsonFieldType)
     (typeEqualsField valueNameText)
 
 -- * --
@@ -186,35 +186,95 @@ data Type = Type
   { typeCode :: Builder,
     typeEqualsField :: Text -> EqualsBuilder.Field,
     typeHashCodeField :: Builder -> HashCodeBuilder.Field,
-    typeToJsonField :: Builder -> ToJsonBuilder.Field
+    typeToJsonFieldType :: ToJsonBuilder.FieldType
   }
 
 intType :: Bool -> Type
 intType = \case
-  False -> Type "int" EqualsBuilder.primitiveField HashCodeBuilder.intField ToJsonBuilder.intField
-  True -> Type "OptionalInt" EqualsBuilder.objectField HashCodeBuilder.objectField ToJsonBuilder.optionalIntField
+  False ->
+    Type
+      "int"
+      EqualsBuilder.primitiveField
+      HashCodeBuilder.intField
+      ToJsonBuilder.intFieldType
+  True ->
+    Type
+      "OptionalInt"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      ToJsonBuilder.optionalIntFieldType
 
 longType :: Bool -> Type
 longType = \case
-  False -> Type "long" EqualsBuilder.primitiveField HashCodeBuilder.longField ToJsonBuilder.longField
-  True -> Type "OptionalLong" EqualsBuilder.objectField HashCodeBuilder.objectField ToJsonBuilder.optionalLongField
+  False ->
+    Type
+      "long"
+      EqualsBuilder.primitiveField
+      HashCodeBuilder.longField
+      ToJsonBuilder.longFieldType
+  True ->
+    Type
+      "OptionalLong"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      ToJsonBuilder.optionalLongFieldType
 
 floatType :: Bool -> Type
 floatType = \case
-  False -> Type "float" EqualsBuilder.primitiveField HashCodeBuilder.floatField ToJsonBuilder.floatField
-  True -> Type "Optional<Float>" EqualsBuilder.objectField HashCodeBuilder.objectField (ToJsonBuilder.optionalField ToJsonBuilder.floatField)
+  False ->
+    Type
+      "float"
+      EqualsBuilder.primitiveField
+      HashCodeBuilder.floatField
+      ToJsonBuilder.floatFieldType
+  True ->
+    Type
+      "Optional<Float>"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      (ToJsonBuilder.optionalFieldType ToJsonBuilder.floatFieldType)
 
 doubleType :: Bool -> Type
 doubleType = \case
-  False -> Type "double" EqualsBuilder.primitiveField HashCodeBuilder.doubleField ToJsonBuilder.doubleField
-  True -> Type "OptionalDouble" EqualsBuilder.objectField HashCodeBuilder.objectField ToJsonBuilder.optionalDoubleField
+  False ->
+    Type
+      "double"
+      EqualsBuilder.primitiveField
+      HashCodeBuilder.doubleField
+      ToJsonBuilder.doubleFieldType
+  True ->
+    Type
+      "OptionalDouble"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      ToJsonBuilder.optionalDoubleFieldType
 
 stringType :: Bool -> Type
 stringType = \case
-  False -> Type "String" EqualsBuilder.objectField HashCodeBuilder.objectField ToJsonBuilder.stringField
-  True -> Type "Optional<String>" EqualsBuilder.objectField HashCodeBuilder.objectField (ToJsonBuilder.optionalField ToJsonBuilder.stringField)
+  False ->
+    Type
+      "String"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      ToJsonBuilder.stringFieldType
+  True ->
+    Type
+      "Optional<String>"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      (ToJsonBuilder.optionalFieldType ToJsonBuilder.stringFieldType)
 
 dateType :: Bool -> Type
 dateType = \case
-  False -> Type "Date" EqualsBuilder.objectField HashCodeBuilder.objectField ToJsonBuilder.dateField
-  True -> Type "Optional<Date>" EqualsBuilder.objectField HashCodeBuilder.objectField (ToJsonBuilder.optionalField ToJsonBuilder.dateField)
+  False ->
+    Type
+      "Date"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      ToJsonBuilder.dateFieldType
+  True ->
+    Type
+      "Optional<Date>"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      (ToJsonBuilder.optionalFieldType ToJsonBuilder.dateFieldType)

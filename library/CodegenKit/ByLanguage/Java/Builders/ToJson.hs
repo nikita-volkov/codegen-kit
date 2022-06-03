@@ -8,16 +8,21 @@ module CodegenKit.ByLanguage.Java.Builders.ToJson
 
     -- * --
     Field,
-    intField,
-    longField,
-    floatField,
-    doubleField,
-    stringField,
-    dateField,
-    optionalField,
-    optionalIntField,
-    optionalLongField,
-    optionalDoubleField,
+    field,
+
+    -- * --
+    FieldType,
+    primitiveFieldType,
+    intFieldType,
+    longFieldType,
+    floatFieldType,
+    doubleFieldType,
+    stringFieldType,
+    dateFieldType,
+    optionalFieldType,
+    optionalIntFieldType,
+    optionalLongFieldType,
+    optionalDoubleFieldType,
   )
 where
 
@@ -60,108 +65,112 @@ data Field = Field
   { fieldStatements :: Builder
   }
 
-namedField :: Builder -> Builder -> Field
-namedField name valueStatements =
+field :: Builder -> FieldType -> Field
+field name (FieldType _ statements) =
   Field
     [j|
       builder.append("\"$name\":");
-      $valueStatements
-    |]
-
-intField :: Builder -> Field
-intField name =
-  namedField
-    name
-    [j|
-      builder.append(this.$name);
-    |]
-
-longField :: Builder -> Field
-longField name =
-  namedField
-    name
-    [j|
-      builder.append(this.$name);
-    |]
-
-floatField :: Builder -> Field
-floatField name =
-  namedField
-    name
-    [j|
-      builder.append(this.$name);
-    |]
-
-doubleField :: Builder -> Field
-doubleField name =
-  namedField
-    name
-    [j|
-      builder.append(this.$name);
-    |]
-
-stringField :: Builder -> Field
-stringField name =
-  namedField
-    name
-    [j|
-      builder.append('"');
-      builder.append(this.$name.replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b").replace("\f", "\\f").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"));
-      builder.append('"');
-    |]
-
-dateField :: Builder -> Field
-dateField name =
-  namedField
-    name
-    [j|
-      builder.append(this.$name.toString());
-    |]
-
-optionalField :: (Builder -> Field) -> Builder -> Field
-optionalField presentField name =
-  namedField name $
-    [j|
-      if (this.$name.isPresent()) {
-        ${name}Present = this.$name.get();
-        $presentStatements
-      } else {
-        builder.append("null");
-      }
+      $appliedStatements
     |]
   where
-    presentStatements =
-      fieldStatements $ presentField (name <> "Present")
+    appliedStatements =
+      statements name [j|this.$name|]
 
-optionalIntField :: Builder -> Field
-optionalIntField name =
-  namedField name $
+-- * --
+
+data FieldType = FieldType
+  { fieldTypeType :: Builder,
+    fieldTypeStatements :: Builder -> Builder -> Builder
+  }
+
+primitiveFieldType :: Builder -> FieldType
+primitiveFieldType type_ =
+  FieldType
+    type_
+    (\_ ref -> [j|builder.append($ref);|])
+
+intFieldType :: FieldType
+intFieldType = primitiveFieldType "int"
+
+longFieldType :: FieldType
+longFieldType = primitiveFieldType "long"
+
+floatFieldType :: FieldType
+floatFieldType = primitiveFieldType "float"
+
+doubleFieldType :: FieldType
+doubleFieldType = primitiveFieldType "double"
+
+stringFieldType :: FieldType
+stringFieldType =
+  FieldType "String" $ \name ref ->
     [j|
-      if (this.$name.isPresent()) {
-        builder.append(this.$name.getAsInt());
-      } else {
-        builder.append("null");
-      }
+      builder.append('"');
+      builder.append($ref.replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b").replace("\f", "\\f").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"));
+      builder.append('"');
     |]
 
-optionalLongField :: Builder -> Field
-optionalLongField name =
-  namedField name $
+dateFieldType :: FieldType
+dateFieldType =
+  FieldType "Date" $ \name ref ->
     [j|
-      if (this.$name.isPresent()) {
-        builder.append(this.$name.getAsLong());
-      } else {
-        builder.append("null");
-      }
+      builder.append($ref.toString());
     |]
 
-optionalDoubleField :: Builder -> Field
-optionalDoubleField name =
-  namedField name $
-    [j|
-      if (this.$name.isPresent()) {
-        builder.append(this.$name.getAsDouble());
-      } else {
-        builder.append("null");
-      }
-    |]
+optionalFieldType :: FieldType -> FieldType
+optionalFieldType (FieldType elementType elementStatements) =
+  FieldType [j|Optional<$elementType>|] statements
+  where
+    statements name ref =
+      [j|
+        if ($ref.isPresent()) {
+          $elementType $elementName = $ref.get();
+          $appliedElementStatements
+        } else {
+          builder.append("null");
+        }
+      |]
+      where
+        elementName =
+          name <> "Present"
+        appliedElementStatements =
+          elementStatements elementName elementName
+
+optionalIntFieldType :: FieldType
+optionalIntFieldType =
+  FieldType "OptionalInt" statements
+  where
+    statements name ref =
+      [j|
+        if ($ref.isPresent()) {
+          builder.append($ref.getAsInt());
+        } else {
+          builder.append("null");
+        }
+      |]
+
+optionalLongFieldType :: FieldType
+optionalLongFieldType =
+  FieldType "OptionalLong" statements
+  where
+    statements name ref =
+      [j|
+        if ($ref.isPresent()) {
+          builder.append($ref.getAsLong());
+        } else {
+          builder.append("null");
+        }
+      |]
+
+optionalDoubleFieldType :: FieldType
+optionalDoubleFieldType =
+  FieldType "OptionalDouble" statements
+  where
+    statements name ref =
+      [j|
+        if ($ref.isPresent()) {
+          builder.append($ref.getAsDouble());
+        } else {
+          builder.append("null");
+        }
+      |]
