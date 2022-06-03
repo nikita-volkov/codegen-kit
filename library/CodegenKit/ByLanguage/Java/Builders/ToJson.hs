@@ -1,4 +1,4 @@
-module CodegenKit.ByLanguage.Java.ToJsonBuilderDsl
+module CodegenKit.ByLanguage.Java.Builders.ToJson
   ( -- * --
     snippetsMethodDecl,
 

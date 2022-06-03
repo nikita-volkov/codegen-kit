@@ -1,4 +1,4 @@
-module CodegenKit.ByLanguage.Java.JavaDocBuilderDsl
+module CodegenKit.ByLanguage.Java.Builders.JavaDoc
   ( -- * --
     Param,
     Return,

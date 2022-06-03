@@ -1,5 +1,5 @@
 -- | Dumb code snippets. No logic. Only care about layout.
-module CodegenKit.ByLanguage.Java.HashCodeBuilderDsl.Snippets where
+module CodegenKit.ByLanguage.Java.Builders.HashCode.Snippets where
 
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude

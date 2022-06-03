@@ -1,4 +1,4 @@
-module CodegenKit.ByLanguage.Java.HashCodeBuilderDsl
+module CodegenKit.ByLanguage.Java.Builders.HashCode
   ( -- * --
     HashCodeSnippets (..),
     hashCodeSnippets,
@@ -19,7 +19,7 @@ module CodegenKit.ByLanguage.Java.HashCodeBuilderDsl
 where
 
 import Coalmine.MultilineTextBuilder
-import qualified CodegenKit.ByLanguage.Java.HashCodeBuilderDsl.Snippets as Snippets
+import qualified CodegenKit.ByLanguage.Java.Builders.HashCode.Snippets as Snippets
 import CodegenKit.Prelude
 import qualified Data.HashSet as HashSet
 

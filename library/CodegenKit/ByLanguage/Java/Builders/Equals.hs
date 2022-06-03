@@ -3,7 +3,7 @@
 --
 -- - The method declation
 -- - The docs in any form
-module CodegenKit.ByLanguage.Java.EqualsBuilderDsl
+module CodegenKit.ByLanguage.Java.Builders.Equals
   ( -- * Execution
     equalsMethodsForProduct,
 
