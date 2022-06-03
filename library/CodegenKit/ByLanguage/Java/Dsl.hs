@@ -1,4 +1,4 @@
-module CodegenKit.ByLanguage.Java.Dsl where
+module CodegenKit.ByLanguage.Java.Dsl {-# DEPRECATED "Use specialized DSLs" #-} where
 
 import Coalmine.EvenSimplerPaths (Path)
 import Coalmine.MultilineTextBuilder
