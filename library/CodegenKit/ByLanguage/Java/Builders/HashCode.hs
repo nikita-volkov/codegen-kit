@@ -114,6 +114,10 @@ arrayField name =
 
 objectField :: Builder -> Field
 objectField name =
+  hashExpField [j|this.$name.hashCode()|]
+
+nullCheckedObjectField :: Builder -> Field
+nullCheckedObjectField name =
   Field
     mempty
     [j|
