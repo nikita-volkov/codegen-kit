@@ -65,6 +65,16 @@ objectField fieldName =
   Field
     [j|$fieldName.equals(that.$fieldName)|]
 
+nullCheckedObjectField :: Text -> Field
+nullCheckedObjectField fieldName =
+  Field
+    [j|
+      (
+        $fieldName == that.$fieldName ||
+        $fieldName != null && $fieldName.equals(that.$fieldName)
+      )
+    |]
+
 arrayField :: Text -> Field
 arrayField fieldName =
   Field
