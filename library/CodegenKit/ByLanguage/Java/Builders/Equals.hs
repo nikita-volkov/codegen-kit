@@ -37,7 +37,13 @@ equalsMethodsForProduct className = \case
       public boolean equals(Object that) {
         return that instanceof $className && equals(($className) that);
       }
-      private boolean equals($className that) {
+      /**
+       * Equality check specialized to only the instances of this class.
+       * <p>
+       * Unlike the Object-generalized version it avoids instance checks,
+       * since that is resolved by the type system.
+       */
+      public boolean equals($className that) {
         return
           $fields;
       }
