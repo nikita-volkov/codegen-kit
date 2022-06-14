@@ -28,6 +28,11 @@ import qualified Data.Text.IO as TextIO
 newtype Fileset = Fileset [(Path, Text)]
   deriving (Semigroup, Monoid)
 
+instance IsList Fileset where
+  type Item Fileset = (Path, Text)
+  fromList = Fileset
+  toList = coerce
+
 instance BroadPrinting Fileset where
   toBroadBuilder (Fileset package) =
     B.intercalate "\n\n" $ fmap renderFile package
