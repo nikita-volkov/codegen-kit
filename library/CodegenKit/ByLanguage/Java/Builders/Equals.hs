@@ -53,7 +53,7 @@ equalsMethodsForProduct className = \case
 
 multiFieldsExp :: [Field] -> Builder
 multiFieldsExp =
-  List.intercalateMap fieldEqualsMethodExp " &&\n"
+  List.mapIntercalate fieldEqualsMethodExp " &&\n"
 
 -- * --
 

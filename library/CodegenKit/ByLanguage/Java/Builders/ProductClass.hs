@@ -106,11 +106,11 @@ class_ ClassName {..} fields =
       |]
       where
         propertyDecls =
-          List.intercalateMap fieldPropertyDecl "\n" fields
+          List.mapIntercalate fieldPropertyDecl "\n" fields
         propertyAssignments =
-          List.intercalateMap fieldAssignment "\n" fields
+          List.mapIntercalate fieldAssignment "\n" fields
         constructorArgs =
-          List.intercalateMap fieldArg ", " fields
+          List.mapIntercalate fieldArg ", " fields
         HashCodeBuilder.HashCodeSnippets {..} =
           HashCodeBuilder.hashCodeSnippets
             classNameCode

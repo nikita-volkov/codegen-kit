@@ -54,7 +54,7 @@ snippets fields =
     |]
   where
     statements =
-      List.intercalateMap
+      List.mapIntercalate
         fieldStatements
         "\nbuilder.append(',');\n"
         fields
