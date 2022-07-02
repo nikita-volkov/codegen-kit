@@ -4,7 +4,6 @@
 module CodegenKit.ByLanguage.Haskell.ExpFormatter where
 
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified Coalmine.SimplePaths as Paths
 import CodegenKit.Prelude
 import qualified Data.Text as Text
 import qualified TextBuilderDev as B'

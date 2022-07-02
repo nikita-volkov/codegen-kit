@@ -16,8 +16,8 @@ module CodegenKit.Packaging
   )
 where
 
+import qualified Coalmine.EvenSimplerPaths as Path
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified Coalmine.SimplePaths as Paths
 import CodegenKit.Prelude hiding (inDir, print)
 import qualified Data.Text.IO as TextIO
 import qualified System.Directory as Directory
@@ -29,7 +29,7 @@ import qualified System.Directory as Directory
 -- package sets.
 --
 -- The abstraction.
-newtype FileSet = FileSet [(FilePath, Text)]
+newtype FileSet = FileSet [(Path, Text)]
   deriving (Semigroup, Monoid)
 
 instance BroadPrinting FileSet where
@@ -50,7 +50,8 @@ write (FileSet files) =
   traverse_ (uncurry writeFileCreatingDirs) files
   where
     writeFileCreatingDirs path contents = do
-      Directory.createDirectoryIfMissing True $ printCompactAsString $ Paths.filePathDir path
+      forM_ (Path.parent path) $
+        Directory.createDirectoryIfMissing True . printCompactAsString
       TextIO.writeFile (printCompactAsString path) contents
 
 print :: FileSet -> IO ()
@@ -58,7 +59,7 @@ print = printBroadToStdOut
 
 -- * --
 
-fromFile :: FilePath -> Text -> FileSet
+fromFile :: Path -> Text -> FileSet
 fromFile path content =
   FileSet [(path, content)]
 
@@ -70,9 +71,9 @@ fromModule ns (Module mod) =
 
 -- |
 -- Prepend a directory path to all contents of this package.
-inDir :: DirPath -> FileSet -> FileSet
+inDir :: Path -> FileSet -> FileSet
 inDir path (FileSet contents) =
-  FileSet $ fmap (first (Paths.inDir path)) contents
+  FileSet $ fmap (first (mappend path)) contents
 
 -- * --
 
@@ -81,4 +82,4 @@ inDir path (FileSet contents) =
 newtype Module
   = -- |
     -- Function from namespace into filename and contents.
-    Module ([Name] -> (FilePath, Text))
+    Module ([Name] -> (Path, Text))

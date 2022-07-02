@@ -10,7 +10,6 @@ module CodegenKit.Dependencies
   )
 where
 
-import qualified Coalmine.SimplePaths as Paths
 import CodegenKit.Prelude hiding (singleton, toList)
 import qualified CodegenKit.Versioning as Versioning
 import qualified Data.Map.Strict as Map

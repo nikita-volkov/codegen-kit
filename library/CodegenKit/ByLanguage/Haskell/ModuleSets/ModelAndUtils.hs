@@ -30,7 +30,6 @@ where
 import qualified Coalmine.BaseExtras.List as List
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
-import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors as ModelAccessorsPackage
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging

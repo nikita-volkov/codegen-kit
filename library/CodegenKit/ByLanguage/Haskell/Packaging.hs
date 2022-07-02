@@ -23,7 +23,6 @@ module CodegenKit.ByLanguage.Haskell.Packaging
 where
 
 import qualified Coalmine.Name as Name
-import qualified Coalmine.SimplePaths as Paths
 import qualified CodegenKit.ByLanguage.Haskell.Contents.Cabal as CabalContents
 import qualified CodegenKit.ByLanguage.Haskell.FileSets.Stack as StackFileSet
 import CodegenKit.Packaging (FileSet)
@@ -40,7 +39,7 @@ import qualified Data.Map.Strict as Map
 -- E.g., being exposed or hidden.
 data Modules
   = Modules
-      !(Acc (FilePath, [Name] -> Text))
+      !(Acc (Path, [Name] -> Text))
       -- ^ List of files.
       !(Acc [Name])
       -- ^ Exposed modules.
@@ -116,13 +115,13 @@ toCabalFileSet packageName synopsis version modules =
     contents =
       toCabalContents packageName synopsis version modules
 
-toModulesFileSet :: DirPath -> Modules -> FileSet
+toModulesFileSet :: Path -> Modules -> FileSet
 toModulesFileSet srcDirPath (Modules files _ _ _ _) =
   foldMap file files
   where
     file (filePath, render) =
       Packaging.fromFile
-        (Paths.inDir srcDirPath filePath)
+        (srcDirPath <> filePath)
         (render [])
 
 toStackExtraDeps :: Modules -> [StackFileSet.ExtraDep]
@@ -161,7 +160,7 @@ inNamespace ns (Modules files exposed hidden dependencies stackExtraDeps) =
       files & fmap (bimap prependPath prependModuleName)
       where
         prependPath =
-          Paths.inDir (moduleDirPath ns)
+          mappend (moduleDirPath ns)
         prependModuleName render =
           render . flip mappend ns
 
@@ -231,6 +230,6 @@ githubPackageLocation =
 
 -- * Helpers
 
-moduleDirPath :: [Name] -> DirPath
+moduleDirPath :: [Name] -> Path
 moduleDirPath =
   foldMap (fromString . to . Name.toUpperCamelCaseText)
