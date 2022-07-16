@@ -7,13 +7,13 @@ packages:
 - completed:
     name: coalmine
     pantry-tree:
-      sha256: cb3b1ea8badee1e9485205130ebfbd3c9a27d528fbadb5a80465125369595473
-      size: 9343
-    commit: 1a0e9c3c4aa1e075ae4040b81f2f12056f3d336e
+      sha256: b3c9779db1b259ee6c452563fe357a059d309568a348a27c3c283c2ce99179b1
+      size: 9428
+    commit: f14cc1ebf46e8e1d56155a73d394fcc292dfb57c
     git: https://github.com/nikita-volkov/coalmine
     version: 0.1.0.2
   original:
-    commit: 1a0e9c3c4aa1e075ae4040b81f2f12056f3d336e
+    commit: f14cc1ebf46e8e1d56155a73d394fcc292dfb57c
     git: https://github.com/nikita-volkov/coalmine
 - completed:
     name: moore-machines
@@ -51,28 +51,14 @@ packages:
 - completed:
     name: acquire
     pantry-tree:
-      sha256: 446c9d338874484cb801448e68c1ff16b1aa75bcedfd2c69d5e957d08a269487
-      size: 343
-    commit: 0e853dd613537e4b6fcbddb551d42df676045049
+      sha256: e194150d070a0e4f07e5f2285e82f177312f328c7490f3a659f361b4f6324d00
+      size: 438
+    commit: 75194757308ae9340b0e2eda46d8db4d25af7516
     git: https://github.com/metrix-ai/acquire
     version: 0.3.1
   original:
-    commit: 0e853dd613537e4b6fcbddb551d42df676045049
+    commit: 75194757308ae9340b0e2eda46d8db4d25af7516
     git: https://github.com/metrix-ai/acquire
-- completed:
-    pantry-tree:
-      sha256: 4c700792b51236a70e364ac79c1cd0d197596264c0f57099eb5cea193b663c1b
-      size: 408
-    hackage: aeson-value-parser-0.19.7@sha256:c114ae7deb86b55154a408896602f9ce61555ac6fd044e8e209c9c544ad2f4db,2054
-  original:
-    hackage: aeson-value-parser-0.19.7
-- completed:
-    pantry-tree:
-      sha256: 1240e61d89fa70c65636995919674b5bc55bc33a719e555fa4ec8950a91eb6e5
-      size: 604
-    hackage: cereal-unordered-containers-0.1@sha256:e47c65f76633248fccdea1f38de952473edf7a28cf05af38e64b681a47305c92,1544
-  original:
-    hackage: cereal-unordered-containers-0.1
 - completed:
     pantry-tree:
       sha256: 520aa5f59b55c14d27115a801f499f940a563849b0c54876bcd6be41f6450713
@@ -80,20 +66,6 @@ packages:
     hackage: cereal-data-dword-0.1.1@sha256:a3fa6dfafaeeb3774c5888dfa601d561ce05b0af66f52859970247e58135d47e,1381
   original:
     hackage: cereal-data-dword-0.1.1
-- completed:
-    pantry-tree:
-      sha256: b95775b15664193c3301f10233f26ff43f60327f700c15e439cbed7f615c401c
-      size: 446
-    hackage: domain-aeson-0.1@sha256:8337de97b765b535cf8c252ca051c7f1573ad03b21774a09dcb6673ad7269ad1,1897
-  original:
-    hackage: domain-aeson-0.1
-- completed:
-    pantry-tree:
-      sha256: babc92fb6290d5d7b59cf6a07c8abb51a1a176824371f5cbf2a916259a337915
-      size: 366
-    hackage: domain-cereal-0.1@sha256:db6fe7980ee3f9834a9e2c7cbe577354406286fecfb18477aac712cc008a83ce,1879
-  original:
-    hackage: domain-cereal-0.1
 - completed:
     pantry-tree:
       sha256: 946dbffdad0a92dbdeeaaabb1c7ac2451f3002561407068543fcd860cd860f15
@@ -108,29 +80,15 @@ packages:
     hackage: timestamp-0.2@sha256:103fe49ce206922d3b14d57d8aff25eaf03c70fef5fcdaeaeb8416aaee163e51,1598
   original:
     hackage: timestamp-0.2
-- completed:
-    pantry-tree:
-      sha256: af6a4af7b400a4891918a0d3b60d16cbf90a4d5d0a101223f920d684d435754c
-      size: 402
-    hackage: leb128-cereal-1.2@sha256:ba8770629aa1fa8524cbbea3b4065b21def815a766ab6c74174aa57f8c124ead,1883
-  original:
-    hackage: leb128-cereal-1.2
-- completed:
-    pantry-tree:
-      sha256: 8883631a132438e7892fcb13e89d6bbcdc0ac76c56fbea8df8d7aa482ce81f73
-      size: 724
-    hackage: text-builder-dev-0.3.3@sha256:79ec422defcc2e5b34f94129c72b98d34b2efc1ed8bbd945ccb8f4f535a892c3,2784
-  original:
-    hackage: text-builder-dev-0.3.3
 snapshots:
 - completed:
-    sha256: 33e3ba230f58941e800dbb4c8475200ac034959c38255e1995fd38d18cb4fbfd
-    size: 813
-    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/8bcee317a1c799c3f410f85ac160c067ceff028c/snapshot.yaml
+    sha256: c1d2a4c5ae5597a54fe57190602f1d827fc94f98dd8e8c0d8386e211f151ab44
+    size: 655
+    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/ad0c026d3d6b696cbee585a85cb3dcc3bc3bb86f/snapshot.yaml
   original:
-    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/8bcee317a1c799c3f410f85ac160c067ceff028c/snapshot.yaml
+    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/ad0c026d3d6b696cbee585a85cb3dcc3bc3bb86f/snapshot.yaml
 - completed:
-    sha256: 3d516da83f27e490ecd1d86dfea088f9ae7737802d4e3fb8157c9e4066c355de
-    size: 614843
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/7/1.yaml
-  original: nightly-2022-07-01
+    sha256: 6a7d84094bf948100b933f83f8cff586a41633d59cb1adbb89eefc25405fabe8
+    size: 616794
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/7/16.yaml
+  original: nightly-2022-07-16
