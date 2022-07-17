@@ -31,6 +31,7 @@ module CodegenKit.ByLanguage.Java.Builders.ToJson
     optionalDoubleFieldType,
     customEscapedToStringFieldType,
     customUnescapedToStringFieldType,
+    arrayFieldType,
   )
 where
 
@@ -223,3 +224,25 @@ customEscapedToStringFieldType signature =
       builder.append($ref.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b").replace("\f", "\\f").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"));
       builder.append('"');
     |]
+
+arrayFieldType :: FieldType -> FieldType
+arrayFieldType (FieldType elementType elementStatements) =
+  FieldType [j|$elementType[]|] statements
+  where
+    statements name ref =
+      [j|
+        builder.append('[');
+        if ($ref.length > 0) {
+          $headElementStatements
+          for (int i = 1; i < $ref.length; i++) {
+            builder.append(',');
+            $loopElementStatements
+          }
+        }
+        builder.append(']');
+      |]
+      where
+        headElementStatements =
+          elementStatements name [j|$ref[0]|]
+        loopElementStatements =
+          elementStatements name [j|$ref[i]|]
