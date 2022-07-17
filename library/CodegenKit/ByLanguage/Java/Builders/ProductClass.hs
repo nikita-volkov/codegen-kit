@@ -23,6 +23,7 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
 
     -- ** Predefined
     booleanType,
+    byteType,
     shortType,
     intType,
     longType,
@@ -222,6 +223,23 @@ booleanType = \case
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       (ToJsonBuilder.optionalFieldType ToJsonBuilder.booleanFieldType)
+      ["java.util.Optional"]
+
+byteType :: Bool -> Type
+byteType = \case
+  False ->
+    Type
+      "byte"
+      EqualsBuilder.primitiveField
+      HashCodeBuilder.byteField
+      ToJsonBuilder.byteFieldType
+      []
+  True ->
+    Type
+      "Optional<Byte>"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      (ToJsonBuilder.optionalFieldType ToJsonBuilder.byteFieldType)
       ["java.util.Optional"]
 
 shortType :: Bool -> Type

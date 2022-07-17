@@ -13,6 +13,7 @@ module CodegenKit.ByLanguage.Java.Builders.ToJson
     -- * --
     FieldType,
     booleanFieldType,
+    byteFieldType,
     shortFieldType,
     intFieldType,
     longFieldType,
@@ -98,6 +99,9 @@ primitiveFieldType type_ =
 
 booleanFieldType :: FieldType
 booleanFieldType = primitiveFieldType "Boolean"
+
+byteFieldType :: FieldType
+byteFieldType = primitiveFieldType "Byte"
 
 shortFieldType :: FieldType
 shortFieldType = primitiveFieldType "Short"
