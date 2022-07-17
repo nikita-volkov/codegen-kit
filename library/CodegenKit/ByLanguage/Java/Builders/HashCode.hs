@@ -21,12 +21,12 @@ where
 import Coalmine.MultilineTextBuilder
 import qualified CodegenKit.ByLanguage.Java.Builders.HashCode.Snippets as Snippets
 import CodegenKit.Prelude
-import qualified Data.HashSet as HashSet
+import qualified Data.Set as Set
 
 -- * --
 
 data HashCodeSnippets = HashCodeSnippets
-  { hashCodeSnippetsImports :: HashSet Text,
+  { hashCodeSnippetsImports :: Set Text,
     hashCodeSnippetsClassHashPropertyDecl :: Builder,
     hashCodeSnippetsHashCodeMethodDecls :: Builder
   }
@@ -45,21 +45,21 @@ hashCodeSnippets className fields =
         (Snippets.unitHashCodeMethod)
     _ ->
       HashCodeSnippets
-        (HashSet.unions . fmap fieldImports $ fields)
+        (Set.unions . fmap fieldImports $ fields)
         (Snippets.classHashStaticProperty className)
         (Snippets.statementsHashCodeMethod . fmap fieldHashUpdateStatements $ fields)
 
 -- * Field
 
 data Field = Field
-  { fieldImports :: HashSet Text,
+  { fieldImports :: Set Text,
     fieldHashUpdateStatements :: Builder
   }
 
 addFieldImport :: Text -> Field -> Field
 addFieldImport import_ Field {..} =
   Field
-    (HashSet.insert import_ fieldImports)
+    (Set.insert import_ fieldImports)
     fieldHashUpdateStatements
 
 hashExpField :: Builder -> Field

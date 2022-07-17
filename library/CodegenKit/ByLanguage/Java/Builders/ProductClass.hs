@@ -55,18 +55,20 @@ fileset dirPath namespace Class {..} =
       [j|
         package $namespace;
 
-        import java.sql.Date;
-        import java.sql.*;
-        import java.util.*;
-
+        $imports
         $classCode
       |]
+      where
+        imports =
+          classImports
+            & foldMap (flip mappend ";\n" . mappend "import ")
 
 -- * --
 
 data Class = Class
   { classPath :: Path,
-    classCode :: Builder
+    classCode :: Builder,
+    classImports :: Set Text
   }
 
 class_ ::
@@ -79,6 +81,7 @@ class_ ClassName {..} fields =
   Class
     classNamePath
     fieldsClassCode
+    imports
   where
     fieldsClassCode =
       [i|
@@ -112,10 +115,6 @@ class_ ClassName {..} fields =
           List.mapIntercalate fieldAssignment "\n" fields
         constructorArgs =
           List.mapIntercalate fieldArg ", " fields
-        HashCodeBuilder.HashCodeSnippets {..} =
-          HashCodeBuilder.hashCodeSnippets
-            classNameCode
-            (fmap fieldHashCodeField fields)
         toJsonSnippets =
           ToJsonBuilder.snippets
             (fmap fieldToJsonField fields)
@@ -126,6 +125,13 @@ class_ ClassName {..} fields =
           EqualsBuilder.equalsMethodsForProduct
             className
             (fmap fieldEqualsField fields)
+    HashCodeBuilder.HashCodeSnippets {..} =
+      HashCodeBuilder.hashCodeSnippets
+        classNameCode
+        (fmap fieldHashCodeField fields)
+    imports =
+      hashCodeSnippetsImports
+        <> foldMap (fromList . fieldImports) fields
 
 -- * --
 
@@ -152,7 +158,8 @@ data Field = Field
     fieldArg :: Builder,
     fieldHashCodeField :: HashCodeBuilder.Field,
     fieldToJsonField :: ToJsonBuilder.Field,
-    fieldEqualsField :: EqualsBuilder.Field
+    fieldEqualsField :: EqualsBuilder.Field,
+    fieldImports :: [Text]
   }
 
 field :: FieldName -> Type -> Field
@@ -164,6 +171,7 @@ field FieldName {..} Type {..} =
     (typeHashCodeField valueNameBuilder)
     (ToJsonBuilder.field valueNameBuilder typeToJsonFieldType)
     (typeEqualsField valueNameText)
+    typeImports
 
 -- * --
 
@@ -202,7 +210,7 @@ shortType = \case
       []
   True ->
     Type
-      "Optional"
+      "Optional<Short>"
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       (ToJsonBuilder.optionalFieldType ToJsonBuilder.shortFieldType)
