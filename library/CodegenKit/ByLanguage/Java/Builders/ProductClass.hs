@@ -31,6 +31,8 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
     bigDecimalType,
     stringType,
     dateType,
+    timeType,
+    timestampType,
     uuidType,
     customObjectType,
   )
@@ -325,21 +327,25 @@ stringType = \case
       ["java.util.Optional"]
 
 dateType :: Bool -> Type
-dateType = \case
-  False ->
-    Type
-      "Date"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      ToJsonBuilder.dateFieldType
-      ["java.sql.Date"]
-  True ->
-    Type
-      "Optional<Date>"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      (ToJsonBuilder.optionalFieldType ToJsonBuilder.dateFieldType)
-      ["java.sql.Date", "java.util.Optional"]
+dateType =
+  customObjectType
+    "Date"
+    ToJsonBuilder.dateFieldType
+    ["java.sql.Date"]
+
+timeType :: Bool -> Type
+timeType =
+  customObjectType
+    "Time"
+    ToJsonBuilder.timeFieldType
+    ["java.sql.Time"]
+
+timestampType :: Bool -> Type
+timestampType =
+  customObjectType
+    "Timestamp"
+    ToJsonBuilder.timestampFieldType
+    ["java.sql.Timestamp"]
 
 customObjectType ::
   -- | Signature.

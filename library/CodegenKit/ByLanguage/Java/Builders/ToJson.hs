@@ -21,12 +21,15 @@ module CodegenKit.ByLanguage.Java.Builders.ToJson
     bigDecimalFieldType,
     stringFieldType,
     dateFieldType,
+    timeFieldType,
+    timestampFieldType,
     uuidFieldType,
     optionalFieldType,
     optionalIntFieldType,
     optionalLongFieldType,
     optionalDoubleFieldType,
-    customToStringFieldType,
+    customEscapedToStringFieldType,
+    customUnescapedToStringFieldType,
   )
 where
 
@@ -130,22 +133,16 @@ stringFieldType =
     |]
 
 dateFieldType :: FieldType
-dateFieldType =
-  FieldType "Date" $ \name ref ->
-    [j|
-      builder.append('"');
-      builder.append($ref.toString());
-      builder.append('"');
-    |]
+dateFieldType = customUnescapedToStringFieldType "Date"
+
+timeFieldType :: FieldType
+timeFieldType = customUnescapedToStringFieldType "Time"
+
+timestampFieldType :: FieldType
+timestampFieldType = customUnescapedToStringFieldType "Timestamp"
 
 uuidFieldType :: FieldType
-uuidFieldType =
-  FieldType "UUID" $ \name ref ->
-    [j|
-      builder.append('"');
-      builder.append($ref.toString());
-      builder.append('"');
-    |]
+uuidFieldType = customUnescapedToStringFieldType "UUID"
 
 optionalFieldType :: FieldType -> FieldType
 optionalFieldType (FieldType elementType elementStatements) =
@@ -205,8 +202,17 @@ optionalDoubleFieldType =
         }
       |]
 
-customToStringFieldType :: Builder -> FieldType
-customToStringFieldType signature =
+customUnescapedToStringFieldType :: Builder -> FieldType
+customUnescapedToStringFieldType signature =
+  FieldType signature $ \name ref ->
+    [j|
+      builder.append('"');
+      builder.append($ref.toString());
+      builder.append('"');
+    |]
+
+customEscapedToStringFieldType :: Builder -> FieldType
+customEscapedToStringFieldType signature =
   FieldType signature $ \name ref ->
     [j|
       builder.append('"');
