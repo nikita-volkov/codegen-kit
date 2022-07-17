@@ -1,7 +1,7 @@
 cabal-version: 3.0
 
 name: codegen-kit
-version: 0.1
+version: 0.1.0.1
 synopsis: Code generation utils
 homepage: https://github.com/nikita-volkov/codegen-kit
 bug-reports: https://github.com/nikita-volkov/codegen-kit/issues
