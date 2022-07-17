@@ -24,6 +24,7 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
     -- ** Composite
     customObjectType,
     arrayType,
+    optionalType,
 
     -- ** Specific
     booleanType,
@@ -33,12 +34,17 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
     longType,
     floatType,
     doubleType,
-    bigDecimalType,
     stringType,
     dateType,
     timeType,
     timestampType,
+    bigDecimalType,
     uuidType,
+
+    -- ** Special optionals
+    optionalIntType,
+    optionalLongType,
+    optionalDoubleType,
   )
 where
 
@@ -177,9 +183,9 @@ data Field = Field
 field :: FieldName -> Type -> Field
 field FieldName {..} Type {..} =
   Field
-    [i|public final $typeCode $valueNameBuilder;|]
+    [i|public final $typeSignature $valueNameBuilder;|]
     [i|this.$valueNameBuilder = $valueNameBuilder;|]
-    [i|$typeCode $valueNameBuilder|]
+    [i|$typeSignature $valueNameBuilder|]
     (typeHashCodeField valueNameBuilder)
     (ToJsonBuilder.field valueNameBuilder typeToJsonFieldType)
     (typeEqualsField valueNameText)
@@ -204,7 +210,8 @@ fieldName name =
 -- * --
 
 data Type = Type
-  { typeCode :: Builder,
+  { typeSignature :: Builder,
+    typeBoxedSignature :: Builder,
     typeEqualsField :: Text -> EqualsBuilder.Field,
     typeHashCodeField :: Builder -> HashCodeBuilder.Field,
     typeToJsonFieldType :: ToJsonBuilder.FieldType,
@@ -220,203 +227,181 @@ customObjectType ::
   ToJsonBuilder.FieldType ->
   -- | Imports.
   [Text] ->
-  -- | Optional.
-  Bool ->
   Type
-customObjectType signature toJsonFieldType imports = \case
-  False ->
-    Type
-      signature
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      toJsonFieldType
-      imports
-  True ->
-    Type
-      [j|Optional<$signature>|]
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      (ToJsonBuilder.optionalFieldType toJsonFieldType)
-      ("java.util.Optional" : imports)
+customObjectType signature toJsonFieldType imports =
+  Type
+    signature
+    signature
+    EqualsBuilder.objectField
+    HashCodeBuilder.objectField
+    toJsonFieldType
+    imports
 
 arrayType :: Type -> Type
 arrayType Type {..} =
   Type
-    [j|$typeCode[]|]
+    [j|$typeSignature[]|]
+    [j|$typeSignature[]|]
     EqualsBuilder.arrayField
     HashCodeBuilder.arrayField
     (ToJsonBuilder.arrayFieldType typeToJsonFieldType)
     typeImports
 
+optionalType :: Type -> Type
+optionalType Type {..} =
+  Type
+    [j|Optional<$typeBoxedSignature>|]
+    [j|Optional<$typeBoxedSignature>|]
+    EqualsBuilder.objectField
+    HashCodeBuilder.objectField
+    (ToJsonBuilder.optionalFieldType typeToJsonFieldType)
+    ("java.util.Optional" : typeImports)
+
 -- ** Specific
 
-booleanType :: Bool -> Type
-booleanType = \case
-  False ->
-    Type
-      "boolean"
-      EqualsBuilder.primitiveField
-      HashCodeBuilder.booleanField
-      ToJsonBuilder.booleanFieldType
-      []
-  True ->
-    Type
-      "Optional<Boolean>"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      (ToJsonBuilder.optionalFieldType ToJsonBuilder.booleanFieldType)
-      ["java.util.Optional"]
+booleanType :: Type
+booleanType =
+  Type
+    "boolean"
+    "Boolean"
+    EqualsBuilder.primitiveField
+    HashCodeBuilder.booleanField
+    ToJsonBuilder.booleanFieldType
+    []
 
-byteType :: Bool -> Type
-byteType = \case
-  False ->
-    Type
-      "byte"
-      EqualsBuilder.primitiveField
-      HashCodeBuilder.byteField
-      ToJsonBuilder.byteFieldType
-      []
-  True ->
-    Type
-      "Optional<Byte>"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      (ToJsonBuilder.optionalFieldType ToJsonBuilder.byteFieldType)
-      ["java.util.Optional"]
+byteType :: Type
+byteType =
+  Type
+    "byte"
+    "Byte"
+    EqualsBuilder.primitiveField
+    HashCodeBuilder.byteField
+    ToJsonBuilder.byteFieldType
+    []
 
-shortType :: Bool -> Type
-shortType = \case
-  False ->
-    Type
-      "short"
-      EqualsBuilder.primitiveField
-      HashCodeBuilder.shortField
-      ToJsonBuilder.shortFieldType
-      []
-  True ->
-    Type
-      "Optional<Short>"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      (ToJsonBuilder.optionalFieldType ToJsonBuilder.shortFieldType)
-      ["java.util.Optional"]
+shortType :: Type
+shortType =
+  Type
+    "short"
+    "Short"
+    EqualsBuilder.primitiveField
+    HashCodeBuilder.shortField
+    ToJsonBuilder.shortFieldType
+    []
 
-intType :: Bool -> Type
-intType = \case
-  False ->
-    Type
-      "int"
-      EqualsBuilder.primitiveField
-      HashCodeBuilder.intField
-      ToJsonBuilder.intFieldType
-      []
-  True ->
-    Type
-      "OptionalInt"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      ToJsonBuilder.optionalIntFieldType
-      ["java.util.OptionalInt"]
+intType :: Type
+intType =
+  Type
+    "int"
+    "Integer"
+    EqualsBuilder.primitiveField
+    HashCodeBuilder.intField
+    ToJsonBuilder.intFieldType
+    []
 
-longType :: Bool -> Type
-longType = \case
-  False ->
-    Type
-      "long"
-      EqualsBuilder.primitiveField
-      HashCodeBuilder.longField
-      ToJsonBuilder.longFieldType
-      []
-  True ->
-    Type
-      "OptionalLong"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      ToJsonBuilder.optionalLongFieldType
-      ["java.util.OptionalLong"]
+longType :: Type
+longType =
+  Type
+    "long"
+    "Long"
+    EqualsBuilder.primitiveField
+    HashCodeBuilder.longField
+    ToJsonBuilder.longFieldType
+    []
 
-floatType :: Bool -> Type
-floatType = \case
-  False ->
-    Type
-      "float"
-      EqualsBuilder.primitiveField
-      HashCodeBuilder.floatField
-      ToJsonBuilder.floatFieldType
-      []
-  True ->
-    Type
-      "Optional<Float>"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      (ToJsonBuilder.optionalFieldType ToJsonBuilder.floatFieldType)
-      ["java.util.Optional"]
+floatType :: Type
+floatType =
+  Type
+    "float"
+    "Float"
+    EqualsBuilder.primitiveField
+    HashCodeBuilder.floatField
+    ToJsonBuilder.floatFieldType
+    []
 
-doubleType :: Bool -> Type
-doubleType = \case
-  False ->
-    Type
-      "double"
-      EqualsBuilder.primitiveField
-      HashCodeBuilder.doubleField
-      ToJsonBuilder.doubleFieldType
-      []
-  True ->
-    Type
-      "OptionalDouble"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      ToJsonBuilder.optionalDoubleFieldType
-      ["java.util.OptionalDouble"]
+doubleType :: Type
+doubleType =
+  Type
+    "double"
+    "Double"
+    EqualsBuilder.primitiveField
+    HashCodeBuilder.doubleField
+    ToJsonBuilder.doubleFieldType
+    []
 
-stringType :: Bool -> Type
-stringType = \case
-  False ->
-    Type
-      "String"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      ToJsonBuilder.stringFieldType
-      []
-  True ->
-    Type
-      "Optional<String>"
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      (ToJsonBuilder.optionalFieldType ToJsonBuilder.stringFieldType)
-      ["java.util.Optional"]
+stringType :: Type
+stringType =
+  Type
+    "String"
+    "String"
+    EqualsBuilder.objectField
+    HashCodeBuilder.objectField
+    ToJsonBuilder.stringFieldType
+    []
 
-dateType :: Bool -> Type
+dateType :: Type
 dateType =
   customObjectType
     "Date"
     ToJsonBuilder.dateFieldType
     ["java.sql.Date"]
 
-timeType :: Bool -> Type
+timeType :: Type
 timeType =
   customObjectType
     "Time"
     ToJsonBuilder.timeFieldType
     ["java.sql.Time"]
 
-timestampType :: Bool -> Type
+timestampType :: Type
 timestampType =
   customObjectType
     "Timestamp"
     ToJsonBuilder.timestampFieldType
     ["java.sql.Timestamp"]
 
-bigDecimalType :: Bool -> Type
+bigDecimalType :: Type
 bigDecimalType =
   customObjectType
     "BigDecimal"
     ToJsonBuilder.bigDecimalFieldType
     ["java.math.BigDecimal"]
 
-uuidType :: Bool -> Type
+uuidType :: Type
 uuidType =
   customObjectType
     "UUID"
     ToJsonBuilder.uuidFieldType
     ["java.util.UUID"]
+
+-- ** Special optionals
+
+optionalIntType :: Type
+optionalIntType =
+  Type
+    "OptionalInt"
+    "OptionalInt"
+    EqualsBuilder.objectField
+    HashCodeBuilder.objectField
+    ToJsonBuilder.optionalIntFieldType
+    ["java.util.OptionalInt"]
+
+optionalLongType :: Type
+optionalLongType =
+  Type
+    "OptionalLong"
+    "OptionalLong"
+    EqualsBuilder.objectField
+    HashCodeBuilder.objectField
+    ToJsonBuilder.optionalLongFieldType
+    ["java.util.OptionalLong"]
+
+optionalDoubleType :: Type
+optionalDoubleType =
+  Type
+    "OptionalDouble"
+    "OptionalDouble"
+    EqualsBuilder.objectField
+    HashCodeBuilder.objectField
+    ToJsonBuilder.optionalDoubleFieldType
+    ["java.util.OptionalDouble"]
