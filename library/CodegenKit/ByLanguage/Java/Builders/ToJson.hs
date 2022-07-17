@@ -13,6 +13,7 @@ module CodegenKit.ByLanguage.Java.Builders.ToJson
     -- * --
     FieldType,
     primitiveFieldType,
+    shortFieldType,
     intFieldType,
     longFieldType,
     floatFieldType,
@@ -88,6 +89,9 @@ primitiveFieldType type_ =
   FieldType
     type_
     (\_ ref -> [j|builder.append($ref);|])
+
+shortFieldType :: FieldType
+shortFieldType = primitiveFieldType "short"
 
 intFieldType :: FieldType
 intFieldType = primitiveFieldType "int"

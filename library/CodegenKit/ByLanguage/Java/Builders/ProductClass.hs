@@ -20,6 +20,7 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
 
     -- * --
     Type,
+    shortType,
     intType,
     longType,
     floatType,
@@ -186,8 +187,26 @@ data Type = Type
   { typeCode :: Builder,
     typeEqualsField :: Text -> EqualsBuilder.Field,
     typeHashCodeField :: Builder -> HashCodeBuilder.Field,
-    typeToJsonFieldType :: ToJsonBuilder.FieldType
+    typeToJsonFieldType :: ToJsonBuilder.FieldType,
+    typeImports :: [Text]
   }
+
+shortType :: Bool -> Type
+shortType = \case
+  False ->
+    Type
+      "short"
+      EqualsBuilder.primitiveField
+      HashCodeBuilder.shortField
+      ToJsonBuilder.shortFieldType
+      []
+  True ->
+    Type
+      "Optional"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      (ToJsonBuilder.optionalFieldType ToJsonBuilder.shortFieldType)
+      ["java.util.Optional"]
 
 intType :: Bool -> Type
 intType = \case
@@ -197,12 +216,14 @@ intType = \case
       EqualsBuilder.primitiveField
       HashCodeBuilder.intField
       ToJsonBuilder.intFieldType
+      []
   True ->
     Type
       "OptionalInt"
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       ToJsonBuilder.optionalIntFieldType
+      ["java.util.OptionalInt"]
 
 longType :: Bool -> Type
 longType = \case
@@ -212,12 +233,14 @@ longType = \case
       EqualsBuilder.primitiveField
       HashCodeBuilder.longField
       ToJsonBuilder.longFieldType
+      []
   True ->
     Type
       "OptionalLong"
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       ToJsonBuilder.optionalLongFieldType
+      ["java.util.OptionalLong"]
 
 floatType :: Bool -> Type
 floatType = \case
@@ -227,12 +250,14 @@ floatType = \case
       EqualsBuilder.primitiveField
       HashCodeBuilder.floatField
       ToJsonBuilder.floatFieldType
+      []
   True ->
     Type
       "Optional<Float>"
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       (ToJsonBuilder.optionalFieldType ToJsonBuilder.floatFieldType)
+      ["java.util.Optional"]
 
 doubleType :: Bool -> Type
 doubleType = \case
@@ -242,12 +267,14 @@ doubleType = \case
       EqualsBuilder.primitiveField
       HashCodeBuilder.doubleField
       ToJsonBuilder.doubleFieldType
+      []
   True ->
     Type
       "OptionalDouble"
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       ToJsonBuilder.optionalDoubleFieldType
+      ["java.util.OptionalDouble"]
 
 stringType :: Bool -> Type
 stringType = \case
@@ -257,12 +284,14 @@ stringType = \case
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       ToJsonBuilder.stringFieldType
+      []
   True ->
     Type
       "Optional<String>"
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       (ToJsonBuilder.optionalFieldType ToJsonBuilder.stringFieldType)
+      ["java.util.Optional"]
 
 dateType :: Bool -> Type
 dateType = \case
@@ -272,9 +301,11 @@ dateType = \case
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       ToJsonBuilder.dateFieldType
+      ["java.sql.Date"]
   True ->
     Type
       "Optional<Date>"
       EqualsBuilder.objectField
       HashCodeBuilder.objectField
       (ToJsonBuilder.optionalFieldType ToJsonBuilder.dateFieldType)
+      ["java.sql.Date", "java.util.Optional"]
