@@ -21,7 +21,11 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
     -- * --
     Type,
 
-    -- ** Predefined
+    -- ** Composite
+    customObjectType,
+    arrayType,
+
+    -- ** Specific
     booleanType,
     byteType,
     shortType,
@@ -35,7 +39,6 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
     timeType,
     timestampType,
     uuidType,
-    customObjectType,
   )
 where
 
@@ -208,6 +211,45 @@ data Type = Type
     typeImports :: [Text]
   }
 
+-- ** Combinators
+
+customObjectType ::
+  -- | Signature.
+  Builder ->
+  -- | To JSON converter.
+  ToJsonBuilder.FieldType ->
+  -- | Imports.
+  [Text] ->
+  -- | Optional.
+  Bool ->
+  Type
+customObjectType signature toJsonFieldType imports = \case
+  False ->
+    Type
+      signature
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      toJsonFieldType
+      imports
+  True ->
+    Type
+      [j|Optional<$signature>|]
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      (ToJsonBuilder.optionalFieldType toJsonFieldType)
+      ("java.util.Optional" : imports)
+
+arrayType :: Type -> Type
+arrayType Type {..} =
+  Type
+    [j|$typeCode[]|]
+    EqualsBuilder.arrayField
+    HashCodeBuilder.arrayField
+    (ToJsonBuilder.arrayFieldType typeToJsonFieldType)
+    typeImports
+
+-- ** Specific
+
 booleanType :: Bool -> Type
 booleanType = \case
   False ->
@@ -364,32 +406,6 @@ timestampType =
     "Timestamp"
     ToJsonBuilder.timestampFieldType
     ["java.sql.Timestamp"]
-
-customObjectType ::
-  -- | Signature.
-  Builder ->
-  -- | To JSON converter.
-  ToJsonBuilder.FieldType ->
-  -- | Imports.
-  [Text] ->
-  -- | Optional.
-  Bool ->
-  Type
-customObjectType signature toJsonFieldType imports = \case
-  False ->
-    Type
-      signature
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      toJsonFieldType
-      imports
-  True ->
-    Type
-      [j|Optional<$signature>|]
-      EqualsBuilder.objectField
-      HashCodeBuilder.objectField
-      (ToJsonBuilder.optionalFieldType toJsonFieldType)
-      ("java.util.Optional" : imports)
 
 bigDecimalType :: Bool -> Type
 bigDecimalType =
