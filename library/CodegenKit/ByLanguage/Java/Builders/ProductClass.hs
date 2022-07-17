@@ -22,17 +22,17 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
     Type,
 
     -- ** Predefined
+    booleanType,
     shortType,
     intType,
     longType,
     floatType,
     doubleType,
+    bigDecimalType,
     stringType,
     dateType,
-
-    -- ** Custom
+    uuidType,
     customObjectType,
-    customOptionalObjectType,
   )
 where
 
@@ -205,6 +205,23 @@ data Type = Type
     typeImports :: [Text]
   }
 
+booleanType :: Bool -> Type
+booleanType = \case
+  False ->
+    Type
+      "boolean"
+      EqualsBuilder.primitiveField
+      HashCodeBuilder.booleanField
+      ToJsonBuilder.booleanFieldType
+      []
+  True ->
+    Type
+      "Optional<Boolean>"
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      (ToJsonBuilder.optionalFieldType ToJsonBuilder.booleanFieldType)
+      ["java.util.Optional"]
+
 shortType :: Bool -> Type
 shortType = \case
   False ->
@@ -331,27 +348,35 @@ customObjectType ::
   ToJsonBuilder.FieldType ->
   -- | Imports.
   [Text] ->
+  -- | Optional.
+  Bool ->
   Type
-customObjectType signature toJsonFieldType imports =
-  Type
-    signature
-    EqualsBuilder.objectField
-    HashCodeBuilder.objectField
-    toJsonFieldType
-    imports
+customObjectType signature toJsonFieldType imports = \case
+  False ->
+    Type
+      signature
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      toJsonFieldType
+      imports
+  True ->
+    Type
+      [j|Optional<$signature>|]
+      EqualsBuilder.objectField
+      HashCodeBuilder.objectField
+      (ToJsonBuilder.optionalFieldType toJsonFieldType)
+      ("java.util.Optional" : imports)
 
-customOptionalObjectType ::
-  -- | Base type signature.
-  Builder ->
-  -- | To JSON converter.
-  ToJsonBuilder.FieldType ->
-  -- | Imports.
-  [Text] ->
-  Type
-customOptionalObjectType signature toJsonFieldType imports =
-  Type
-    [j|Optional<$signature>|]
-    EqualsBuilder.objectField
-    HashCodeBuilder.objectField
-    (ToJsonBuilder.optionalFieldType toJsonFieldType)
-    ("java.util.Optional" : imports)
+bigDecimalType :: Bool -> Type
+bigDecimalType =
+  customObjectType
+    "BigDecimal"
+    ToJsonBuilder.bigDecimalFieldType
+    ["java.math.BigDecimal"]
+
+uuidType :: Bool -> Type
+uuidType =
+  customObjectType
+    "UUID"
+    ToJsonBuilder.uuidFieldType
+    ["java.util.UUID"]

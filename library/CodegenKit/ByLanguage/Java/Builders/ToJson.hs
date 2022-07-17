@@ -12,14 +12,16 @@ module CodegenKit.ByLanguage.Java.Builders.ToJson
 
     -- * --
     FieldType,
-    primitiveFieldType,
+    booleanFieldType,
     shortFieldType,
     intFieldType,
     longFieldType,
     floatFieldType,
     doubleFieldType,
+    bigDecimalFieldType,
     stringFieldType,
     dateFieldType,
+    uuidFieldType,
     optionalFieldType,
     optionalIntFieldType,
     optionalLongFieldType,
@@ -81,7 +83,7 @@ field name (FieldType _ statements) =
 -- * --
 
 data FieldType = FieldType
-  { fieldTypeType :: Builder,
+  { fieldBoxedType :: Builder,
     fieldTypeStatements :: Builder -> Builder -> Builder
   }
 
@@ -91,20 +93,32 @@ primitiveFieldType type_ =
     type_
     (\_ ref -> [j|builder.append($ref);|])
 
+booleanFieldType :: FieldType
+booleanFieldType = primitiveFieldType "Boolean"
+
 shortFieldType :: FieldType
-shortFieldType = primitiveFieldType "short"
+shortFieldType = primitiveFieldType "Short"
 
 intFieldType :: FieldType
-intFieldType = primitiveFieldType "int"
+intFieldType = primitiveFieldType "Integer"
 
 longFieldType :: FieldType
-longFieldType = primitiveFieldType "long"
+longFieldType = primitiveFieldType "Long"
 
 floatFieldType :: FieldType
-floatFieldType = primitiveFieldType "float"
+floatFieldType = primitiveFieldType "Float"
 
 doubleFieldType :: FieldType
-doubleFieldType = primitiveFieldType "double"
+doubleFieldType = primitiveFieldType "Double"
+
+bigDecimalFieldType :: FieldType
+bigDecimalFieldType =
+  FieldType "BigDecimal" $ \name ref ->
+    [j|
+      builder.append('"');
+      builder.append($ref.toPlainString());
+      builder.append('"');
+    |]
 
 stringFieldType :: FieldType
 stringFieldType =
@@ -118,6 +132,15 @@ stringFieldType =
 dateFieldType :: FieldType
 dateFieldType =
   FieldType "Date" $ \name ref ->
+    [j|
+      builder.append('"');
+      builder.append($ref.toString());
+      builder.append('"');
+    |]
+
+uuidFieldType :: FieldType
+uuidFieldType =
+  FieldType "UUID" $ \name ref ->
     [j|
       builder.append('"');
       builder.append($ref.toString());
