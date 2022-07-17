@@ -24,6 +24,7 @@ module CodegenKit.ByLanguage.Java.Builders.ToJson
     optionalIntFieldType,
     optionalLongFieldType,
     optionalDoubleFieldType,
+    customToStringFieldType,
   )
 where
 
@@ -180,3 +181,12 @@ optionalDoubleFieldType =
           builder.append("null");
         }
       |]
+
+customToStringFieldType :: Builder -> FieldType
+customToStringFieldType signature =
+  FieldType signature $ \name ref ->
+    [j|
+      builder.append('"');
+      builder.append($ref.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b").replace("\f", "\\f").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"));
+      builder.append('"');
+    |]

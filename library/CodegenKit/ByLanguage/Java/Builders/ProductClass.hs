@@ -20,6 +20,8 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
 
     -- * --
     Type,
+
+    -- ** Predefined
     shortType,
     intType,
     longType,
@@ -27,6 +29,10 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
     doubleType,
     stringType,
     dateType,
+
+    -- ** Custom
+    customObjectType,
+    customOptionalObjectType,
   )
 where
 
@@ -317,3 +323,35 @@ dateType = \case
       HashCodeBuilder.objectField
       (ToJsonBuilder.optionalFieldType ToJsonBuilder.dateFieldType)
       ["java.sql.Date", "java.util.Optional"]
+
+customObjectType ::
+  -- | Signature.
+  Builder ->
+  -- | To JSON converter.
+  ToJsonBuilder.FieldType ->
+  -- | Imports.
+  [Text] ->
+  Type
+customObjectType signature toJsonFieldType imports =
+  Type
+    signature
+    EqualsBuilder.objectField
+    HashCodeBuilder.objectField
+    toJsonFieldType
+    imports
+
+customOptionalObjectType ::
+  -- | Base type signature.
+  Builder ->
+  -- | To JSON converter.
+  ToJsonBuilder.FieldType ->
+  -- | Imports.
+  [Text] ->
+  Type
+customOptionalObjectType signature toJsonFieldType imports =
+  Type
+    [j|Optional<$signature>|]
+    EqualsBuilder.objectField
+    HashCodeBuilder.objectField
+    (ToJsonBuilder.optionalFieldType toJsonFieldType)
+    ("java.util.Optional" : imports)
