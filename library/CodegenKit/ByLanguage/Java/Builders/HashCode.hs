@@ -101,7 +101,7 @@ doubleField name =
 
 booleanField :: Builder -> Field
 booleanField name =
-  hashExpField [j|this.$name ? 1231 : 1237|]
+  hashExpField [j|(this.$name ? 1231 : 1237)|]
 
 charField :: Builder -> Field
 charField name =
