@@ -4,23 +4,53 @@ import qualified Coalmine.BaseExtras.List as List
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude
 
+-- * Splicing
+
+compareTo :: Builder -> [Component] -> Builder
+compareTo className components =
+  [j|
+    public int compareTo($className that) {
+      int status;$statements
+      return 0;
+    }
+  |]
+  where
+    statements =
+      foldMap (mappend "\n" . componentStatements) components
+
+-- * Component
+
 data Component = Component
-  { componentStatements :: Builder -> Builder -> Builder
+  { componentStatements :: Builder
+  }
+
+component :: Builder -> Type -> Component
+component fieldName Type {..} =
+  Component
+    ( typeStatements
+        [j|this.$fieldName|]
+        [j|that.$fieldName|]
+    )
+
+-- * Type
+
+data Type = Type
+  { typeStatements :: Builder -> Builder -> Builder
   }
 
 -- * General
 
-primitive :: Component
+primitive :: Type
 primitive =
-  Component $ \leftExp rightExp ->
+  Type $ \leftExp rightExp ->
     [j|
       status = ($leftExp < $rightExp) ? -1 : (($leftExp == $rightExp) ? 0 : 1);
       if (status != 0) return status;
     |]
 
-comparable :: Component
+comparable :: Type
 comparable =
-  Component $ \leftExp rightExp ->
+  Type $ \leftExp rightExp ->
     [j|
       status = $leftExp.compareTo($rightExp);
       if (status != 0) return status;
@@ -28,25 +58,25 @@ comparable =
 
 -- * Specific Primitives
 
-boolean :: Component
+boolean :: Type
 boolean =
-  Component $ \leftExp rightExp ->
+  Type $ \leftExp rightExp ->
     [j|
       status = Boolean.compare($leftExp, $rightExp);
       if (status != 0) return status;
     |]
 
-int :: Component
+int :: Type
 int =
-  Component $ \leftExp rightExp ->
+  Type $ \leftExp rightExp ->
     [j|
       status = Integer.compare($leftExp, $rightExp);
       if (status != 0) return status;
     |]
 
-long :: Component
+long :: Type
 long =
-  Component $ \leftExp rightExp ->
+  Type $ \leftExp rightExp ->
     [j|
       status = Long.compare($leftExp, $rightExp);
       if (status != 0) return status;
@@ -54,9 +84,9 @@ long =
 
 -- * Optionals
 
-optional :: Component -> Component
-optional Component {..} =
-  Component statements
+optional :: Type -> Type
+optional Type {..} =
+  Type statements
   where
     statements leftExp rightExp =
       [j|
@@ -70,6 +100,6 @@ optional Component {..} =
       |]
       where
         substatements =
-          componentStatements
+          typeStatements
             [j|$leftExp.get()|]
             [j|$rightExp.get()|]
