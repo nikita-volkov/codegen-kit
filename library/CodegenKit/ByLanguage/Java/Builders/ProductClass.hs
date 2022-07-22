@@ -104,7 +104,7 @@ class_ ClassName {..} fields =
   where
     fieldsClassCode =
       [i|
-        public final class $classNameCode {
+        public final class $classNameCode implements Comparable<$classNameCode> {
           $propertyDecls
 
           $classNameCode($constructorArgs) {
