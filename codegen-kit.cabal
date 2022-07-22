@@ -10,8 +10,6 @@ maintainer: Nikita Volkov <nikita.y.volkov@mail.ru>
 copyright: (c) 2022 Nikita Volkov
 license: MIT
 license-file: LICENSE
-extra-source-files:
-  domain/*.domain.yaml
 
 source-repository head
   type: git
@@ -51,8 +49,6 @@ library
     CodegenKit.ByLanguage.Java.Dsl
     CodegenKit.Dependencies
     CodegenKit.Fileset
-    CodegenKit.JavaRenderer
-    CodegenKit.JavaRenderer.Model
     CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:
