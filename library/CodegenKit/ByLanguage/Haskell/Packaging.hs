@@ -1,6 +1,6 @@
 module CodegenKit.ByLanguage.Haskell.Packaging
   ( -- * --
-    toFileSet,
+    toFileset,
 
     -- * --
     Modules,
@@ -25,8 +25,8 @@ where
 import qualified Coalmine.Name as Name
 import qualified CodegenKit.ByLanguage.Haskell.Contents.Cabal as CabalContents
 import qualified CodegenKit.ByLanguage.Haskell.FileSets.Stack as StackFileSet
-import CodegenKit.Packaging (FileSet)
-import qualified CodegenKit.Packaging as Packaging
+import CodegenKit.Fileset (Fileset)
+import qualified CodegenKit.Fileset as Fileset
 import CodegenKit.Prelude
 import qualified CodegenKit.Versioning as Versioning
 import qualified Data.Map.Strict as Map
@@ -103,9 +103,9 @@ toCabalContents packageName synopsis version modules =
               (CabalContents.listVersion minHead minTail)
               (CabalContents.listVersion maxHead maxTail)
 
-toCabalFileSet :: Name -> Text -> CabalContents.Version -> Modules -> FileSet
+toCabalFileSet :: Name -> Text -> CabalContents.Version -> Modules -> Fileset
 toCabalFileSet packageName synopsis version modules =
-  Packaging.fromFile filePath contents
+  Fileset.file filePath contents
   where
     filePath =
       fromString . to
@@ -115,12 +115,12 @@ toCabalFileSet packageName synopsis version modules =
     contents =
       toCabalContents packageName synopsis version modules
 
-toModulesFileSet :: Path -> Modules -> FileSet
+toModulesFileSet :: Path -> Modules -> Fileset
 toModulesFileSet srcDirPath (Modules files _ _ _ _) =
   foldMap file files
   where
     file (filePath, render) =
-      Packaging.fromFile
+      Fileset.file
         (srcDirPath <> filePath)
         (render [])
 
@@ -130,15 +130,15 @@ toStackExtraDeps (Modules _ _ _ _ x) =
 
 -- |
 -- Generate all package files including @.cabal@.
-toFileSet ::
+toFileset ::
   -- | Package name.
   Name ->
   -- | Synopsis.
   Text ->
   CabalContents.Version ->
   Modules ->
-  FileSet
-toFileSet packageName synopsis version modules =
+  Fileset
+toFileset packageName synopsis version modules =
   mconcat
     [ StackFileSet.fileSet (toStackExtraDeps modules),
       toCabalFileSet packageName synopsis version modules,

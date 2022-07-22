@@ -49,7 +49,6 @@ library
     CodegenKit.ByLanguage.Java.Dsl
     CodegenKit.Dependencies
     CodegenKit.Fileset
-    CodegenKit.Packaging
     CodegenKit.Versioning
   other-modules:
     CodegenKit.Prelude

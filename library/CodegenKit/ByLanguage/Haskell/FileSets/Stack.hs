@@ -12,16 +12,16 @@ where
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
-import qualified CodegenKit.Packaging as Packaging
+import qualified CodegenKit.Fileset as Fileset
 import CodegenKit.Prelude hiding (Version)
 import qualified Data.List.Extra as ListExtra
 import qualified TextBuilderDev as B'
 
 -- * --
 
-fileSet :: [ExtraDep] -> Packaging.FileSet
+fileSet :: [ExtraDep] -> Fileset.Fileset
 fileSet =
-  Packaging.fromFile "stack.yaml" . contents
+  Fileset.file "stack.yaml" . contents
 
 -- * --
 
