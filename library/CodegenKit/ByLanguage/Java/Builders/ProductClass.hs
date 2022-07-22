@@ -122,8 +122,6 @@ class_ ClassName {..} fields =
           }
 
           $toJsonMethods
-          
-          $hashCodeSnippetsClassHashPropertyDecl
         }
       |]
       where

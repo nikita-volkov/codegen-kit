@@ -27,7 +27,6 @@ import qualified Data.Set as Set
 
 data HashCodeSnippets = HashCodeSnippets
   { hashCodeSnippetsImports :: Set Text,
-    hashCodeSnippetsClassHashPropertyDecl :: Builder,
     hashCodeSnippetsHashCodeMethodDecls :: Builder
   }
 
@@ -41,13 +40,11 @@ hashCodeSnippets className fields =
     [] ->
       HashCodeSnippets
         mempty
-        (Snippets.classHashStaticProperty className)
-        (Snippets.unitHashCodeMethod)
+        (Snippets.unitHashCodeMethod className)
     _ ->
       HashCodeSnippets
         (Set.unions . fmap fieldImports $ fields)
-        (Snippets.classHashStaticProperty className)
-        (Snippets.statementsHashCodeMethod . fmap fieldHashUpdateStatements $ fields)
+        (Snippets.statementsHashCodeMethod className . fmap fieldHashUpdateStatements $ fields)
 
 -- * Field
 
