@@ -55,9 +55,9 @@ snippets fields =
        */
       public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("{");
+        builder.append('{');
         $statements
-        builder.append("}");
+        builder.append('}');
         return builder.toString();
       }
     |]
