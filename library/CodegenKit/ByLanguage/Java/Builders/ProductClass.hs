@@ -114,13 +114,6 @@ class_ ClassName {..} fields =
 
           $hashCodeSnippetsHashCodeMethodDecls
 
-          /**
-           * Serialize to compact JSON representation.
-           */
-          public String toString() {
-            return toCompactJsonString();
-          }
-
           $toJsonMethods
         }
       |]
@@ -135,7 +128,7 @@ class_ ClassName {..} fields =
           ToJsonBuilder.snippets
             (fmap fieldToJsonField fields)
         toJsonMethods =
-          toJsonSnippets & ToJsonBuilder.snippetsMethodDecl
+          toJsonSnippets & ToJsonBuilder.snippetsMethodDecls
         className = classNameCode & to
         equalsMethods =
           EqualsBuilder.equalsMethodsForProduct

@@ -1,6 +1,6 @@
 module CodegenKit.ByLanguage.Java.Builders.ToJson
   ( -- * --
-    snippetsMethodDecl,
+    snippetsMethodDecls,
 
     -- * --
     Snippets,
@@ -43,7 +43,7 @@ import qualified Data.HashSet as HashSet
 -- * --
 
 data Snippets = Snippets
-  { snippetsMethodDecl :: Builder
+  { snippetsMethodDecls :: Builder
   }
 
 snippets :: [Field] -> Snippets
@@ -53,7 +53,7 @@ snippets fields =
       /**
        * Serialize to compact JSON representation.
        */
-      public String toCompactJsonString() {
+      public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("{");
         $statements
