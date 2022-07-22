@@ -66,6 +66,22 @@ boolean =
       if (status != 0) return status;
     |]
 
+byte :: Type
+byte =
+  Type $ \leftExp rightExp ->
+    [j|
+      status = Byte.compare($leftExp, $rightExp);
+      if (status != 0) return status;
+    |]
+
+short :: Type
+short =
+  Type $ \leftExp rightExp ->
+    [j|
+      status = Short.compare($leftExp, $rightExp);
+      if (status != 0) return status;
+    |]
+
 int :: Type
 int =
   Type $ \leftExp rightExp ->
@@ -79,6 +95,22 @@ long =
   Type $ \leftExp rightExp ->
     [j|
       status = Long.compare($leftExp, $rightExp);
+      if (status != 0) return status;
+    |]
+
+float :: Type
+float =
+  Type $ \leftExp rightExp ->
+    [j|
+      status = Float.compare($leftExp, $rightExp);
+      if (status != 0) return status;
+    |]
+
+double :: Type
+double =
+  Type $ \leftExp rightExp ->
+    [j|
+      status = Double.compare($leftExp, $rightExp);
       if (status != 0) return status;
     |]
 
@@ -103,3 +135,66 @@ optional Type {..} =
           typeStatements
             [j|$leftExp.get()|]
             [j|$rightExp.get()|]
+
+optionalInt :: Type
+optionalInt =
+  Type statements
+  where
+    statements leftExp rightExp =
+      [j|
+        if ($leftExp.isPresent()) {
+          if ($rightExp.isPresent()) {
+            $substatements
+          } else return 1;
+        } else {
+          if ($rightExp.isPresent()) return -1;
+        }
+      |]
+      where
+        substatements =
+          typeStatements
+            int
+            [j|$leftExp.getAsInt()|]
+            [j|$rightExp.getAsInt()|]
+
+optionalLong :: Type
+optionalLong =
+  Type statements
+  where
+    statements leftExp rightExp =
+      [j|
+        if ($leftExp.isPresent()) {
+          if ($rightExp.isPresent()) {
+            $substatements
+          } else return 1;
+        } else {
+          if ($rightExp.isPresent()) return -1;
+        }
+      |]
+      where
+        substatements =
+          typeStatements
+            long
+            [j|$leftExp.getAsLong()|]
+            [j|$rightExp.getAsLong()|]
+
+optionalDouble :: Type
+optionalDouble =
+  Type statements
+  where
+    statements leftExp rightExp =
+      [j|
+        if ($leftExp.isPresent()) {
+          if ($rightExp.isPresent()) {
+            $substatements
+          } else return 1;
+        } else {
+          if ($rightExp.isPresent()) return -1;
+        }
+      |]
+      where
+        substatements =
+          typeStatements
+            double
+            [j|$leftExp.getAsDouble()|]
+            [j|$rightExp.getAsDouble()|]
