@@ -53,6 +53,7 @@ import Coalmine.EvenSimplerPaths (Path)
 import qualified Coalmine.EvenSimplerPaths as Paths
 import Coalmine.MultilineTextBuilder
 import qualified Coalmine.Name as Name
+import qualified CodegenKit.ByLanguage.Java.Builders.CompareTo as CompareToBuilder
 import qualified CodegenKit.ByLanguage.Java.Builders.Equals as EqualsBuilder
 import qualified CodegenKit.ByLanguage.Java.Builders.HashCode as HashCodeBuilder
 import qualified CodegenKit.ByLanguage.Java.Builders.ToJson as ToJsonBuilder
@@ -179,7 +180,7 @@ field FieldName {..} Type {..} =
     [i|$typeSignature $valueNameBuilder|]
     (typeHashCodeField valueNameBuilder)
     (ToJsonBuilder.field valueNameBuilder typeToJsonFieldType)
-    (typeEqualsField valueNameText)
+    (typeEqualsField valueNameBuilder)
     typeImports
 
 -- * --
@@ -203,7 +204,7 @@ fieldName name =
 data Type = Type
   { typeSignature :: Builder,
     typeBoxedSignature :: Builder,
-    typeEqualsField :: Text -> EqualsBuilder.Field,
+    typeEqualsField :: Builder -> EqualsBuilder.Field,
     typeHashCodeField :: Builder -> HashCodeBuilder.Field,
     typeToJsonFieldType :: ToJsonBuilder.FieldType,
     typeImports :: [Text]
