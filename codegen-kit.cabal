@@ -38,6 +38,7 @@ library
     CodegenKit.ByLanguage.Haskell.Packaging
     CodegenKit.ByLanguage.Haskell.Snippets
     CodegenKit.ByLanguage.Java.Attoparsec
+    CodegenKit.ByLanguage.Java.Builders.CompareTo
     CodegenKit.ByLanguage.Java.Builders.Equals
     CodegenKit.ByLanguage.Java.Builders.HashCode
     CodegenKit.ByLanguage.Java.Builders.HashCode.Snippets

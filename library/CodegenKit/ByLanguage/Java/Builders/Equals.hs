@@ -24,7 +24,7 @@ import qualified Data.HashSet as HashSet
 
 -- |
 -- Build as an equals method for product.
-equalsMethodsForProduct :: Text -> [Field] -> Builder
+equalsMethodsForProduct :: Builder -> [Field] -> Builder
 equalsMethodsForProduct className = \case
   [] ->
     [i|
@@ -61,17 +61,17 @@ data Field = Field
   { fieldEqualsMethodExp :: Builder
   }
 
-primitiveField :: Text -> Field
+primitiveField :: Builder -> Field
 primitiveField fieldName =
   Field
     [j|$fieldName == that.$fieldName|]
 
-objectField :: Text -> Field
+objectField :: Builder -> Field
 objectField fieldName =
   Field
     [j|$fieldName.equals(that.$fieldName)|]
 
-nullCheckedObjectField :: Text -> Field
+nullCheckedObjectField :: Builder -> Field
 nullCheckedObjectField fieldName =
   Field
     [j|
@@ -81,7 +81,7 @@ nullCheckedObjectField fieldName =
       )
     |]
 
-arrayField :: Text -> Field
+arrayField :: Builder -> Field
 arrayField fieldName =
   Field
     [j|java.util.Arrays.equals($fieldName, that.$fieldName)|]
