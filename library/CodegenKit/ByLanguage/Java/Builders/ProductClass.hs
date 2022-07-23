@@ -104,7 +104,7 @@ class_ ClassName {..} fields =
   where
     fieldsClassCode =
       [i|
-        public final class $classNameCode {
+        public final class $classNameCode implements Comparable<$classNameCode> {
           $propertyDecls
 
           $classNameCode($constructorArgs) {
@@ -116,6 +116,8 @@ class_ ClassName {..} fields =
           $hashCodeSnippetsHashCodeMethodDecls
 
           $toJsonMethods
+
+          $compareToDecls
         }
       |]
       where
@@ -135,6 +137,10 @@ class_ ClassName {..} fields =
           EqualsBuilder.equalsMethodsForProduct
             className
             (fmap fieldEqualsField fields)
+        compareToDecls =
+          CompareToBuilder.compareTo
+            className
+            (fmap fieldCompareToComponent fields)
     HashCodeBuilder.HashCodeSnippets {..} =
       HashCodeBuilder.hashCodeSnippets
         classNameCode
@@ -169,6 +175,7 @@ data Field = Field
     fieldHashCodeField :: HashCodeBuilder.Field,
     fieldToJsonField :: ToJsonBuilder.Field,
     fieldEqualsField :: EqualsBuilder.Field,
+    fieldCompareToComponent :: CompareToBuilder.Component,
     fieldImports :: [Text]
   }
 
@@ -181,6 +188,7 @@ field FieldName {..} Type {..} =
     (typeHashCodeField valueNameBuilder)
     (ToJsonBuilder.field valueNameBuilder typeToJsonFieldType)
     (typeEqualsField valueNameBuilder)
+    (CompareToBuilder.component valueNameBuilder typeCompareToType)
     typeImports
 
 -- * --
@@ -207,6 +215,7 @@ data Type = Type
     typeEqualsField :: Builder -> EqualsBuilder.Field,
     typeHashCodeField :: Builder -> HashCodeBuilder.Field,
     typeToJsonFieldType :: ToJsonBuilder.FieldType,
+    typeCompareToType :: CompareToBuilder.Type,
     typeImports :: [Text]
   }
 
@@ -227,6 +236,7 @@ customObjectType signature toJsonFieldType imports =
     EqualsBuilder.objectField
     HashCodeBuilder.objectField
     toJsonFieldType
+    CompareToBuilder.comparable
     imports
 
 arrayType :: Type -> Type
@@ -237,6 +247,7 @@ arrayType Type {..} =
     EqualsBuilder.arrayField
     HashCodeBuilder.arrayField
     (ToJsonBuilder.arrayFieldType typeToJsonFieldType)
+    CompareToBuilder.comparable
     typeImports
 
 optionalType :: Type -> Type
@@ -247,6 +258,7 @@ optionalType Type {..} =
     EqualsBuilder.objectField
     HashCodeBuilder.objectField
     (ToJsonBuilder.optionalFieldType typeToJsonFieldType)
+    (CompareToBuilder.optional typeCompareToType)
     ("java.util.Optional" : typeImports)
 
 -- ** Specific
@@ -259,6 +271,7 @@ booleanType =
     EqualsBuilder.primitiveField
     HashCodeBuilder.booleanField
     ToJsonBuilder.booleanFieldType
+    CompareToBuilder.boolean
     []
 
 byteType :: Type
@@ -269,6 +282,7 @@ byteType =
     EqualsBuilder.primitiveField
     HashCodeBuilder.byteField
     ToJsonBuilder.byteFieldType
+    CompareToBuilder.byte
     []
 
 shortType :: Type
@@ -279,6 +293,7 @@ shortType =
     EqualsBuilder.primitiveField
     HashCodeBuilder.shortField
     ToJsonBuilder.shortFieldType
+    CompareToBuilder.short
     []
 
 intType :: Type
@@ -289,6 +304,7 @@ intType =
     EqualsBuilder.primitiveField
     HashCodeBuilder.intField
     ToJsonBuilder.intFieldType
+    CompareToBuilder.int
     []
 
 longType :: Type
@@ -299,6 +315,7 @@ longType =
     EqualsBuilder.primitiveField
     HashCodeBuilder.longField
     ToJsonBuilder.longFieldType
+    CompareToBuilder.long
     []
 
 floatType :: Type
@@ -309,6 +326,7 @@ floatType =
     EqualsBuilder.primitiveField
     HashCodeBuilder.floatField
     ToJsonBuilder.floatFieldType
+    CompareToBuilder.float
     []
 
 doubleType :: Type
@@ -319,6 +337,7 @@ doubleType =
     EqualsBuilder.primitiveField
     HashCodeBuilder.doubleField
     ToJsonBuilder.doubleFieldType
+    CompareToBuilder.double
     []
 
 stringType :: Type
@@ -329,6 +348,7 @@ stringType =
     EqualsBuilder.objectField
     HashCodeBuilder.objectField
     ToJsonBuilder.stringFieldType
+    CompareToBuilder.comparable
     []
 
 dateType :: Type
@@ -376,6 +396,7 @@ optionalIntType =
     EqualsBuilder.objectField
     HashCodeBuilder.objectField
     ToJsonBuilder.optionalIntFieldType
+    CompareToBuilder.optionalInt
     ["java.util.OptionalInt"]
 
 optionalLongType :: Type
@@ -386,6 +407,7 @@ optionalLongType =
     EqualsBuilder.objectField
     HashCodeBuilder.objectField
     ToJsonBuilder.optionalLongFieldType
+    CompareToBuilder.optionalLong
     ["java.util.OptionalLong"]
 
 optionalDoubleType :: Type
@@ -396,4 +418,5 @@ optionalDoubleType =
     EqualsBuilder.objectField
     HashCodeBuilder.objectField
     ToJsonBuilder.optionalDoubleFieldType
+    CompareToBuilder.optionalDouble
     ["java.util.OptionalDouble"]
