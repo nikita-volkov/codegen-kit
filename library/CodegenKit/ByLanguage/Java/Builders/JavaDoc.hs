@@ -1,5 +1,5 @@
 module CodegenKit.ByLanguage.Java.Builders.JavaDoc
-  ( -- * --
+  ( -- * Types
     Param,
     Return,
     Content,
@@ -10,7 +10,9 @@ module CodegenKit.ByLanguage.Java.Builders.JavaDoc
     fieldJavaDoc,
 
     -- * Content
-    textContent,
+    plainTextContent,
+    boldTextContent,
+    italicTextContent,
     linkContent,
     inlineCodeContent,
     preformattedCodeContent,
@@ -25,7 +27,7 @@ import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude
 import qualified Data.HashSet as HashSet
 
--- * --
+-- * Types
 
 data Param
 
@@ -35,7 +37,7 @@ data Content
 
 data Throws
 
--- * --
+-- * Builders
 
 methodJavaDoc :: [Content] -> [Param] -> Maybe Return -> [Throws] -> Builder
 methodJavaDoc =
@@ -47,8 +49,16 @@ fieldJavaDoc contents =
 
 -- * Content
 
-textContent :: Text -> Content
-textContent =
+plainTextContent :: Text -> Content
+plainTextContent =
+  error "TODO"
+
+boldTextContent :: Text -> Content
+boldTextContent =
+  error "TODO"
+
+italicTextContent :: Text -> Content
+italicTextContent =
   error "TODO"
 
 linkContent :: Text -> Content
