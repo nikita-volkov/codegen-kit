@@ -25,9 +25,11 @@ instance Semigroup VersionBounds where
 
 -- * --
 
-data Version
-  = Version !Word ![Word]
-  deriving (Eq, Show)
+data Version = Version
+  { versionHead :: !Word,
+    versionTail :: ![Word]
+  }
+  deriving (Eq, Show, Generic)
 
 instance Ord Version where
   compare l r =
@@ -41,6 +43,12 @@ instance CompactPrinting Version where
 instance BroadPrinting Version where
   toBroadBuilder =
     to . toCompactBuilder
+
+instance ToJSON Version where
+  toJSON = toJSON . printCompactAs @Text
+
+instance ToJSONKey Version where
+  toJSONKey = printCompactAs @Text >$< toJSONKey
 
 versionParts :: Version -> [Word]
 versionParts (Version head tail) =
