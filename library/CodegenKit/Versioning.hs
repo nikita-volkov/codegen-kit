@@ -8,6 +8,7 @@ module CodegenKit.Versioning
 where
 
 import CodegenKit.Prelude
+import qualified Data.Attoparsec.Text as Attoparsec
 import qualified StructureKit.Range as Range
 
 data VersionBounds
@@ -49,6 +50,16 @@ instance ToJSON Version where
 
 instance ToJSONKey Version where
   toJSONKey = printCompactAs @Text >$< toJSONKey
+
+instance LenientParser Version where
+  lenientParser = do
+    head <- Attoparsec.decimal
+    tail <- many tailSegmentParser
+    return (Version head tail)
+    where
+      tailSegmentParser = do
+        Attoparsec.char '.'
+        Attoparsec.decimal
 
 versionParts :: Version -> [Word]
 versionParts (Version head tail) =
