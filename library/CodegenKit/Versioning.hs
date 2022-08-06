@@ -42,8 +42,7 @@ instance CompactPrinting Version where
       <> foldMap (mappend "." . toCompactBuilder) t
 
 instance BroadPrinting Version where
-  toBroadBuilder =
-    to . toCompactBuilder
+  toBroadBuilder = to . toCompactBuilder
 
 instance ToJSON Version where
   toJSON = toJSON . printCompactAs @Text
