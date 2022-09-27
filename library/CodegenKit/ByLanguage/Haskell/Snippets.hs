@@ -62,3 +62,98 @@ moduleRef nsNameList moduleName =
     [ foldMap (flip mappend "." . Name.toUpperCamelCaseTextBuilder) nsNameList,
       Name.toUpperCamelCaseTextBuilder moduleName
     ]
+
+-- * --
+
+multilineList :: [Builder] -> Builder
+multilineList =
+  \case
+    [] -> "[]"
+    a : b -> "[ " <> a <> indent 2 (foldMap (mappend ",\n") b) <> "\n]"
+
+staticMonoid :: [Builder] -> Builder
+staticMonoid = \case
+  [] -> "mempty"
+  [a] -> a
+  a -> "mconcat " <> indent 2 ("\n" <> multilineList a)
+
+inDoubleQuotes :: Builder -> Builder
+inDoubleQuotes a = mconcat ["\"", a, "\""]
+
+stringLiteral :: Text -> Builder
+stringLiteral =
+  inDoubleQuotes
+    . intercalate "\\n\\\n\\"
+    . fmap from
+    . Text.lines
+    . Text.pack
+    . join
+    . fmap escapeChar
+    . Text.unpack
+  where
+    escapeChar = \case
+      '\\' -> "\\\\"
+      '"' -> "\\\""
+      a -> [a]
+
+multilineApplicative :: Builder -> [Builder] -> Builder
+multilineApplicative construcor aps =
+  case aps of
+    [] -> "pure " <> construcor
+    head : aps -> construcor <> indent 2 ("\n<$> " <> head <> foldMap (mappend "\n<*> ") aps)
+
+-- * --
+
+recordFieldsBlock ::
+  -- | Fields rendered using 'recordFieldDecl'.
+  [Builder] ->
+  Builder
+recordFieldsBlock fields =
+  "{ " <> indent 2 (mconcat (intersperse ",\n" fields)) <> "\n}"
+
+recordFieldDecl ::
+  -- | Haddock.
+  Builder ->
+  -- | Field name.
+  Builder ->
+  -- | Bang.
+  Builder ->
+  -- | Field type.
+  Builder ->
+  Builder
+recordFieldDecl haddock fieldName bang fieldType =
+  appendNewlineIfNotNull haddock <> fieldName <> " :: " <> bang <> fieldType
+
+appendNewlineIfNotNull :: Builder -> Builder
+appendNewlineIfNotNull builder = if null builder then mempty else builder <> "\n"
+
+newtypeRecordDecl typeName conName fieldHaddock fieldName fieldType =
+  indent 2 $
+    mconcat
+      [ "newtype ",
+        typeName,
+        " = ",
+        conName,
+        "\n",
+        recordFieldsBlock [recordFieldDecl fieldHaddock fieldName "" fieldType]
+      ]
+
+dataRecordDecl typeName conName fields =
+  indent 2 $
+    mconcat
+      [ "data ",
+        typeName,
+        " = ",
+        conName,
+        "\n",
+        recordFieldsBlock fields
+      ]
+
+enumDecl typeName options =
+  indent 2 $
+    mconcat
+      [ "data ",
+        typeName,
+        "\n= ",
+        intercalate "\n| " (fmap (indent 2) options)
+      ]
