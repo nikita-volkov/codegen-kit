@@ -69,7 +69,7 @@ multilineList :: [Builder] -> Builder
 multilineList =
   \case
     [] -> "[]"
-    a : b -> "[ " <> a <> indent 2 (foldMap (mappend ",\n") b) <> "\n]"
+    a : b -> "[ " <> indent 2 (a <> foldMap (mappend ",\n") b) <> "\n]"
 
 staticMonoid :: [Builder] -> Builder
 staticMonoid = \case
