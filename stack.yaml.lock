@@ -129,13 +129,13 @@ packages:
     url: https://github.com/nikita-volkov/structure-kit/archive/46ffb6527c48f8a718adecd21a313f0b1ba5e81c.tar.gz
 snapshots:
 - completed:
-    sha256: 469698760b6b80ec67c7b53c771c47ce43d4dd4f64c3b6114ece6b9779cb11d5
+    sha256: 767dd85782a593df599fe43c10d9d489153eee57eb94b69a712aaa576918b54a
     size: 1030
-    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/3ebf1fb626f5a8d0fa8280408d33b297a0b10971/snapshot.yaml
+    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/64d55411e3ce5deed174ee08d5cd62fde30ed432/snapshot.yaml
   original:
-    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/3ebf1fb626f5a8d0fa8280408d33b297a0b10971/snapshot.yaml
+    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/64d55411e3ce5deed174ee08d5cd62fde30ed432/snapshot.yaml
 - completed:
-    sha256: e8d2623ddf31a11ece3e72633c0b7db97a4dfb93b8c44ab760913bebfd2cf2c4
-    size: 636751
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/9/26.yaml
-  original: nightly-2022-09-26
+    sha256: f10dfcd8e0b9bf71c58611a61fd25dbce50cc4d0e0265dcf416bd7f3585cf1af
+    size: 643193
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/9/27.yaml
+  original: nightly-2022-09-27
