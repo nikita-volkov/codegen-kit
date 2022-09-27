@@ -15,12 +15,7 @@ groupedExp (Exp needsGrouping isMultiline content) =
   if needsGrouping
     then
       if isMultiline
-        then
-          mconcat
-            [ "( ",
-              B.indent 2 content,
-              "\n)"
-            ]
+        then "( " <> B.indent 2 content <> "\n)"
         else "(" <> content <> ")"
     else content
 
