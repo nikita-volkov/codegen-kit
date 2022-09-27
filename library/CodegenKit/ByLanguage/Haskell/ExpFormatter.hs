@@ -152,6 +152,14 @@ multilinePostAppChain baseExp chain =
   Exp True True $
     groupedExp baseExp <> B.indent 2 (foldMap (mappend "\n& " . B.indent 4 . groupedExp) chain)
 
+staticMonoid :: [Exp] -> Exp
+staticMonoid = \case
+  [] -> Exp False False "mempty"
+  [a] -> a
+  a ->
+    Exp True True $
+      "mconcat " <> B.indent 2 ("\n" <> groupedExp (multilineList a))
+
 -- * --
 
 apChain ::
