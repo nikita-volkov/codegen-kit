@@ -12,8 +12,8 @@ where
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as Builder
 import CodegenKit.Prelude hiding (intercalate)
-import qualified Data.HashMap.Strict as HashMap
-import qualified Data.HashSet as HashSet
+import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 import qualified Data.Text as Text
 
 compileModule ::
@@ -35,10 +35,10 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
     $bodySplice
   |]
   where
-    aliasHashMap =
-      HashMap.fromList aliasMapList
+    aliasMap =
+      Map.fromList aliasMapList
     unqualifiedSet =
-      HashSet.fromList unqualifiedImports
+      Set.fromList unqualifiedImports
     importsSplice =
       Builder.intercalate "\n" compiledImportList
       where
@@ -52,9 +52,9 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
             & join
           where
             compileImport imported =
-              if HashSet.member imported unqualifiedSet
+              if Set.member imported unqualifiedSet
                 then []
-                else pure $ case HashMap.lookup imported aliasHashMap of
+                else pure $ case Map.lookup imported aliasMap of
                   Just alias ->
                     [j|import qualified $imported as $alias|]
                   Nothing ->
@@ -70,9 +70,9 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
       compileBody resolveModule
       where
         resolveModule imported =
-          if HashSet.member imported unqualifiedSet
+          if Set.member imported unqualifiedSet
             then ""
-            else case HashMap.lookup imported aliasHashMap of
+            else case Map.lookup imported aliasMap of
               Just alias -> alias
               Nothing -> imported
 
