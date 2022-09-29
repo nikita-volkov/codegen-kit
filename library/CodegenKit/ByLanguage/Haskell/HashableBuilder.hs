@@ -5,32 +5,25 @@ import CodegenKit.ByLanguage.Haskell.ModuleBuilder
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (intercalate)
 
-product :: Body -> Int -> Body
+product :: Text -> Int -> Body
 product productRef fieldAmount =
-  "instance "
-    <> imported "Data.Hashable" "Hashable"
-    <> " "
-    <> productRef
-    <> " where"
-    <> indent
-      2
-      ( "\nhashWithSalt salt ("
-          <> productRef
-          <> foldMap (mappend " ") fieldNames
-          <> ") ="
-          <> indent 2 ("\n" <> definition)
-      )
-  where
-    fieldNames =
-      Snippets.enumAlphabeticNames fieldAmount
-        & fmap splice
-    definition =
-      "salt" <> indent 2 (foldMap extendCode fieldNames)
-      where
-        extendCode name =
-          mconcat
-            [ "\n& flip ",
-              imported "Data.Hashable" "hashWithSalt",
-              " ",
-              name
-            ]
+  importing "Data.Hashable" "Hashable" $ \hashable ->
+    importing "Data.Hashable" "hashWithSalt" $ \hashWithSalt ->
+      let patterns =
+            foldMap (mappend " ") fieldNames
+          fieldNames =
+            Snippets.enumAlphabeticNames fieldAmount
+          definition =
+            "salt" <> Builder.indent 2 (foldMap extendCode fieldNames)
+            where
+              extendCode name =
+                [j|
+
+                  & flip $hashWithSalt $name
+                |]
+       in splice
+            [i|
+              instance $hashable $productRef where
+                hashWithSalt salt ($productRef$patterns) =
+                  $definition
+            |]

@@ -49,6 +49,6 @@ tests =
           [ ("Data.Hashable", "Hashable"),
             ("Our.Namespace", "OurNamespace")
           ]
-          (product (imported "Our.Namespace" "B") 3)
+          (importing "Our.Namespace" "B" (\b -> product b 3))
       )
   ]

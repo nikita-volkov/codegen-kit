@@ -2,7 +2,7 @@
 module CodegenKit.ByLanguage.Haskell.ModuleBuilder
   ( compileModule,
     Body,
-    imported,
+    importing,
     splice,
     indent,
     intercalate,
@@ -26,7 +26,7 @@ compileModule ::
   -- | Module contents.
   Body ->
   Text
-compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports compileBody) =
+compileModule moduleName unqualifiedImports aliasMapList (Body compileBody) =
   [i|
     module $moduleName where
 
@@ -66,7 +66,7 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
           where
             compileImport imported =
               [j|import $imported|]
-    bodySplice =
+    (bodySplice, requestedImports) =
       compileBody resolveModule
       where
         resolveModule imported =
@@ -80,57 +80,56 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
 --
 -- Automates over imports and qualification.
 data Body = Body
-  { -- | Requested qualified imports.
-    bodyRequestedImports :: !(Acc Text),
-    -- | Given a function aliasing a qualified module, compile into a splice.
-    bodyCompiler :: !((Text -> Text) -> Builder)
+  { -- | Given a function aliasing a qualified module, compile into a splice and a list of requested imports.
+    bodyCompiler :: !((Text -> Text) -> (Builder, Acc Text))
   }
 
 instance Semigroup Body where
-  Body lImports lCompile <> Body rImports rCompile =
+  Body lCompile <> Body rCompile =
     Body
-      (lImports <> rImports)
       ( \resolveModule ->
           lCompile resolveModule <> rCompile resolveModule
       )
 
 instance Monoid Body where
-  mempty = Body mempty mempty
+  mempty = Body mempty
 
 instance IsString Body where
   fromString = splice . fromString
 
-imported ::
+importing ::
   -- | Fully qualified module reference.
   Text ->
   -- | Member name.
   Text ->
+  (Text -> Body) ->
   Body
-imported moduleRef memberName =
-  Body
-    (pure moduleRef)
-    ( \resolveModule ->
-        case resolveModule moduleRef of
-          prefix ->
-            if Text.null prefix
-              then to memberName
-              else to prefix <> "." <> to memberName
-    )
+importing moduleRef memberName cont =
+  Body $ \resolveModule ->
+    let ref =
+          case resolveModule moduleRef of
+            "" -> memberName
+            prefix -> mconcat [prefix, ".", memberName]
+     in case cont ref of
+          Body compileNested ->
+            compileNested resolveModule
+              & second (pure moduleRef <>)
 
 splice :: Builder -> Body
 splice builder =
-  Body mempty (const builder)
+  Body (const (builder, mempty))
 
 indent :: Int -> Body -> Body
-indent spaces (Body requestedImports compileBody) =
-  Body requestedImports (Builder.indent spaces . compileBody)
+indent spaces (Body compileBody) =
+  Body (first (Builder.indent spaces) . compileBody)
 
 intercalate :: Builder -> [Body] -> Body
 intercalate separator bodies =
   Body
-    (foldMap bodyRequestedImports bodies)
     ( \resolveModule ->
-        Builder.intercalate
-          separator
-          (fmap (($ resolveModule) . bodyCompiler) bodies)
+        case unzip (fmap (($ resolveModule) . bodyCompiler) bodies) of
+          (splices, requestedImports) ->
+            ( Builder.intercalate separator splices,
+              mconcat requestedImports
+            )
     )
