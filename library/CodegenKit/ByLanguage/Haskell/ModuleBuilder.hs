@@ -2,7 +2,7 @@
 module CodegenKit.ByLanguage.Haskell.ModuleBuilder
   ( compileModule,
     Body,
-    qualifiedRef,
+    ref,
     splice,
     indent,
     intercalate,
@@ -13,6 +13,7 @@ import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as Builder
 import CodegenKit.Prelude hiding (intercalate)
 import qualified Data.HashMap.Strict as HashMap
+import qualified Data.HashSet as HashSet
 
 compileModule ::
   -- | Module name.
@@ -35,6 +36,8 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
   where
     aliasHashMap =
       HashMap.fromList aliasMapList
+    unqualifiedSet =
+      HashSet.fromList unqualifiedImports
     importsSplice =
       Builder.intercalate "\n" compiledImportList
       where
@@ -45,13 +48,16 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
             & toList
             & nubSort
             & fmap compileImport
+            & join
           where
             compileImport ref =
-              case HashMap.lookup ref aliasHashMap of
-                Just alias ->
-                  [j|import qualified $ref as $alias|]
-                Nothing ->
-                  [j|import qualified $ref|]
+              if HashSet.member ref unqualifiedSet
+                then []
+                else pure $ case HashMap.lookup ref aliasHashMap of
+                  Just alias ->
+                    [j|import qualified $ref as $alias|]
+                  Nothing ->
+                    [j|import qualified $ref|]
         compiledUnqualifiedImportList =
           unqualifiedImports
             & nubSort
@@ -63,9 +69,11 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
       compileBody resolveModule
       where
         resolveModule ref =
-          case HashMap.lookup ref aliasHashMap of
-            Just alias -> alias
-            Nothing -> ref
+          if HashSet.member ref unqualifiedSet
+            then ""
+            else case HashMap.lookup ref aliasHashMap of
+              Just alias -> alias
+              Nothing -> ref
 
 -- | Module contents.
 --
@@ -91,13 +99,13 @@ instance Monoid Body where
 instance IsString Body where
   fromString = splice . fromString
 
-qualifiedRef ::
+ref ::
   -- | Fully qualified module reference.
   Text ->
   -- | Member name.
   Text ->
   Body
-qualifiedRef moduleRef memberName =
+ref moduleRef memberName =
   Body
     (pure moduleRef)
     ( \resolveModule ->
