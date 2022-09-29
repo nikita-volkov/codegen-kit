@@ -7,7 +7,7 @@ import CodegenKit.ByLanguage.Haskell.ModuleBuilder
 
 tests =
   [ eqTestCase
-      "product"
+      "Local product"
       [i|
         module A where
           
@@ -26,5 +26,29 @@ tests =
           ["Prelude"]
           [("Data.Hashable", "Hashable")]
           (product "B" 3)
+      ),
+    eqTestCase
+      "Imported product"
+      [i|
+        module A where
+          
+        import Prelude
+        import qualified Data.Hashable as Hashable
+        import qualified Our.Namespace as OurNamespace
+
+        instance Hashable.Hashable OurNamespace.B where
+          hashWithSalt salt (OurNamespace.B a b c) =
+            salt
+              & flip Hashable.hashWithSalt a
+              & flip Hashable.hashWithSalt b
+              & flip Hashable.hashWithSalt c
+      |]
+      ( compileModule
+          "A"
+          ["Prelude"]
+          [ ("Data.Hashable", "Hashable"),
+            ("Our.Namespace", "OurNamespace")
+          ]
+          (product (imported "Our.Namespace" "B") 3)
       )
   ]

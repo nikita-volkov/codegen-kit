@@ -8,7 +8,7 @@ import CodegenKit.Prelude hiding (intercalate)
 product :: Body -> Int -> Body
 product productRef fieldAmount =
   "instance "
-    <> ref "Data.Hashable" "Hashable"
+    <> imported "Data.Hashable" "Hashable"
     <> " "
     <> productRef
     <> " where"
@@ -30,7 +30,7 @@ product productRef fieldAmount =
         extendCode name =
           mconcat
             [ "\n& flip ",
-              ref "Data.Hashable" "hashWithSalt",
+              imported "Data.Hashable" "hashWithSalt",
               " ",
               name
             ]

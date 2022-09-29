@@ -2,7 +2,7 @@
 module CodegenKit.ByLanguage.Haskell.ModuleBuilder
   ( compileModule,
     Body,
-    ref,
+    imported,
     splice,
     indent,
     intercalate,
@@ -50,30 +50,30 @@ compileModule moduleName unqualifiedImports aliasMapList (Body requestedImports 
             & fmap compileImport
             & join
           where
-            compileImport ref =
-              if HashSet.member ref unqualifiedSet
+            compileImport imported =
+              if HashSet.member imported unqualifiedSet
                 then []
-                else pure $ case HashMap.lookup ref aliasHashMap of
+                else pure $ case HashMap.lookup imported aliasHashMap of
                   Just alias ->
-                    [j|import qualified $ref as $alias|]
+                    [j|import qualified $imported as $alias|]
                   Nothing ->
-                    [j|import qualified $ref|]
+                    [j|import qualified $imported|]
         compiledUnqualifiedImportList =
           unqualifiedImports
             & nubSort
             & fmap compileImport
           where
-            compileImport ref =
-              [j|import $ref|]
+            compileImport imported =
+              [j|import $imported|]
     bodySplice =
       compileBody resolveModule
       where
-        resolveModule ref =
-          if HashSet.member ref unqualifiedSet
+        resolveModule imported =
+          if HashSet.member imported unqualifiedSet
             then ""
-            else case HashMap.lookup ref aliasHashMap of
+            else case HashMap.lookup imported aliasHashMap of
               Just alias -> alias
-              Nothing -> ref
+              Nothing -> imported
 
 -- | Module contents.
 --
@@ -99,13 +99,13 @@ instance Monoid Body where
 instance IsString Body where
   fromString = splice . fromString
 
-ref ::
+imported ::
   -- | Fully qualified module reference.
   Text ->
   -- | Member name.
   Text ->
   Body
-ref moduleRef memberName =
+imported moduleRef memberName =
   Body
     (pure moduleRef)
     ( \resolveModule ->
