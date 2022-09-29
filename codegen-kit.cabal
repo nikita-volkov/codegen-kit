@@ -27,6 +27,7 @@ library
     CodegenKit.ByLanguage.Haskell.Dependencies
     CodegenKit.ByLanguage.Haskell.ExpFormatter
     CodegenKit.ByLanguage.Haskell.FileSets.Stack
+    CodegenKit.ByLanguage.Haskell.HashableBuilder
     CodegenKit.ByLanguage.Haskell.ModuleBuilder
     CodegenKit.ByLanguage.Haskell.Modules.BaseDataTypes
     CodegenKit.ByLanguage.Haskell.Modules.BaseOperators
@@ -72,6 +73,7 @@ test-suite test
   main-is:
     Main.hs
   other-modules:
+    Tests.HashableBuilder
     Tests.HaskellExpFormatter
   build-depends:
     coalmine,
