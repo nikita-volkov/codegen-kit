@@ -14,6 +14,7 @@ import qualified Coalmine.MultilineTextBuilder as Builder
 import CodegenKit.Prelude hiding (intercalate)
 import qualified Data.HashMap.Strict as HashMap
 import qualified Data.HashSet as HashSet
+import qualified Data.Text as Text
 
 compileModule ::
   -- | Module name.
@@ -109,7 +110,11 @@ imported moduleRef memberName =
   Body
     (pure moduleRef)
     ( \resolveModule ->
-        to (resolveModule moduleRef) <> "." <> to memberName
+        case resolveModule moduleRef of
+          prefix ->
+            if Text.null prefix
+              then to memberName
+              else to prefix <> "." <> to memberName
     )
 
 splice :: Builder -> Body
