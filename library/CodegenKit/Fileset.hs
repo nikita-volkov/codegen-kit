@@ -20,11 +20,6 @@ import qualified Data.Text.IO as TextIO
 
 -- * --
 
--- |
--- Brings all variations of rendering to order by defining
--- package sets.
---
--- The abstraction.
 newtype Fileset = Fileset [(Path, Text)]
   deriving (Semigroup, Monoid)
 
