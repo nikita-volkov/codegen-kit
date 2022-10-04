@@ -64,14 +64,14 @@ packages:
 - completed:
     name: coalmine
     pantry-tree:
-      sha256: 4bc02efb4f81fbde76e3392faeedf7e28a5869f49dba2e9b6d0bb00d759838a1
-      size: 9809
-    sha256: 330a1aeaae6fe62caf6b59d1e00f2245e3537bda2714ff4acb843080db2722e0
-    size: 57721
-    url: https://github.com/nikita-volkov/coalmine/archive/e3bbda94c4c578ee7e066be80f791dfc79d5d6d5.tar.gz
-    version: 0.1.0.10
+      sha256: ac97a3ae7a38d653b065e259dc4ce488c670774abf31812195b591bb89d34f16
+      size: 9963
+    sha256: 57217fd50cdc13ea89977978d7f0c9fbe0d51355d6799af7e6ab4760f0368cfa
+    size: 58231
+    url: https://github.com/nikita-volkov/coalmine/archive/2ab6264c7e10a354eaa3e0991768b89d067a5874.tar.gz
+    version: 0.1.0.12
   original:
-    url: https://github.com/nikita-volkov/coalmine/archive/e3bbda94c4c578ee7e066be80f791dfc79d5d6d5.tar.gz
+    url: https://github.com/nikita-volkov/coalmine/archive/2ab6264c7e10a354eaa3e0991768b89d067a5874.tar.gz
 - completed:
     name: curly
     pantry-tree:
@@ -129,11 +129,11 @@ packages:
     url: https://github.com/nikita-volkov/structure-kit/archive/46ffb6527c48f8a718adecd21a313f0b1ba5e81c.tar.gz
 snapshots:
 - completed:
-    sha256: 7d81ae9727d6a1352c4311c221730e1fba35825960b439978473eea79d14c367
+    sha256: 87375e4c7306e5ec0f496e62111a55dfa2b8fd24c135e593d445f03ad92fd1b2
     size: 1030
-    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/7f44a431ac92e22fd38815ff4521fe84ded8e25e/snapshot.yaml
+    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/cd7654d5ffc150ed507a78b4edb7bd5a1caf3939/snapshot.yaml
   original:
-    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/7f44a431ac92e22fd38815ff4521fe84ded8e25e/snapshot.yaml
+    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/cd7654d5ffc150ed507a78b4edb7bd5a1caf3939/snapshot.yaml
 - completed:
     sha256: e0665b6096ae42229053ff678d12ede7078a6e72ac479c4ac7eda025c83a5caa
     size: 643193
