@@ -23,12 +23,12 @@ library
   import: language-settings
   hs-source-dirs: library
   exposed-modules:
+    CodegenKit.ByLanguage.Haskell.Composers.Haddock
+    CodegenKit.ByLanguage.Haskell.Composers.Hashable
     CodegenKit.ByLanguage.Haskell.Contents.Cabal
     CodegenKit.ByLanguage.Haskell.Dependencies
     CodegenKit.ByLanguage.Haskell.ExpFormatter
     CodegenKit.ByLanguage.Haskell.FileSets.Stack
-    CodegenKit.ByLanguage.Haskell.HaddockComposer
-    CodegenKit.ByLanguage.Haskell.HashableBuilder
     CodegenKit.ByLanguage.Haskell.ModuleBuilder
     CodegenKit.ByLanguage.Haskell.Modules.BaseDataTypes
     CodegenKit.ByLanguage.Haskell.Modules.BaseOperators
@@ -74,7 +74,7 @@ test-suite test
   main-is:
     Main.hs
   other-modules:
-    Tests.HashableBuilder
+    Tests.ByModule.ByLanguage.Haskell.Composers.Hashable
     Tests.HaskellExpFormatter
   build-depends:
     coalmine,

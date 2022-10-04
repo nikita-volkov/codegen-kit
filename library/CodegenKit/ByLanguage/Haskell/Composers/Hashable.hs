@@ -1,4 +1,4 @@
-module CodegenKit.ByLanguage.Haskell.HashableBuilder where
+module CodegenKit.ByLanguage.Haskell.Composers.Hashable where
 
 import qualified Coalmine.MultilineTextBuilder as Builder
 import CodegenKit.ByLanguage.Haskell.ModuleBuilder

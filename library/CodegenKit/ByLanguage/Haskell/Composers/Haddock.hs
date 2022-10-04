@@ -1,5 +1,5 @@
 -- | Composer DSL for Haddock.
-module CodegenKit.ByLanguage.Haskell.HaddockComposer where
+module CodegenKit.ByLanguage.Haskell.Composers.Haddock where
 
 import qualified Coalmine.MultilineTextBuilder as B
 import CodegenKit.Prelude

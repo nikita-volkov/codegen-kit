@@ -1,8 +1,8 @@
-module Tests.HashableBuilder where
+module Tests.ByModule.ByLanguage.Haskell.Composers.Hashable where
 
 import Coalmine.Prelude hiding (product)
 import Coalmine.Tasty
-import CodegenKit.ByLanguage.Haskell.HashableBuilder
+import CodegenKit.ByLanguage.Haskell.Composers.Hashable
 import CodegenKit.ByLanguage.Haskell.ModuleBuilder
 
 tests =
