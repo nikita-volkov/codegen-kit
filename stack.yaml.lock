@@ -64,14 +64,14 @@ packages:
 - completed:
     name: coalmine
     pantry-tree:
-      sha256: 19ac0d70894106a201fe9ef69813d453bee19ae0ea74837ee747ddf984cd9d5b
-      size: 9807
-    sha256: 3c1f77b54618d3aa396560fc80128e3c45a23302c6dfe2098fedb250bbc556ad
-    size: 57176
-    url: https://github.com/nikita-volkov/coalmine/archive/d00237fa65efcd68d319201ce8d81ecc93c0a7b8.tar.gz
-    version: 0.1.0.7
+      sha256: 4bc02efb4f81fbde76e3392faeedf7e28a5869f49dba2e9b6d0bb00d759838a1
+      size: 9809
+    sha256: 330a1aeaae6fe62caf6b59d1e00f2245e3537bda2714ff4acb843080db2722e0
+    size: 57721
+    url: https://github.com/nikita-volkov/coalmine/archive/e3bbda94c4c578ee7e066be80f791dfc79d5d6d5.tar.gz
+    version: 0.1.0.10
   original:
-    url: https://github.com/nikita-volkov/coalmine/archive/d00237fa65efcd68d319201ce8d81ecc93c0a7b8.tar.gz
+    url: https://github.com/nikita-volkov/coalmine/archive/e3bbda94c4c578ee7e066be80f791dfc79d5d6d5.tar.gz
 - completed:
     name: curly
     pantry-tree:
@@ -129,13 +129,13 @@ packages:
     url: https://github.com/nikita-volkov/structure-kit/archive/46ffb6527c48f8a718adecd21a313f0b1ba5e81c.tar.gz
 snapshots:
 - completed:
-    sha256: a6235499e89776666d4a19e06b00bad40faf58f195ce045fc937e4d6a3900d9d
+    sha256: 7d81ae9727d6a1352c4311c221730e1fba35825960b439978473eea79d14c367
     size: 1030
-    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/dd80387d59be2b270df0a5425ae472a63ac439f4/snapshot.yaml
+    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/7f44a431ac92e22fd38815ff4521fe84ded8e25e/snapshot.yaml
   original:
-    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/dd80387d59be2b270df0a5425ae472a63ac439f4/snapshot.yaml
+    url: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/7f44a431ac92e22fd38815ff4521fe84ded8e25e/snapshot.yaml
 - completed:
-    sha256: f10dfcd8e0b9bf71c58611a61fd25dbce50cc4d0e0265dcf416bd7f3585cf1af
+    sha256: e0665b6096ae42229053ff678d12ede7078a6e72ac479c4ac7eda025c83a5caa
     size: 643193
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/9/27.yaml
-  original: nightly-2022-09-27
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2022/9/30.yaml
+  original: nightly-2022-09-30
