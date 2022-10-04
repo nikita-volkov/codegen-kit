@@ -15,12 +15,70 @@ source-repository head
   type: git
   location: git://github.com/nikita-volkov/codegen-kit.git
 
-common language-settings
-  default-extensions: BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedLabels, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators, UndecidableInstances, ViewPatterns
+common base-settings
   default-language: Haskell2010
+  default-extensions:
+    BangPatterns
+    ConstraintKinds
+    DataKinds
+    DefaultSignatures
+    DeriveDataTypeable
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveTraversable
+    DerivingVia
+    EmptyDataDecls
+    FlexibleContexts
+    FlexibleInstances
+    FunctionalDependencies
+    GADTs
+    GeneralizedNewtypeDeriving
+    InstanceSigs
+    LambdaCase
+    LiberalTypeSynonyms
+    MagicHash
+    MultiParamTypeClasses
+    MultiWayIf
+    NoImplicitPrelude
+    NoMonomorphismRestriction
+    NumericUnderscores
+    OverloadedLabels
+    OverloadedStrings
+    PatternGuards
+    ParallelListComp
+    QuasiQuotes
+    RankNTypes
+    RecordWildCards
+    ScopedTypeVariables
+    StandaloneDeriving
+    TemplateHaskell
+    TupleSections
+    TypeApplications
+    TypeFamilies
+    TypeOperators
+    UndecidableInstances
+    ViewPatterns
+  build-depends:
+    attoparsec,
+    coalmine,
+    directory,
+    domain,
+    domain-optics,
+    extra,
+    rerebase,
+    structure-kit,
+    text-builder-dev,
+
+common executable-settings
+  import: base-settings
+  ghc-options: 
+    -O2
+    -threaded
+    "-with-rtsopts=-N -I0 -qg"
 
 library
-  import: language-settings
+  import: base-settings
   hs-source-dirs: library
   exposed-modules:
     CodegenKit.ByLanguage.Haskell.Composers.Haddock
@@ -56,19 +114,9 @@ library
     CodegenKit.Versioning
   other-modules:
     CodegenKit.Prelude
-  build-depends:
-    attoparsec,
-    coalmine,
-    directory,
-    domain,
-    domain-optics,
-    extra,
-    rerebase,
-    structure-kit,
-    text-builder-dev,
 
 test-suite test
-  import: language-settings
+  import: base-settings
   type: exitcode-stdio-1.0
   hs-source-dirs: test
   main-is:
@@ -82,7 +130,7 @@ test-suite test
     rerebase <2,
 
 test-suite demo
-  import: language-settings
+  import: base-settings
   type: exitcode-stdio-1.0
   hs-source-dirs: demo
   main-is: Main.hs
