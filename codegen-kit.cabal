@@ -110,7 +110,6 @@ library
     CodegenKit.ByLanguage.Java.Code
     CodegenKit.ByLanguage.Java.Dsl
     CodegenKit.Dependencies
-    CodegenKit.Fileset
     CodegenKit.Versioning
   other-modules:
     CodegenKit.Prelude

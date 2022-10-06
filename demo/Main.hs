@@ -1,9 +1,9 @@
 module Main where
 
+import qualified Coalmine.Fileset as Fileset
 import Coalmine.Prelude
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as HaskellPackaging
-import qualified CodegenKit.Fileset as Fileset
 import qualified Demo.SamplesFor.ModelAndUtils.Iso8601 as Iso8601ModelAndUtils
 
 -- * --

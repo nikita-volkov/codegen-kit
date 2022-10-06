@@ -9,10 +9,10 @@ module CodegenKit.ByLanguage.Haskell.FileSets.Stack
   )
 where
 
+import qualified Coalmine.Fileset as Fileset
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
-import qualified CodegenKit.Fileset as Fileset
 import CodegenKit.Prelude hiding (Version)
 import qualified Data.List.Extra as ListExtra
 import qualified TextBuilderDev as B'

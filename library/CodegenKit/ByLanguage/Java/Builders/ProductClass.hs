@@ -51,14 +51,13 @@ where
 import qualified Coalmine.BaseExtras.List as List
 import Coalmine.EvenSimplerPaths (Path)
 import qualified Coalmine.EvenSimplerPaths as Paths
+import qualified Coalmine.Fileset as Fileset
 import Coalmine.MultilineTextBuilder
 import qualified Coalmine.Name as Name
 import qualified CodegenKit.ByLanguage.Java.Builders.CompareTo as CompareToBuilder
 import qualified CodegenKit.ByLanguage.Java.Builders.Equals as EqualsBuilder
 import qualified CodegenKit.ByLanguage.Java.Builders.HashCode as HashCodeBuilder
 import qualified CodegenKit.ByLanguage.Java.Builders.ToJson as ToJsonBuilder
-import CodegenKit.Fileset (Fileset)
-import qualified CodegenKit.Fileset as Fileset
 import CodegenKit.Prelude hiding (intercalate)
 import qualified Data.Text.IO as TextIO
 

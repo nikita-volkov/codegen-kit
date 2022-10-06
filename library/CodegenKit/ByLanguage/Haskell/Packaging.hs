@@ -22,11 +22,10 @@ module CodegenKit.ByLanguage.Haskell.Packaging
   )
 where
 
+import qualified Coalmine.Fileset as Fileset
 import qualified Coalmine.Name as Name
 import qualified CodegenKit.ByLanguage.Haskell.Contents.Cabal as CabalContents
 import qualified CodegenKit.ByLanguage.Haskell.FileSets.Stack as StackFileSet
-import CodegenKit.Fileset (Fileset)
-import qualified CodegenKit.Fileset as Fileset
 import CodegenKit.Prelude
 import qualified CodegenKit.Versioning as Versioning
 import qualified Data.Map.Strict as Map
