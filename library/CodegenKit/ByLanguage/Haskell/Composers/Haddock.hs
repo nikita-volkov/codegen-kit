@@ -19,31 +19,16 @@ compileHaddock =
 -- * --
 
 newtype Block = Block
-  { lines :: Seq TextBuilder
+  { builder :: Builder
   }
-
-instance Semigroup Block where
-  Block l <> Block r =
-    Block $ case Seq.viewr l of
-      Seq.EmptyR -> r
-      lLines Seq.:> lEdgeLine -> case Seq.viewl r of
-        Seq.EmptyL -> l
-        rEdgeLine Seq.:< rLines ->
-          (lLines Seq.|> (lEdgeLine <> rEdgeLine)) Seq.>< rLines
-
-instance Monoid Block where
-  mempty = Block mempty
-
-instance IsString Block where
-  fromString = textSplice . fromString
+  deriving (Semigroup, Monoid, IsString)
 
 textSplice :: Text -> Block
-textSplice = Block . Seq.fromList . fmap to . Text.lines
+textSplice = error "TODO"
 
 prependEachLineInSplice :: Line -> Block -> Block
 prependEachLineInSplice (Line line) (Block lines) =
-  Block $
-    Seq.mapHead (line <>) lines
+  error "TODO"
 
 newtype Line
   = Line TextBuilder
