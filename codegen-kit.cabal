@@ -83,6 +83,7 @@ library
   exposed-modules:
     CodegenKit.ByLanguage.Haskell.Composers.Haddock
     CodegenKit.ByLanguage.Haskell.Composers.Hashable
+    CodegenKit.ByLanguage.Haskell.Composers.ProductType
     CodegenKit.ByLanguage.Haskell.Contents.Cabal
     CodegenKit.ByLanguage.Haskell.Dependencies
     CodegenKit.ByLanguage.Haskell.ExpFormatter
