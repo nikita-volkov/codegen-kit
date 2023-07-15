@@ -94,6 +94,7 @@ stringLiteral =
     escapeChar = \case
       '\\' -> "\\\\"
       '"' -> "\\\""
+      '\t' -> "\\t"
       a -> [a]
 
 multilineApplicative :: Builder -> [Builder] -> Builder
