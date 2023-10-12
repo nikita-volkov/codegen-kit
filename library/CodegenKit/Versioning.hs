@@ -1,6 +1,7 @@
 module CodegenKit.Versioning
   ( -- * --
-    VersionBounds (..),
+    VersionRange,
+    pattern VersionRange,
 
     -- * --
     Version (..),
@@ -9,26 +10,23 @@ where
 
 import CodegenKit.Prelude
 import qualified Data.Attoparsec.Text as Attoparsec
-import qualified StructureKit.Range as Range
+import qualified StructureKit.OpenRange as OpenRange
 
-data VersionBounds
-  = VersionBounds
-      !Version
-      -- ^ Min bound.
-      !Version
-      -- ^ Max bound.
+-- * --
 
-instance Semigroup VersionBounds where
-  VersionBounds lMin lMax <> VersionBounds rMin rMax =
-    case Range.Range lMin lMax <> Range.Range rMin rMax of
-      Range.Range min max ->
-        VersionBounds min max
+type VersionRange =
+  OpenRange.Range Version
+
+pattern VersionRange :: Maybe Version -> Maybe Version -> VersionRange
+pattern VersionRange from upTo = OpenRange.Range from upTo
+
+{-# COMPLETE VersionRange #-}
 
 -- * --
 
 data Version = Version
-  { versionHead :: !Word,
-    versionTail :: ![Word]
+  { versionHead :: Word,
+    versionTail :: [Word]
   }
   deriving (Eq, Show, Generic)
 

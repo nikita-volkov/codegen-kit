@@ -17,12 +17,12 @@ import qualified Data.Map.Strict as Map
 -- * --
 
 newtype Dependencies
-  = Dependencies (Map Text Versioning.VersionBounds)
+  = Dependencies (Map Text Versioning.VersionRange)
 
 instance Semigroup Dependencies where
   Dependencies lMap <> Dependencies rMap =
-    Dependencies $
-      Map.unionWith (<>) lMap rMap
+    Dependencies
+      $ Map.unionWith (<>) lMap rMap
 
 instance Monoid Dependencies where
   mempty =
@@ -30,7 +30,7 @@ instance Monoid Dependencies where
 
 -- ** --
 
-toList :: Dependencies -> [(Text, Versioning.VersionBounds)]
+toList :: Dependencies -> [(Text, Versioning.VersionRange)]
 toList =
   Map.toAscList . coerce
 
@@ -38,10 +38,10 @@ toList =
 
 singleton :: Text -> Word -> [Word] -> Word -> [Word] -> Dependencies
 singleton packageName minHead minTail maxHead maxTail =
-  Dependencies $
-    Map.singleton
+  Dependencies
+    $ Map.singleton
       packageName
-      ( Versioning.VersionBounds
-          (Versioning.Version minHead minTail)
-          (Versioning.Version maxHead maxTail)
+      ( Versioning.VersionRange
+          (Just (Versioning.Version minHead minTail))
+          (Just (Versioning.Version maxHead maxTail))
       )

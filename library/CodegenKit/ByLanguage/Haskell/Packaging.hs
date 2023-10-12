@@ -38,16 +38,16 @@ import qualified Data.Map.Strict as Map
 -- E.g., being exposed or hidden.
 data Modules
   = Modules
+      -- | List of files.
       !(Acc (Path, [Name] -> Text))
-      -- ^ List of files.
+      -- | Exposed modules.
       !(Acc [Name])
-      -- ^ Exposed modules.
+      -- | Hidden modules.
       !(Acc [Name])
-      -- ^ Hidden modules.
-      !(Map Text Versioning.VersionBounds)
-      -- ^ Package dependencies.
+      -- | Package dependencies.
+      !(Map Text Versioning.VersionRange)
+      -- | Stack dependencies.
       ![StackFileSet.ExtraDep]
-      -- ^ Stack dependencies.
 
 instance Semigroup Modules where
   Modules l1 l2 l3 l4 l5 <> Modules r1 r2 r3 r4 r5 =
@@ -66,7 +66,7 @@ toHiddenModuleSet :: Modules -> Set [Name]
 toHiddenModuleSet (Modules _ _ hidden _ _) =
   fromList . toList $ hidden
 
-toDependencyList :: Modules -> [(Text, Versioning.VersionBounds)]
+toDependencyList :: Modules -> [(Text, Versioning.VersionRange)]
 toDependencyList (Modules _ _ _ deps _) =
   deps & Map.toAscList
 
@@ -93,9 +93,9 @@ toCabalContents packageName synopsis version modules =
     dependencies =
       toDependencyList modules
         <&> \( name,
-               Versioning.VersionBounds
-                 (Versioning.Version minHead minTail)
-                 (Versioning.Version maxHead maxTail)
+               Versioning.VersionRange
+                 (Just (Versioning.Version minHead minTail))
+                 (Just (Versioning.Version maxHead maxTail))
                ) ->
             CabalContents.rangeDependency
               (CabalContents.plainPackageName name)
@@ -107,7 +107,8 @@ toCabalFileSet packageName synopsis version modules =
   Fileset.file filePath contents
   where
     filePath =
-      fromString . to
+      fromString
+        . to
         . flip mappend ".cabal"
         . Name.toSpinalCaseTextBuilder
         $ packageName
@@ -188,16 +189,16 @@ module_ exposed name dependencies contents =
 
 data Dependency
   = Dependency
+      -- | Package name.
       !Text
-      -- ^ Package name.
-      !Versioning.VersionBounds
-      -- ^ Package version bounds.
+      -- | Package version bounds.
+      !Versioning.VersionRange
+      -- | Extra dependencies for stack.
       ![StackFileSet.ExtraDep]
-      -- ^ Extra dependencies for stack.
 
 -- ** --
 
-dependencyTuple :: Dependency -> (Text, Versioning.VersionBounds)
+dependencyTuple :: Dependency -> (Text, Versioning.VersionRange)
 dependencyTuple (Dependency a b _) =
   (a, b)
 
@@ -207,9 +208,9 @@ dependency :: Text -> Word -> [Word] -> Word -> [Word] -> [PackageLocation] -> D
 dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
   Dependency
     packageName
-    ( Versioning.VersionBounds
-        (Versioning.Version minHead minTail)
-        (Versioning.Version maxHead maxTail)
+    ( Versioning.VersionRange
+        (Just (Versioning.Version minHead minTail))
+        (Just (Versioning.Version maxHead maxTail))
     )
     (coerce stackExtraDeps)
 
