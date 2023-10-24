@@ -6,6 +6,8 @@ module CodegenKit.ByLanguage.Haskell.Packaging
     Modules,
     inNamespace,
     module_,
+    v1Module,
+    v2Module,
 
     -- * --
     Dependency,
@@ -26,6 +28,7 @@ import qualified Coalmine.Fileset as Fileset
 import qualified Coalmine.Name as Name
 import qualified CodegenKit.ByLanguage.Haskell.Contents.Cabal as CabalContents
 import qualified CodegenKit.ByLanguage.Haskell.FileSets.Stack as StackFileSet
+import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude
 import qualified CodegenKit.Versioning as Versioning
 import qualified Data.Map.Strict as Map
@@ -164,6 +167,7 @@ inNamespace ns (Modules files exposed hidden dependencies stackExtraDeps) =
         prependModuleName render =
           render . flip mappend ns
 
+{-# DEPRECATED module_ "Use v1Module" #-}
 module_ ::
   -- | Is it exposed?
   Bool ->
@@ -174,7 +178,19 @@ module_ ::
   -- | Module contents rendering function from compiled namespace.
   ([Name] -> Text) ->
   Modules
-module_ exposed name dependencies contents =
+module_ = v1Module
+
+v1Module ::
+  -- | Is it exposed?
+  Bool ->
+  -- | Module name.
+  Name ->
+  -- | Package dependencies.
+  [Dependency] ->
+  -- | Module contents rendering function from compiled namespace.
+  ([Name] -> Text) ->
+  Modules
+v1Module exposed name dependencies contents =
   Modules
     (pure (filePath, contents))
     (if exposed then pure [name] else empty)
@@ -182,6 +198,30 @@ module_ exposed name dependencies contents =
     (Map.fromListWith (<>) . fmap dependencyTuple $ dependencies)
     (foldMap (\(Dependency _ _ x) -> x) dependencies)
   where
+    filePath =
+      fromString . to . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
+
+v2Module ::
+  -- | Is it exposed?
+  Bool ->
+  -- | Module name.
+  Name ->
+  -- | Package dependencies.
+  [Dependency] ->
+  -- | Module contents rendering function from qualified module name.
+  (Text -> Text) ->
+  Modules
+v2Module exposed name dependencies contents =
+  Modules
+    (pure (filePath, adaptedContents))
+    (if exposed then pure [name] else empty)
+    (if exposed then empty else pure [name])
+    (Map.fromListWith (<>) . fmap dependencyTuple $ dependencies)
+    (foldMap (\(Dependency _ _ x) -> x) dependencies)
+  where
+    adaptedContents namespace =
+      contents $ to @Text $ Snippets.moduleRef namespace name
+
     filePath =
       fromString . to . flip mappend ".hs" . Name.toUpperCamelCaseText $ name
 

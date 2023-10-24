@@ -27,7 +27,7 @@ modules ::
   [(Text, [(Text, Text)])] ->
   Packaging.Modules
 modules hasFieldConfigs hasVariantConfigs =
-  Packaging.module_ True moduleName deps contentByNs
+  Packaging.v1Module True moduleName deps contentByNs
   where
     deps =
       [ Dependencies.basePrelude
@@ -72,8 +72,8 @@ content preludeModuleRef typesModuleRef moduleRef hasFieldConfigs hasVariantConf
 -- * --
 
 hasFieldDecls lcFieldName ucFieldName instanceConfigs =
-  Templates.hasFieldClass lcFieldName ucFieldName :
-  instanceDecls
+  Templates.hasFieldClass lcFieldName ucFieldName
+    : instanceDecls
   where
     instanceDecls =
       instanceConfigs
@@ -83,8 +83,8 @@ hasFieldDecls lcFieldName ucFieldName instanceConfigs =
           )
 
 hasVariantDecls ucVariantName instanceConfigs =
-  Templates.hasVariantClass ucVariantName :
-  instanceDecls
+  Templates.hasVariantClass ucVariantName
+    : instanceDecls
   where
     instanceDecls =
       instanceConfigs

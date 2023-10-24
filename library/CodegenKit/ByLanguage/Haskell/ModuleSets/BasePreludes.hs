@@ -34,12 +34,12 @@ operatorsName = "base-operators"
 
 operators :: Packaging.Modules
 operators =
-  Packaging.module_ False operatorsName deps contents
+  Packaging.v2Module False operatorsName deps contents
   where
     deps =
       [ Dependencies.base
       ]
-    contents nsNameList =
+    contents moduleRef =
       [i|
         -- |
         -- A collection of common operators provided across
@@ -115,17 +115,15 @@ operators =
         import qualified Prelude
 
       |]
-      where
-        moduleRef = Snippets.moduleRef nsNameList operatorsName
 
 dataTypes :: Packaging.Modules
 dataTypes =
-  Packaging.module_ False dataTypesName deps contents
+  Packaging.v2Module False dataTypesName deps contents
   where
     deps =
       [ Dependencies.base
       ]
-    contents nsNameList =
+    contents moduleRef =
       [i|
         -- |
         -- A module that reexports only the data types
@@ -180,17 +178,15 @@ dataTypes =
         import qualified Prelude
 
       |]
-      where
-        moduleRef = Snippets.moduleRef nsNameList dataTypesName
 
 all :: Packaging.Modules
 all =
-  Packaging.module_ False allName deps contents
+  Packaging.v2Module False allName deps contents
   where
     deps =
       [ Dependencies.base
       ]
-    contents nsNameList =
+    contents moduleRef =
       [i|
         -- |
         -- Reexports of most of the definitions from the \"base\" package,
@@ -275,5 +271,3 @@ all =
         import Unsafe.Coerce as Exports
         
       |]
-      where
-        moduleRef = Snippets.moduleRef nsNameList allName

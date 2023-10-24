@@ -46,7 +46,7 @@ modules ::
   [Section] ->
   Packaging.Modules
 modules sections =
-  Packaging.module_ True moduleName deps (content sections)
+  Packaging.v1Module True moduleName deps (content sections)
   where
     deps =
       [ Dependencies.basePrelude,
@@ -147,17 +147,17 @@ sum sumName haddock variants =
     haddockPrefix =
       Snippets.prefixHaddockWithNewline haddock
     constructors =
-      B.intercalate "\n" $
-        List.mapHeadAndTail (variantCode "= ") (fmap (variantCode "| ")) $
-          variants
+      B.intercalate "\n"
+        $ List.mapHeadAndTail (variantCode "= ") (fmap (variantCode "| "))
+        $ variants
       where
         variantCode prefix (ucVariantName, docs, memberTypes) =
-          B.indent 2 $
-            mconcat
+          B.indent 2
+            $ mconcat
               [ prefix,
                 Snippets.prefixHaddockWithNewline docs,
-                B.indent 2 $
-                  mconcat
+                B.indent 2
+                  $ mconcat
                     [ from @Text ucVariantName,
                       from @Text sumName,
                       foldMap memberCode memberTypes
@@ -217,11 +217,12 @@ productAccessorIsLabelInstance productName fieldName (Type fieldType) fieldIndex
     |]
   where
     fieldPatterns =
-      B.intercalate " " . mconcat $
-        [ blanks 0 fieldIndex,
-          ["a"],
-          blanks (succ fieldIndex) fieldAmount
-        ]
+      B.intercalate " "
+        . mconcat
+        $ [ blanks 0 fieldIndex,
+            ["a"],
+            blanks (succ fieldIndex) fieldAmount
+          ]
       where
         blanks from to =
           replicate (to - from) "_"
@@ -239,10 +240,10 @@ productMapperIsLabelInstance productName fieldName (Type fieldType) fieldIndex f
       varNamesFromUpTo 0 fieldAmount
         & B.intercalate " "
     fieldExps =
-      B.intercalate " " $
-        varNamesFromUpTo 0 fieldIndex
-          <> ["(map " <> Snippets.alphabeticIndexName fieldIndex <> ")"]
-          <> varNamesFromUpTo (succ fieldIndex) fieldAmount
+      B.intercalate " "
+        $ varNamesFromUpTo 0 fieldIndex
+        <> ["(map " <> Snippets.alphabeticIndexName fieldIndex <> ")"]
+        <> varNamesFromUpTo (succ fieldIndex) fieldAmount
     varNamesFromUpTo from to =
       enumFromTo from (pred to)
         & fmap Snippets.alphabeticIndexName
@@ -350,22 +351,23 @@ sumHashableInstance sumName variants =
           |]
           where
             variantIndexCode =
-              B.uniline . mconcat $
-                [ "(",
-                  B'.decimal variantIndex,
-                  " :: ",
-                  toTextBuilder preludeAlias,
-                  ".Int)"
-                ]
+              B.uniline
+                . mconcat
+                $ [ "(",
+                    B'.decimal variantIndex,
+                    " :: ",
+                    toTextBuilder preludeAlias,
+                    ".Int)"
+                  ]
             memberNames =
               enumFromTo 0 (pred memberCount)
                 & fmap Snippets.alphabeticIndexName
             memberPatterns =
               foldMap (mappend " ") memberNames
             hashCode =
-              hashSaltExp $
-                variantIndexCode :
-                memberNames
+              hashSaltExp
+                $ variantIndexCode
+                : memberNames
 
 -- * --
 
@@ -375,9 +377,9 @@ productAndInstances ::
   [(Text, Text, Type)] ->
   [Decl]
 productAndInstances productName productDocs fields =
-  typeDecl :
-  productHashableInstance productName size :
-  isLabelInstanceDecls
+  typeDecl
+    : productHashableInstance productName size
+    : isLabelInstanceDecls
   where
     typeDecl =
       fields
@@ -402,9 +404,9 @@ sumAndInstances ::
   [(Text, Text, Text, [Type])] ->
   [Decl]
 sumAndInstances sumName sumDocs variants =
-  typeDecl :
-  hashableDecl :
-  isLabelInstanceDecls
+  typeDecl
+    : hashableDecl
+    : isLabelInstanceDecls
   where
     typeDecl =
       sum sumName sumDocs $ fmap fromVariant variants
@@ -412,8 +414,8 @@ sumAndInstances sumName sumDocs variants =
         fromVariant (_, ucVariantName, docs, memberTypes) =
           (ucVariantName, docs, memberTypes)
     hashableDecl =
-      sumHashableInstance sumName $
-        fmap fromVariant variants
+      sumHashableInstance sumName
+        $ fmap fromVariant variants
       where
         fromVariant (_, name, _, members) =
           (name, length members)
