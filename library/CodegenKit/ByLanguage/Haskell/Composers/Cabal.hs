@@ -1,4 +1,4 @@
-module CodegenKit.ByLanguage.Haskell.Contents.Cabal
+module CodegenKit.ByLanguage.Haskell.Composers.Cabal
   ( -- * --
     contents,
 
@@ -87,21 +87,25 @@ newtype Version
 
 listVersion :: Word -> [Word] -> Version
 listVersion head tail =
-  Version . B.uniline . B'.intercalate "."
+  Version
+    . B.uniline
+    . B'.intercalate "."
     . fmap B'.unsignedDecimal
-    $ head : tail
+    $ head
+    : tail
 
 version2 :: Word -> Word -> Version
 version2 a b =
-  Version . B.uniline $
-    if b == 0
+  Version
+    . B.uniline
+    $ if b == 0
       then B'.unsignedDecimal a
       else
-        mconcat $
-          [ B'.unsignedDecimal a,
-            ".",
-            B'.unsignedDecimal b
-          ]
+        mconcat
+          $ [ B'.unsignedDecimal a,
+              ".",
+              B'.unsignedDecimal b
+            ]
 
 -- * --
 

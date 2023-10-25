@@ -26,8 +26,8 @@ where
 
 import qualified Coalmine.Fileset as Fileset
 import qualified Coalmine.Name as Name
-import qualified CodegenKit.ByLanguage.Haskell.Contents.Cabal as CabalContents
-import qualified CodegenKit.ByLanguage.Haskell.FileSets.Stack as StackFileSet
+import qualified CodegenKit.ByLanguage.Haskell.Composers.Cabal as CabalContents
+import qualified CodegenKit.ByLanguage.Haskell.Composers.Stack as StackFileSet
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude
 import qualified CodegenKit.Versioning as Versioning

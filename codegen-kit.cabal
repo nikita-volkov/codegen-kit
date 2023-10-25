@@ -81,13 +81,13 @@ library
   import:          base-settings
   hs-source-dirs:  library
   exposed-modules:
+    CodegenKit.ByLanguage.Haskell.Composers.Cabal
     CodegenKit.ByLanguage.Haskell.Composers.Haddock
     CodegenKit.ByLanguage.Haskell.Composers.Hashable
     CodegenKit.ByLanguage.Haskell.Composers.ProductType
-    CodegenKit.ByLanguage.Haskell.Contents.Cabal
+    CodegenKit.ByLanguage.Haskell.Composers.Stack
     CodegenKit.ByLanguage.Haskell.Dependencies
     CodegenKit.ByLanguage.Haskell.ExpFormatter
-    CodegenKit.ByLanguage.Haskell.FileSets.Stack
     CodegenKit.ByLanguage.Haskell.ModuleBuilder
     CodegenKit.ByLanguage.Haskell.Modules.BaseDataTypes
     CodegenKit.ByLanguage.Haskell.Modules.BaseOperators
