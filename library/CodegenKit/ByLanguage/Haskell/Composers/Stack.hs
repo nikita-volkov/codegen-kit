@@ -53,14 +53,13 @@ hackageExtraDep name versionHead versionTail =
   ExtraDep name splice
   where
     splice =
-      B.uniline
-        . mconcat
-        $ [ "- ",
-            from @Text name,
-            "-",
-            B'.unsignedDecimal versionHead,
-            foldMap (mappend "." . B'.unsignedDecimal) versionTail
-          ]
+      (B.uniline . mconcat)
+        [ "- ",
+          from @Text name,
+          "-",
+          B'.unsignedDecimal versionHead,
+          foldMap (mappend "." . B'.unsignedDecimal) versionTail
+        ]
 
 githubExtraDep :: Text -> Text -> Text -> Text -> ExtraDep
 githubExtraDep name user repo commitHash =

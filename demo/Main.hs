@@ -20,6 +20,6 @@ main =
         modules
       where
         modules =
-          HaskellPackaging.inNamespace ["fmt-packs", "formatica", "iso8601", "v1"] . mconcat $
+          (HaskellPackaging.inNamespace ["fmt-packs", "formatica", "iso8601", "v1"] . mconcat)
             [ Iso8601ModelAndUtils.iso8601Modules
             ]
