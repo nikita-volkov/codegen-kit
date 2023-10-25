@@ -248,14 +248,14 @@ dependencyTuple (Dependency a b _) =
 -- ** --
 
 dependency :: Text -> Word -> [Word] -> Word -> [Word] -> [PackageLocation] -> Dependency
-dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
+dependency packageName minHead minTail maxHead maxTail packageLocations =
   Dependency
     packageName
     ( Versioning.VersionRange
         (Just (Versioning.Version minHead minTail))
         (Just (Versioning.Version maxHead maxTail))
     )
-    (fmap (.stackExtraDep) stackExtraDeps)
+    (fmap (.stackExtraDep) packageLocations)
 
 -- * --
 
