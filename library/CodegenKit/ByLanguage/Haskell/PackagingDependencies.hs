@@ -44,4 +44,4 @@ uuid =
   dependency "uuid" 1 [3] 2 [] []
 
 vector =
-  dependency "vector" 0 [12] 0 [13] []
+  dependency "vector" 0 [13] 0 [14] []
