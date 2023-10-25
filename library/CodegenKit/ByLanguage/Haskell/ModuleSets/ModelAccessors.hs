@@ -6,11 +6,11 @@ where
 
 import Coalmine.MultilineTextBuilder (Builder)
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.ByLanguage.Haskell.Dependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors.Templates as Templates
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
+import qualified CodegenKit.ByLanguage.Haskell.PackagingDependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 

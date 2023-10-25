@@ -26,10 +26,10 @@ where
 
 import qualified Coalmine.BaseExtras.List as List
 import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.ByLanguage.Haskell.Dependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.ExpFormatter as ExpFormatter
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
+import qualified CodegenKit.ByLanguage.Haskell.PackagingDependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 import qualified TextBuilderDev as B'

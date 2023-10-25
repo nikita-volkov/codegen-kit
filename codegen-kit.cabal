@@ -86,7 +86,6 @@ library
     CodegenKit.ByLanguage.Haskell.Composers.Hashable
     CodegenKit.ByLanguage.Haskell.Composers.ProductType
     CodegenKit.ByLanguage.Haskell.Composers.Stack
-    CodegenKit.ByLanguage.Haskell.Dependencies
     CodegenKit.ByLanguage.Haskell.ExpFormatter
     CodegenKit.ByLanguage.Haskell.ModuleBuilder
     CodegenKit.ByLanguage.Haskell.Modules.BaseDataTypes
@@ -98,6 +97,7 @@ library
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
     CodegenKit.ByLanguage.Haskell.Packaging
+    CodegenKit.ByLanguage.Haskell.PackagingDependencies
     CodegenKit.ByLanguage.Haskell.Snippets
     CodegenKit.ByLanguage.Java.Attoparsec
     CodegenKit.ByLanguage.Java.Builders.CompareTo
