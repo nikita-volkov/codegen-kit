@@ -252,21 +252,29 @@ dependency packageName minHead minTail maxHead maxTail stackExtraDeps =
         (Just (Versioning.Version minHead minTail))
         (Just (Versioning.Version maxHead maxTail))
     )
-    (coerce stackExtraDeps)
+    (fmap (.stackExtraDep) stackExtraDeps)
 
 -- * --
 
 -- |
 -- How to acquire the source code of the package.
-newtype PackageLocation = PackageLocation StackFileSet.ExtraDep
+data PackageLocation = PackageLocation
+  { stackExtraDep :: ~StackFileSet.ExtraDep
+  }
 
 hackagePackageLocation :: Text -> Word -> [Word] -> PackageLocation
-hackagePackageLocation =
-  coerce StackFileSet.hackageExtraDep
+hackagePackageLocation name versionHead versionTail =
+  PackageLocation
+    { stackExtraDep =
+        StackFileSet.hackageExtraDep name versionHead versionTail
+    }
 
 githubPackageLocation :: Text -> Text -> Text -> Text -> PackageLocation
-githubPackageLocation =
-  coerce StackFileSet.githubExtraDep
+githubPackageLocation name group repo commitHash =
+  PackageLocation
+    { stackExtraDep =
+        StackFileSet.githubExtraDep name group repo commitHash
+    }
 
 -- * Helpers
 
