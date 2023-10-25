@@ -83,7 +83,7 @@ spinalPackageName =
 
 newtype Version
   = Version Builder
-  deriving (BroadPrinting)
+  deriving (BroadPrinting, IsString)
 
 listVersion :: Word -> [Word] -> Version
 listVersion head tail =
