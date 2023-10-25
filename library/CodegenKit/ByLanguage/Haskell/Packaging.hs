@@ -138,14 +138,17 @@ toFileset ::
   Name ->
   -- | Synopsis.
   Text ->
+  -- | Package version.
   CabalContents.Version ->
+  -- | Stack resolver. If we want to produce a stack file that is.
+  Maybe Text ->
   Modules ->
   Fileset
-toFileset packageName synopsis version modules =
+toFileset packageName synopsis version stackResolver modules =
   mconcat
-    [ StackFileSet.fileSet (toStackExtraDeps modules),
-      toCabalFileSet packageName synopsis version modules,
-      toModulesFileSet "library" modules
+    [ toCabalFileSet packageName synopsis version modules,
+      toModulesFileSet "library" modules,
+      foldMap (\stackResolver -> StackFileSet.fileSet stackResolver (toStackExtraDeps modules)) stackResolver
     ]
 
 -- ** --

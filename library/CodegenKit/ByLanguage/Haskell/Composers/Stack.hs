@@ -19,16 +19,16 @@ import qualified TextBuilderDev as B'
 
 -- * --
 
-fileSet :: [ExtraDep] -> Fileset.Fileset
-fileSet =
-  Fileset.file "stack.yaml" . contents
+fileSet :: Text -> [ExtraDep] -> Fileset.Fileset
+fileSet resolver =
+  Fileset.file "stack.yaml" . contents resolver
 
 -- * --
 
-contents :: [ExtraDep] -> Text
-contents extraDepList =
+contents :: Text -> [ExtraDep] -> Text
+contents resolver extraDepList =
   [i|
-    resolver: nightly-2022-05-05
+    resolver: $resolver
     extra-deps:
       $extraDepsSplice
   |]

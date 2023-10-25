@@ -17,6 +17,7 @@ main =
         "fmt-packs-formatica-iso8601-v1"
         "ISO-8601 model"
         (HaskellPackaging.listVersion 0 [1])
+        (Just "nightly-2023-10-24")
         modules
       where
         modules =
