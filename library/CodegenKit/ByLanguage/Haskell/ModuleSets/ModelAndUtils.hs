@@ -64,8 +64,8 @@ modules sections =
                       modelField (FieldSpec _ lcFieldName fieldDocs (MemberType sig _) _) =
                         (lcFieldName, fieldDocs, sig)
               SumDecl sumName sumDocs variants ->
-                ModelTypesPackage.sumAndInstances sumName sumDocs $
-                  fmap constructor variants
+                ModelTypesPackage.sumAndInstances sumName sumDocs
+                  $ fmap constructor variants
                 where
                   constructor (Variant ucVariantName lcVariantName variantDocs memberTypes) =
                     (lcVariantName, ucVariantName, variantDocs, fmap modelMemberType memberTypes)
@@ -148,10 +148,10 @@ modules sections =
 
 data Section
   = Section
+      -- | Header.
       Text
-      -- ^ Header.
+      -- | Declarations.
       [Decl]
-      -- ^ Declarations.
 
 section ::
   -- | Header.
@@ -166,26 +166,26 @@ section =
 
 data Decl
   = ProductDecl
+      -- | Uppercase name.
       Text
-      -- ^ Uppercase name.
+      -- | Docs.
       Text
-      -- ^ Docs.
+      -- | Fields.
       [FieldSpec]
-      -- ^ Fields.
+      -- | Precalculated amount of fields.
       Int
-      -- ^ Precalculated amount of fields.
   | SumDecl
+      -- | Uppercase name.
       Text
-      -- ^ Uppercase name.
+      -- | Docs.
       Text
-      -- ^ Docs.
+      -- | Variants.
       [Variant]
-      -- ^ Variants.
   | AliasDecl
+      -- | Uppercase name.
       Text
-      -- ^ Uppercase name.
+      -- | Docs.
       Text
-      -- ^ Docs.
       MemberType
 
 product :: Name -> Text -> [Field] -> Decl
@@ -213,16 +213,16 @@ alias name =
 
 data FieldSpec
   = FieldSpec
+      -- | Uppercase name.
       Text
-      -- ^ Uppercase name.
+      -- | Lowercase name.
       Text
-      -- ^ Lowercase name.
+      -- | Docs.
       Text
-      -- ^ Docs.
+      -- | Field type.
       MemberType
-      -- ^ Field type.
+      -- | Field index.
       Int
-      -- ^ Field index.
 
 -- * --
 
@@ -243,14 +243,14 @@ field name docs type_ =
 
 data Variant
   = Variant
+      -- | Uppercase name.
       Text
-      -- ^ Uppercase name.
+      -- | Lowercase name.
       Text
-      -- ^ Lowercase name.
+      -- | Docs.
       Text
-      -- ^ Docs.
+      -- | Variant types.
       [MemberType]
-      -- ^ Variant types.
 
 variant :: Name -> Text -> [MemberType] -> Variant
 variant name =
@@ -262,10 +262,10 @@ variant name =
 
 data MemberType
   = MemberType
+      -- | Type for model.
       ModelTypesPackage.Type
-      -- ^ Type for model.
+      -- | Signature for accessors.
       Text
-      -- ^ Signature for accessors.
 
 -- |
 -- Non-parametric type from Prelude.
