@@ -3,7 +3,7 @@ module Tests.ByModule.ByLanguage.Haskell.Composers.Hashable where
 import Coalmine.Prelude hiding (product)
 import Coalmine.Tasty
 import CodegenKit.ByLanguage.Haskell.Composers.Hashable
-import CodegenKit.ByLanguage.Haskell.ModuleBuilder
+import CodegenKit.ByLanguage.Haskell.Composers.Module
 
 tests =
   [ eqTestCase

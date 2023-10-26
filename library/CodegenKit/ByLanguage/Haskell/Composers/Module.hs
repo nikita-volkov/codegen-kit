@@ -1,5 +1,5 @@
 -- | Small framework for automation of import-management.
-module CodegenKit.ByLanguage.Haskell.ModuleBuilder
+module CodegenKit.ByLanguage.Haskell.Composers.Module
   ( compileModule,
     Body,
     importing,

@@ -85,9 +85,9 @@ library
     CodegenKit.ByLanguage.Haskell.Composers.Exp
     CodegenKit.ByLanguage.Haskell.Composers.Haddock
     CodegenKit.ByLanguage.Haskell.Composers.Hashable
+    CodegenKit.ByLanguage.Haskell.Composers.Module
     CodegenKit.ByLanguage.Haskell.Composers.ProductType
     CodegenKit.ByLanguage.Haskell.Composers.Stack
-    CodegenKit.ByLanguage.Haskell.ModuleBuilder
     CodegenKit.ByLanguage.Haskell.Modules.BaseDataTypes
     CodegenKit.ByLanguage.Haskell.Modules.BaseOperators
     CodegenKit.ByLanguage.Haskell.Modules.BasePrelude

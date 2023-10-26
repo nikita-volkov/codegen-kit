@@ -1,7 +1,7 @@
 module CodegenKit.ByLanguage.Haskell.Composers.Hashable where
 
 import qualified Coalmine.MultilineTextBuilder as Builder
-import CodegenKit.ByLanguage.Haskell.ModuleBuilder
+import CodegenKit.ByLanguage.Haskell.Composers.Module
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (intercalate)
 
