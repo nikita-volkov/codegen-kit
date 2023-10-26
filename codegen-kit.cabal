@@ -29,12 +29,14 @@ common base-settings
     DeriveGeneric
     DeriveTraversable
     DerivingVia
+    DuplicateRecordFields
     EmptyDataDecls
     FlexibleContexts
     FlexibleInstances
     FunctionalDependencies
     GADTs
     GeneralizedNewtypeDeriving
+    ImportQualifiedPost
     InstanceSigs
     LambdaCase
     LiberalTypeSynonyms
@@ -88,6 +90,7 @@ library
     CodegenKit.ByLanguage.Haskell.Composers.Module
     CodegenKit.ByLanguage.Haskell.Composers.ProductType
     CodegenKit.ByLanguage.Haskell.Composers.Stack
+    CodegenKit.ByLanguage.Haskell.Dsls.Package
     CodegenKit.ByLanguage.Haskell.Modules.BaseDataTypes
     CodegenKit.ByLanguage.Haskell.Modules.BaseOperators
     CodegenKit.ByLanguage.Haskell.Modules.BasePrelude
