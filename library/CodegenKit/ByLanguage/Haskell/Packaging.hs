@@ -14,8 +14,8 @@ module CodegenKit.ByLanguage.Haskell.Packaging
     dependency,
 
     -- * --
-    CabalContents.Version,
-    CabalContents.listVersion,
+    Cabal.Version,
+    Cabal.listVersion,
 
     -- * --
     PackageLocation,
@@ -26,8 +26,8 @@ where
 
 import qualified Coalmine.Fileset as Fileset
 import qualified Coalmine.Name as Name
-import qualified CodegenKit.ByLanguage.Haskell.Composers.Cabal as CabalContents
-import qualified CodegenKit.ByLanguage.Haskell.Composers.Stack as StackFileSet
+import qualified CodegenKit.ByLanguage.Haskell.Composers.Cabal as Cabal
+import qualified CodegenKit.ByLanguage.Haskell.Composers.Stack as Stack
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude
 import qualified CodegenKit.Versioning as Versioning
@@ -50,7 +50,7 @@ data Modules
       -- | Package dependencies.
       !(Map Text Versioning.VersionRange)
       -- | Stack dependencies.
-      ![StackFileSet.ExtraDep]
+      ![Stack.ExtraDep]
 
 instance Semigroup Modules where
   Modules l1 l2 l3 l4 l5 <> Modules r1 r2 r3 r4 r5 =
@@ -79,20 +79,20 @@ toCabalContents ::
   Name ->
   -- | Synopsis.
   Text ->
-  CabalContents.Version ->
+  Cabal.Version ->
   Modules ->
   Text
 toCabalContents packageName synopsis version modules =
-  CabalContents.contents
-    (CabalContents.spinalPackageName packageName)
+  Cabal.contents
+    (Cabal.spinalPackageName packageName)
     synopsis
     version
     exposed
     hidden
     dependencies
   where
-    exposed = fmap CabalContents.nameListModuleRef . toList . toExposedModuleSet $ modules
-    hidden = fmap CabalContents.nameListModuleRef . toList . toHiddenModuleSet $ modules
+    exposed = fmap Cabal.nameListModuleRef . toList . toExposedModuleSet $ modules
+    hidden = fmap Cabal.nameListModuleRef . toList . toHiddenModuleSet $ modules
     dependencies =
       toDependencyList modules
         <&> \( name,
@@ -100,12 +100,12 @@ toCabalContents packageName synopsis version modules =
                  (Just (Versioning.Version minHead minTail))
                  (Just (Versioning.Version maxHead maxTail))
                ) ->
-            CabalContents.rangeDependency
-              (CabalContents.plainPackageName name)
-              (CabalContents.listVersion minHead minTail)
-              (CabalContents.listVersion maxHead maxTail)
+            Cabal.rangeDependency
+              (Cabal.plainPackageName name)
+              (Cabal.listVersion minHead minTail)
+              (Cabal.listVersion maxHead maxTail)
 
-toCabalFileSet :: Name -> Text -> CabalContents.Version -> Modules -> Fileset
+toCabalFileSet :: Name -> Text -> Cabal.Version -> Modules -> Fileset
 toCabalFileSet packageName synopsis version modules =
   Fileset.file filePath contents
   where
@@ -127,7 +127,7 @@ toModulesFileSet srcDirPath (Modules files _ _ _ _) =
         (srcDirPath <> filePath)
         (render [])
 
-toStackExtraDeps :: Modules -> [StackFileSet.ExtraDep]
+toStackExtraDeps :: Modules -> [Stack.ExtraDep]
 toStackExtraDeps (Modules _ _ _ _ x) =
   x
 
@@ -139,7 +139,7 @@ toFileset ::
   -- | Synopsis.
   Text ->
   -- | Package version.
-  CabalContents.Version ->
+  Cabal.Version ->
   -- | Stack resolver. If we want to produce a stack file that is.
   Maybe Text ->
   Modules ->
@@ -148,7 +148,7 @@ toFileset packageName synopsis version stackResolver modules =
   mconcat
     [ toCabalFileSet packageName synopsis version modules,
       toModulesFileSet "library" modules,
-      foldMap (\stackResolver -> StackFileSet.fileSet stackResolver (toStackExtraDeps modules)) stackResolver
+      foldMap (\stackResolver -> Stack.fileSet stackResolver (toStackExtraDeps modules)) stackResolver
     ]
 
 -- ** --
@@ -237,7 +237,7 @@ data Dependency
       -- | Package version bounds.
       !Versioning.VersionRange
       -- | Extra dependencies for stack.
-      ![StackFileSet.ExtraDep]
+      ![Stack.ExtraDep]
 
 -- ** --
 
@@ -262,21 +262,21 @@ dependency packageName minHead minTail maxHead maxTail packageLocations =
 -- |
 -- How to acquire the source code of the package.
 data PackageLocation = PackageLocation
-  { stackExtraDep :: ~StackFileSet.ExtraDep
+  { stackExtraDep :: ~Stack.ExtraDep
   }
 
 hackagePackageLocation :: Text -> Word -> [Word] -> PackageLocation
 hackagePackageLocation name versionHead versionTail =
   PackageLocation
     { stackExtraDep =
-        StackFileSet.hackageExtraDep name versionHead versionTail
+        Stack.hackageExtraDep name versionHead versionTail
     }
 
 githubPackageLocation :: Text -> Text -> Text -> Text -> PackageLocation
 githubPackageLocation name group repo commitHash =
   PackageLocation
     { stackExtraDep =
-        StackFileSet.githubExtraDep name group repo commitHash
+        Stack.githubExtraDep name group repo commitHash
     }
 
 -- * Helpers
