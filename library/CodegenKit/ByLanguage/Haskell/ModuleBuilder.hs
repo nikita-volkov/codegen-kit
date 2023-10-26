@@ -3,6 +3,7 @@ module CodegenKit.ByLanguage.Haskell.ModuleBuilder
   ( compileModule,
     Body,
     importing,
+    importedSymbol,
     splice,
     indent,
     intercalate,
@@ -114,6 +115,16 @@ importing moduleRef memberName cont =
           Body compileNested ->
             compileNested resolveModule
               & second (pure moduleRef <>)
+
+-- | Produce code with a symbol reference that is determined based on the imports and produces requirements for them.
+importedSymbol ::
+  -- | Fully qualified module reference.
+  Text ->
+  -- | Member name.
+  Text ->
+  Body
+importedSymbol moduleRef memberName =
+  importing moduleRef memberName $ splice . to
 
 splice :: Builder -> Body
 splice builder =
