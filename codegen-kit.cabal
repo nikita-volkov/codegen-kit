@@ -82,11 +82,11 @@ library
   hs-source-dirs:  library
   exposed-modules:
     CodegenKit.ByLanguage.Haskell.Composers.Cabal
+    CodegenKit.ByLanguage.Haskell.Composers.Exp
     CodegenKit.ByLanguage.Haskell.Composers.Haddock
     CodegenKit.ByLanguage.Haskell.Composers.Hashable
     CodegenKit.ByLanguage.Haskell.Composers.ProductType
     CodegenKit.ByLanguage.Haskell.Composers.Stack
-    CodegenKit.ByLanguage.Haskell.ExpFormatter
     CodegenKit.ByLanguage.Haskell.ModuleBuilder
     CodegenKit.ByLanguage.Haskell.Modules.BaseDataTypes
     CodegenKit.ByLanguage.Haskell.Modules.BaseOperators
@@ -121,8 +121,8 @@ test-suite test
   hs-source-dirs: test
   main-is:        Main.hs
   other-modules:
+    Tests.ByModule.ByLanguage.Haskell.Composers.Exp
     Tests.ByModule.ByLanguage.Haskell.Composers.Hashable
-    Tests.HaskellExpFormatter
 
   build-depends:
     , coalmine
