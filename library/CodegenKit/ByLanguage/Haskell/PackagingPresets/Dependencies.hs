@@ -1,4 +1,4 @@
-module CodegenKit.ByLanguage.Haskell.PackagingDependencies where
+module CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies where
 
 import CodegenKit.ByLanguage.Haskell.Packaging
 import CodegenKit.Prelude

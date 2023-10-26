@@ -10,7 +10,7 @@ import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePr
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors.Templates as Templates
 import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
-import qualified CodegenKit.ByLanguage.Haskell.PackagingDependencies as Dependencies
+import qualified CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 

@@ -97,7 +97,7 @@ library
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
     CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
     CodegenKit.ByLanguage.Haskell.Packaging
-    CodegenKit.ByLanguage.Haskell.PackagingDependencies
+    CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies
     CodegenKit.ByLanguage.Haskell.Snippets
     CodegenKit.ByLanguage.Java.Attoparsec
     CodegenKit.ByLanguage.Java.Builders.CompareTo

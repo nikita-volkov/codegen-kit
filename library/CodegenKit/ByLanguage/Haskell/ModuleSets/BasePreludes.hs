@@ -14,7 +14,7 @@ where
 import qualified Coalmine.MultilineTextBuilder as B
 import qualified Coalmine.Name as Name
 import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
-import qualified CodegenKit.ByLanguage.Haskell.PackagingDependencies as Dependencies
+import qualified CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies as Dependencies
 import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
 import CodegenKit.Prelude hiding (all)
 import qualified TextBuilderDev as B'
