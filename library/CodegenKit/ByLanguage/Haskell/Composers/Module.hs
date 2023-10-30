@@ -12,6 +12,8 @@ where
 
 import Coalmine.MultilineTextBuilder (Builder)
 import Coalmine.MultilineTextBuilder qualified as Builder
+import CodegenKit.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
+import CodegenKit.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
 import CodegenKit.Prelude hiding (intercalate)
 import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
@@ -39,33 +41,6 @@ compileModule moduleName unqualifiedImports aliasMapList (Body compileBody) =
       Map.fromList aliasMapList
     unqualifiedSet =
       Set.fromList unqualifiedImports
-    importsSplice =
-      Builder.intercalate "\n" compiledImportList
-      where
-        compiledImportList =
-          compiledUnqualifiedImportList <> compiledQualifiedImportList
-        compiledQualifiedImportList =
-          requestedImports
-            & toList
-            & nubSort
-            & fmap compileImport
-            & join
-          where
-            compileImport imported =
-              if Set.member imported unqualifiedSet
-                then []
-                else pure $ case Map.lookup imported aliasMap of
-                  Just alias ->
-                    [j|import qualified $imported as $alias|]
-                  Nothing ->
-                    [j|import qualified $imported|]
-        compiledUnqualifiedImportList =
-          unqualifiedImports
-            & nubSort
-            & fmap compileImport
-          where
-            compileImport imported =
-              [j|import $imported|]
     (bodySplice, requestedImports) =
       compileBody resolveModule
       where
@@ -75,6 +50,34 @@ compileModule moduleName unqualifiedImports aliasMapList (Body compileBody) =
             else case Map.lookup imported aliasMap of
               Just alias -> alias
               Nothing -> imported
+    importsSplice =
+      CodeTemplate.compileCodeTemplate
+        CodeTemplate.CodeStyle
+          { importQualifiedPost = False
+          }
+        ImportsBlockTemplate.ImportsBlock
+          { unqualified =
+              ImportsBlockTemplate.UnqualifiedImport <$> unqualifiedImports,
+            qualified =
+              requestedImports
+                & toList
+                & foldMap
+                  ( \qualifiedName ->
+                      if Set.member qualifiedName unqualifiedSet
+                        then []
+                        else pure $ case Map.lookup qualifiedName aliasMap of
+                          Just alias ->
+                            ImportsBlockTemplate.QualifiedImport
+                              { qualifiedName,
+                                alias
+                              }
+                          Nothing ->
+                            ImportsBlockTemplate.QualifiedImport
+                              { qualifiedName,
+                                alias = ""
+                              }
+                  )
+          }
 
 -- | Module contents.
 --

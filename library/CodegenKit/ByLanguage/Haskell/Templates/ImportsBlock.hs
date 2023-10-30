@@ -12,7 +12,7 @@ data ImportsBlock = ImportsBlock
   }
 
 instance CodeTemplate ImportsBlock where
-  codeSplice style ImportsBlock {..} =
+  compileCodeTemplate style ImportsBlock {..} =
     TextBlock.intercalate "\n" compiledImportList
     where
       compiledImportList =
@@ -20,11 +20,11 @@ instance CodeTemplate ImportsBlock where
       compiledQualifiedImportList =
         qualified
           & nubSort
-          & fmap (codeSplice style)
+          & fmap (compileCodeTemplate style)
       compiledUnqualifiedImportList =
         unqualified
           & nubSort
-          & fmap (codeSplice style)
+          & fmap (compileCodeTemplate style)
 
 newtype UnqualifiedImport = UnqualifiedImport
   { qualifiedName :: Text
@@ -32,7 +32,7 @@ newtype UnqualifiedImport = UnqualifiedImport
   deriving (Ord, Eq)
 
 instance CodeTemplate UnqualifiedImport where
-  codeSplice _ UnqualifiedImport {..} =
+  compileCodeTemplate _ UnqualifiedImport {..} =
     [j|import $qualifiedName|]
 
 data QualifiedImport = QualifiedImport
@@ -43,7 +43,7 @@ data QualifiedImport = QualifiedImport
   deriving (Ord, Eq)
 
 instance CodeTemplate QualifiedImport where
-  codeSplice style QualifiedImport {..} =
+  compileCodeTemplate style QualifiedImport {..} =
     if Text.null alias
       then
         if style.importQualifiedPost

@@ -6,5 +6,6 @@ data CodeStyle = CodeStyle
   { importQualifiedPost :: Bool
   }
 
+-- | Class for parameters of templates.
 class CodeTemplate a where
-  codeSplice :: CodeStyle -> a -> Splice
+  compileCodeTemplate :: CodeStyle -> a -> Splice
