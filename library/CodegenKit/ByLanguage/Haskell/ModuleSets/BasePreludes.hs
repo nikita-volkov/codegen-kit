@@ -11,13 +11,9 @@ module CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes
   )
 where
 
-import qualified Coalmine.MultilineTextBuilder as B
-import qualified Coalmine.Name as Name
-import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
-import qualified CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies as Dependencies
-import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
+import CodegenKit.ByLanguage.Haskell.Packaging qualified as Packaging
+import CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies qualified as Dependencies
 import CodegenKit.Prelude hiding (all)
-import qualified TextBuilderDev as B'
 
 -- * --
 

@@ -9,13 +9,12 @@ module CodegenKit.ByLanguage.Haskell.Composers.Stack
   )
 where
 
-import qualified Coalmine.Fileset as Fileset
+import Coalmine.Fileset qualified as Fileset
 import Coalmine.MultilineTextBuilder (Builder)
-import qualified Coalmine.MultilineTextBuilder as B
-import qualified Coalmine.Name as Name
-import CodegenKit.Prelude hiding (Version)
-import qualified Data.List.Extra as ListExtra
-import qualified TextBuilderDev as B'
+import Coalmine.MultilineTextBuilder qualified as B
+import CodegenKit.Prelude
+import Data.List.Extra qualified as ListExtra
+import TextBuilderDev qualified as B'
 
 -- * --
 

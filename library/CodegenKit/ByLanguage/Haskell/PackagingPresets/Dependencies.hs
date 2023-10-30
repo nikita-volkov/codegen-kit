@@ -1,7 +1,8 @@
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
+
 module CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies where
 
 import CodegenKit.ByLanguage.Haskell.Packaging
-import CodegenKit.Prelude
 
 base =
   dependency "base" 4 [12] 5 [] []

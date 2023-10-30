@@ -1,10 +1,10 @@
 module CodegenKit.ByLanguage.Haskell.Snippets where
 
 import Coalmine.MultilineTextBuilder
-import qualified Coalmine.Name as Name
+import Coalmine.Name qualified as Name
 import CodegenKit.Prelude hiding (intercalate, null)
-import qualified Data.Text as Text
-import qualified TextBuilderDev as B'
+import Data.Text qualified as Text
+import TextBuilderDev qualified as B'
 
 -- |
 -- Multiline Haddock in the prefix position.
@@ -58,10 +58,11 @@ namespace =
 
 moduleRef :: [Name] -> Name -> Builder
 moduleRef nsNameList moduleName =
-  uniline . mconcat $
-    [ foldMap (flip mappend "." . Name.toUpperCamelCaseTextBuilder) nsNameList,
-      Name.toUpperCamelCaseTextBuilder moduleName
-    ]
+  uniline
+    . mconcat
+    $ [ foldMap (flip mappend "." . Name.toUpperCamelCaseTextBuilder) nsNameList,
+        Name.toUpperCamelCaseTextBuilder moduleName
+      ]
 
 -- * --
 
@@ -128,9 +129,10 @@ recordFieldDecl haddock fieldName bang fieldType =
 appendNewlineIfNotNull :: Builder -> Builder
 appendNewlineIfNotNull builder = if null builder then mempty else builder <> "\n"
 
+newtypeRecordDecl :: Builder -> Builder -> Builder -> Builder -> Builder -> Builder
 newtypeRecordDecl typeName conName fieldHaddock fieldName fieldType =
-  indent 2 $
-    mconcat
+  indent 2
+    $ mconcat
       [ "newtype ",
         typeName,
         " = ",
@@ -139,9 +141,10 @@ newtypeRecordDecl typeName conName fieldHaddock fieldName fieldType =
         recordFieldsBlock [recordFieldDecl fieldHaddock fieldName "" fieldType]
       ]
 
+dataRecordDecl :: Builder -> Builder -> [Builder] -> Builder
 dataRecordDecl typeName conName fields =
-  indent 2 $
-    mconcat
+  indent 2
+    $ mconcat
       [ "data ",
         typeName,
         " = ",
@@ -150,9 +153,10 @@ dataRecordDecl typeName conName fields =
         recordFieldsBlock fields
       ]
 
+enumDecl :: Builder -> [Builder] -> Builder
 enumDecl typeName options =
-  indent 2 $
-    mconcat
+  indent 2
+    $ mconcat
       [ "data ",
         typeName,
         "\n= ",

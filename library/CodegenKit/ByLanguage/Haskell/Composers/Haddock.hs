@@ -5,12 +5,8 @@
 -- | Composer DSL for Haddock.
 module CodegenKit.ByLanguage.Haskell.Composers.Haddock where
 
-import qualified Coalmine.ContainersExtras.Seq as Seq
 import Coalmine.MultilineTextBuilder (Builder)
 import CodegenKit.Prelude
-import qualified Data.Sequence as Seq
-import qualified Data.Text as Text
-import qualified TextBuilderDev as TextBuilder
 
 compileHaddock :: [Block] -> TextBuilder
 compileHaddock =

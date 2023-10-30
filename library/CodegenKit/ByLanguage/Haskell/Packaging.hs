@@ -24,14 +24,14 @@ module CodegenKit.ByLanguage.Haskell.Packaging
   )
 where
 
-import qualified Coalmine.Fileset as Fileset
-import qualified Coalmine.Name as Name
-import qualified CodegenKit.ByLanguage.Haskell.Composers.Cabal as Cabal
-import qualified CodegenKit.ByLanguage.Haskell.Composers.Stack as Stack
-import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
+import Coalmine.Fileset qualified as Fileset
+import Coalmine.Name qualified as Name
+import CodegenKit.ByLanguage.Haskell.Composers.Cabal qualified as Cabal
+import CodegenKit.ByLanguage.Haskell.Composers.Stack qualified as Stack
+import CodegenKit.ByLanguage.Haskell.Snippets qualified as Snippets
 import CodegenKit.Prelude
-import qualified CodegenKit.Versioning as Versioning
-import qualified Data.Map.Strict as Map
+import CodegenKit.Versioning qualified as Versioning
+import Data.Map.Strict qualified as Map
 
 -- * --
 
@@ -95,15 +95,15 @@ toCabalContents packageName synopsis version modules =
     hidden = fmap Cabal.nameListModuleRef . toList . toHiddenModuleSet $ modules
     dependencies =
       toDependencyList modules
-        <&> \( name,
-               Versioning.VersionRange
-                 (Just (Versioning.Version minHead minTail))
-                 (Just (Versioning.Version maxHead maxTail))
-               ) ->
-            Cabal.rangeDependency
-              (Cabal.plainPackageName name)
-              (Cabal.listVersion minHead minTail)
-              (Cabal.listVersion maxHead maxTail)
+        <&> \(name, versionRange) -> case versionRange of
+          Versioning.VersionRange
+            (Just (Versioning.Version minHead minTail))
+            (Just (Versioning.Version maxHead maxTail)) ->
+              Cabal.rangeDependency
+                (Cabal.plainPackageName name)
+                (Cabal.listVersion minHead minTail)
+                (Cabal.listVersion maxHead maxTail)
+          _ -> error "TODO"
 
 toCabalFileSet :: Name -> Text -> Cabal.Version -> Modules -> Fileset
 toCabalFileSet packageName synopsis version modules =

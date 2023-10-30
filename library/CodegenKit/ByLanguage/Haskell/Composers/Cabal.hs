@@ -23,10 +23,10 @@ module CodegenKit.ByLanguage.Haskell.Composers.Cabal
 where
 
 import Coalmine.MultilineTextBuilder (Builder)
-import qualified Coalmine.MultilineTextBuilder as B
-import qualified Coalmine.Name as Name
-import CodegenKit.Prelude hiding (Version)
-import qualified TextBuilderDev as B'
+import Coalmine.MultilineTextBuilder qualified as B
+import Coalmine.Name qualified as Name
+import CodegenKit.Prelude
+import TextBuilderDev qualified as B'
 
 -- * --
 

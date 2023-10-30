@@ -11,11 +11,10 @@ module CodegenKit.ByLanguage.Haskell.Composers.Module
 where
 
 import Coalmine.MultilineTextBuilder (Builder)
-import qualified Coalmine.MultilineTextBuilder as Builder
+import Coalmine.MultilineTextBuilder qualified as Builder
 import CodegenKit.Prelude hiding (intercalate)
-import qualified Data.Map.Strict as Map
-import qualified Data.Set as Set
-import qualified Data.Text as Text
+import Data.Map.Strict qualified as Map
+import Data.Set qualified as Set
 
 compileModule ::
   -- | Module name.

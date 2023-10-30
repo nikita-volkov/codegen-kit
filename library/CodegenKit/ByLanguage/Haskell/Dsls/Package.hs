@@ -1,17 +1,12 @@
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE NoFieldSelectors #-}
 
-module CodegenKit.ByLanguage.Haskell.Dsls.Package
-  (
-  )
-where
+module CodegenKit.ByLanguage.Haskell.Dsls.Package where
 
-import Coalmine.Prelude hiding (Dependencies)
+import Coalmine.Prelude
 import CodegenKit.ByLanguage.Haskell.Composers.Exp qualified as Exp
 import CodegenKit.Dependencies (Dependencies)
-import CodegenKit.Dependencies qualified as Dependencies
 import CodegenKit.Versioning (VersionRange)
-import CodegenKit.Versioning qualified as VersionRange
 import Data.Set qualified as Set
 
 toFileset :: Package -> Fileset

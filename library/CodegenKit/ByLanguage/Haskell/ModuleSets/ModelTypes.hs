@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
+
 module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
   ( -- * --
     moduleName,
@@ -24,15 +26,13 @@ module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes
   )
 where
 
-import qualified Coalmine.BaseExtras.List as List
-import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.ByLanguage.Haskell.Composers.Exp as ExpFormatter
-import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
-import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
-import qualified CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies as Dependencies
-import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
+import Coalmine.BaseExtras.List qualified as List
+import Coalmine.MultilineTextBuilder qualified as B
+import CodegenKit.ByLanguage.Haskell.Packaging qualified as Packaging
+import CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies qualified as Dependencies
+import CodegenKit.ByLanguage.Haskell.Snippets qualified as Snippets
 import CodegenKit.Prelude hiding (product, sum)
-import qualified TextBuilderDev as B'
+import TextBuilderDev qualified as B'
 
 -- * --
 
@@ -77,10 +77,6 @@ content sections ns =
   where
     moduleRef =
       Snippets.moduleRef ns moduleName
-    operatorsPreludeRef =
-      Snippets.moduleRef ns BasePreludesPackage.operatorsName
-    allPreludeRef =
-      Snippets.moduleRef ns BasePreludesPackage.allName
     content =
       sections
         & coerce
@@ -323,6 +319,7 @@ enumConstructorIsLabelInstance enumType variantName constructorName =
           $constructorName
     |]
 
+enumPredicateIsLabelInstance :: Text -> Text -> Text -> Decl
 enumPredicateIsLabelInstance enumType variantName constructorName =
   Decl
     [i|
@@ -354,7 +351,7 @@ sumHashableInstance sumName variants =
               B.uniline
                 . mconcat
                 $ [ "(",
-                    B'.decimal variantIndex,
+                    B'.decimal @Int variantIndex,
                     " :: ",
                     toTextBuilder preludeAlias,
                     ".Int)"
@@ -474,6 +471,7 @@ boxedVectorAlias = "BVec"
 unboxedVectorAlias :: B.Builder
 unboxedVectorAlias = "UVec"
 
+hashSaltExp :: [B.Builder] -> B.Builder
 hashSaltExp extends =
   "salt" <> foldMap extendCode extends
   where
