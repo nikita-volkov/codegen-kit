@@ -73,6 +73,7 @@ library
   import:          base-settings
   hs-source-dirs:  library
   exposed-modules:
+    CodegenKit.ByLanguage.Haskell.CodeTemplate
     CodegenKit.ByLanguage.Haskell.Composers.Cabal
     CodegenKit.ByLanguage.Haskell.Composers.Exp
     CodegenKit.ByLanguage.Haskell.Composers.Haddock
