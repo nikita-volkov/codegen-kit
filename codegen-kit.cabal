@@ -20,6 +20,7 @@ common base-settings
     NoImplicitPrelude
     NoMonomorphismRestriction
     BangPatterns
+    BlockArguments
     ConstraintKinds
     DataKinds
     DefaultSignatures
@@ -118,17 +119,19 @@ library
     , text-builder-dev
 
 test-suite test
-  import:         base-settings
-  type:           exitcode-stdio-1.0
-  hs-source-dirs: test
-  main-is:        Main.hs
+  import:             base-settings
+  type:               exitcode-stdio-1.0
+  hs-source-dirs:     test
+  main-is:            Main.hs
   other-modules:
-    Tests.ByModule.ByLanguage.Haskell.Composers.Exp
-    Tests.ByModule.ByLanguage.Haskell.Composers.Hashable
+    CodegenKit.ByLanguage.Haskell.Composers.ExpSpec
+    CodegenKit.ByLanguage.Haskell.Composers.HashableSpec
 
+  build-tool-depends: hspec-discover:hspec-discover >=2.11.7 && <3
   build-depends:
     , coalmine
     , codegen-kit
+    , hspec
     , rerebase <2
 
 test-suite demo

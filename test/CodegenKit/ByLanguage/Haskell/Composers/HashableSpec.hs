@@ -1,14 +1,21 @@
-module Tests.ByModule.ByLanguage.Haskell.Composers.Hashable where
+module CodegenKit.ByLanguage.Haskell.Composers.HashableSpec where
 
 import Coalmine.Prelude hiding (product)
-import Coalmine.Tasty
 import CodegenKit.ByLanguage.Haskell.Composers.Hashable
 import CodegenKit.ByLanguage.Haskell.Composers.Module
+import Test.Hspec
 
-tests =
-  [ eqTestCase
-      "Local product"
-      [i|
+spec = do
+  describe "Local product" do
+    it "Should print as expected"
+      $ shouldBe
+        ( compileModule
+            "A"
+            ["Prelude"]
+            [("Data.Hashable", "Hashable")]
+            (product "B" 3)
+        )
+        [i|
         module A where
           
         import Prelude
@@ -21,15 +28,19 @@ tests =
               & flip Hashable.hashWithSalt b
               & flip Hashable.hashWithSalt c
       |]
-      ( compileModule
-          "A"
-          ["Prelude"]
-          [("Data.Hashable", "Hashable")]
-          (product "B" 3)
-      ),
-    eqTestCase
-      "Imported product"
-      [i|
+
+  describe "Imported product" do
+    it "Should print as expected"
+      $ shouldBe
+        ( compileModule
+            "A"
+            ["Prelude"]
+            [ ("Data.Hashable", "Hashable"),
+              ("Our.Namespace", "OurNamespace")
+            ]
+            (importing "Our.Namespace" "B" (\b -> product b 3))
+        )
+        [i|
         module A where
           
         import Prelude
@@ -43,12 +54,3 @@ tests =
               & flip Hashable.hashWithSalt b
               & flip Hashable.hashWithSalt c
       |]
-      ( compileModule
-          "A"
-          ["Prelude"]
-          [ ("Data.Hashable", "Hashable"),
-            ("Our.Namespace", "OurNamespace")
-          ]
-          (importing "Our.Namespace" "B" (\b -> product b 3))
-      )
-  ]
