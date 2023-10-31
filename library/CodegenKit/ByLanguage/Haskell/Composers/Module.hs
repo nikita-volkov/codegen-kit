@@ -53,7 +53,9 @@ compileModule moduleName unqualifiedImports aliasMapList (Body compileBody) =
     importsSplice =
       CodeTemplate.compileCodeTemplate
         CodeTemplate.CodeStyle
-          { importQualifiedPost = False
+          { importQualifiedPost = False,
+            overloadedRecordDot = False,
+            strictData = False
           }
         ImportsBlockTemplate.ImportsBlock
           { unqualified =

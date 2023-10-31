@@ -3,7 +3,9 @@ module CodegenKit.ByLanguage.Haskell.CodeTemplate where
 import Coalmine.Prelude
 
 data CodeStyle = CodeStyle
-  { importQualifiedPost :: Bool
+  { importQualifiedPost :: Bool,
+    overloadedRecordDot :: Bool,
+    strictData :: Bool
   }
 
 -- | Class for parameters of templates.
