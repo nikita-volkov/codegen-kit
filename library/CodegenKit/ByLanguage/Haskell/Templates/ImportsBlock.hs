@@ -26,14 +26,19 @@ instance CodeTemplate ImportsBlock where
           & nubSort
           & fmap (compileCodeTemplate style)
 
-newtype UnqualifiedImport = UnqualifiedImport
-  { qualifiedName :: Text
+data UnqualifiedImport = UnqualifiedImport
+  { qualifiedName :: Text,
+    symbols :: [Text]
   }
   deriving (Ord, Eq)
 
 instance CodeTemplate UnqualifiedImport where
   compileCodeTemplate _ UnqualifiedImport {..} =
-    [j|import $qualifiedName|]
+    [j|import $qualifiedName ($symbolsSplice)|]
+    where
+      symbolsSplice =
+        symbols
+          & Text.intercalate ", "
 
 data QualifiedImport = QualifiedImport
   { qualifiedName :: Text,
