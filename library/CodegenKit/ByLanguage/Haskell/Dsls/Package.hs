@@ -13,6 +13,7 @@ import CodegenKit.Dependencies (Dependencies)
 import CodegenKit.Versioning (VersionRange)
 import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
+import Data.Text qualified as Text
 
 toFileset :: Package -> Fileset
 toFileset =
@@ -25,10 +26,14 @@ package =
   error "TODO"
 
 -- | Package component. Library, executable, test.
-data Component
+data Component = Component
+  { exposedModules :: Set Text,
+    otherModules :: Set Text
+  }
 
 data Module = Module
   { path :: Path,
+    name :: Text,
     extensions :: Set Text,
     dependencies :: Dependencies,
     content :: CodeTemplate.CodeStyle -> Text
@@ -48,14 +53,20 @@ module_ namespace aliasMapList code =
   where
     path =
       Path.addExtension "hs" . foldMap (fromString . to) $ namespace
+    name =
+      Text.intercalate "." namespace
     extensions =
       code.extensions
     dependencies =
       code.dependencies
     content style =
-      to @Text
-        $ importsSplice
-        <> error "TODO: add body and head"
+      [i|
+        module $name where
+
+        $importsSplice
+
+        $bodySplice
+      |]
       where
         importsSplice =
           code.imports
@@ -73,16 +84,22 @@ module_ namespace aliasMapList code =
                   ImportsBlockTemplate.ImportsBlock {..}
               )
             & CodeTemplate.compileCodeTemplate style
+        aliasMap =
+          Map.fromList aliasMapList
+        bodySplice =
+          code.splice style alias
           where
-            aliasMap =
-              Map.fromList aliasMapList
+            alias qualified =
+              case Map.lookup qualified aliasMap of
+                Just alias -> alias
+                Nothing -> qualified
 
 data Code = Code
   { extensions :: Set Text,
     dependencies :: Dependencies,
     -- | Modules and symbols that are requested to be imported.
     imports :: Map Text (Set Text),
-    splice :: (Text -> Text) -> Splice
+    splice :: CodeTemplate.CodeStyle -> (Text -> Text) -> Splice
   }
 
 instance Semigroup Code where
@@ -109,7 +126,7 @@ expCode exp =
     { extensions = exp.extensions,
       dependencies = exp.dependencies,
       imports = exp.imports,
-      splice = Exp.ungroupedExp . exp.baseExp
+      splice = \style -> Exp.ungroupedExp . exp.baseExp style
     }
 
 -- | For explicitly adding dependencies to code.
@@ -127,7 +144,7 @@ data Exp = Exp
     dependencies :: Dependencies,
     -- | Modules that are requested to be imported.
     imports :: Map Text (Set Text),
-    baseExp :: (Text -> Text) -> Exp.Exp
+    baseExp :: CodeTemplate.CodeStyle -> (Text -> Text) -> Exp.Exp
   }
 
 refExp ::
@@ -142,7 +159,7 @@ refExp dependency moduleName symbolName =
     { extensions = mempty,
       dependencies = foldMap (.dependencies) dependency,
       imports = Map.singleton moduleName (Set.singleton symbolName),
-      baseExp = \deref -> Exp.reference (deref moduleName) symbolName
+      baseExp = \_ deref -> Exp.reference (deref moduleName) symbolName
     }
 
 data Dependency = Dependency
