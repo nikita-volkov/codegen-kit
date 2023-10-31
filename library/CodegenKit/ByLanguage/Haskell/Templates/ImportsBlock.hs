@@ -28,17 +28,21 @@ instance CodeTemplate ImportsBlock where
 
 data UnqualifiedImport = UnqualifiedImport
   { qualifiedName :: Text,
-    symbols :: [Text]
+    symbols :: Maybe [Text]
   }
   deriving (Ord, Eq)
 
 instance CodeTemplate UnqualifiedImport where
   compileCodeTemplate _ UnqualifiedImport {..} =
-    [j|import $qualifiedName ($symbolsSplice)|]
-    where
-      symbolsSplice =
-        symbols
-          & Text.intercalate ", "
+    case symbols of
+      Just symbols ->
+        [j|import $qualifiedName ($symbolsSplice)|]
+        where
+          symbolsSplice =
+            symbols
+              & Text.intercalate ", "
+      Nothing ->
+        [j|import $qualifiedName|]
 
 data QualifiedImport = QualifiedImport
   { qualifiedName :: Text,

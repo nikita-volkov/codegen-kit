@@ -62,7 +62,7 @@ compileModule moduleName unqualifiedImports aliasMapList (Body compileBody) =
               unqualifiedImports
                 & fmap
                   ( \qualifiedName ->
-                      ImportsBlockTemplate.UnqualifiedImport {qualifiedName, symbols = []}
+                      ImportsBlockTemplate.UnqualifiedImport {qualifiedName, symbols = Nothing}
                   ),
             qualified =
               requestedImports

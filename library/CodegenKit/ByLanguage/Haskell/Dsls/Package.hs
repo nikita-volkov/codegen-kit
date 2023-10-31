@@ -64,7 +64,7 @@ module_ namespace aliasMapList code =
               ( \(name, symbols) ->
                   case Map.lookup name aliasMap of
                     Nothing ->
-                      Left (ImportsBlockTemplate.UnqualifiedImport name (Set.toList symbols))
+                      Left (ImportsBlockTemplate.UnqualifiedImport name (Just (Set.toList symbols)))
                     Just alias ->
                       Right (ImportsBlockTemplate.QualifiedImport name alias)
               )
