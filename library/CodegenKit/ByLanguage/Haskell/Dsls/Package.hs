@@ -120,6 +120,24 @@ instance Monoid Code where
         splice = mempty
       }
 
+importing ::
+  -- | Module name.
+  Text ->
+  -- | Symbol name.
+  Text ->
+  (Text -> Splice) ->
+  Code
+importing moduleName symbolName symbolCont =
+  Code
+    { extensions = mempty,
+      dependencies = mempty,
+      imports = Map.singleton moduleName (Set.singleton symbolName),
+      splice = \_ deref ->
+        symbolCont case deref moduleName of
+          "" -> symbolName
+          prefix -> mconcat [prefix, ".", symbolName]
+    }
+
 expCode :: Exp -> Code
 expCode exp =
   Code
