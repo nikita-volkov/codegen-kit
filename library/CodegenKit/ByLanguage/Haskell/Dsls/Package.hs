@@ -165,14 +165,14 @@ data Exp = Exp
     baseExp :: CodeTemplate.CodeStyle -> (Text -> Text) -> Exp.Exp
   }
 
-refExp ::
+importedExp ::
   Maybe Dependency ->
   -- | Module name.
   Text ->
   -- | Symbol name.
   Text ->
   Exp
-refExp dependency moduleName symbolName =
+importedExp dependency moduleName symbolName =
   Exp
     { extensions = mempty,
       dependencies = foldMap (.dependencies) dependency,
