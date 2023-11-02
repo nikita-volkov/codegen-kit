@@ -1,6 +1,5 @@
 module CodegenKit.ByLanguage.Haskell.Templates.ImportsBlock where
 
-import Coalmine.EvenSimplerPaths qualified as Path
 import Coalmine.MultilineTextBuilder qualified as TextBlock
 import Coalmine.Prelude
 import CodegenKit.ByLanguage.Haskell.CodeTemplate

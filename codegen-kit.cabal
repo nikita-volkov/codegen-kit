@@ -80,7 +80,6 @@ library
     CodegenKit.ByLanguage.Haskell.Composers.Haddock
     CodegenKit.ByLanguage.Haskell.Composers.Hashable
     CodegenKit.ByLanguage.Haskell.Composers.Module
-    CodegenKit.ByLanguage.Haskell.Composers.ProductType
     CodegenKit.ByLanguage.Haskell.Composers.Stack
     CodegenKit.ByLanguage.Haskell.Dsls.Package
     CodegenKit.ByLanguage.Haskell.Modules.BaseDataTypes
@@ -132,7 +131,6 @@ test-suite test
     , coalmine
     , codegen-kit
     , hspec
-    , rerebase <2
 
 test-suite demo
   import:         base-settings
@@ -143,4 +141,3 @@ test-suite demo
   build-depends:
     , coalmine
     , codegen-kit
-    , rerebase

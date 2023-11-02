@@ -1,13 +1,13 @@
 module Main where
 
-import qualified Coalmine.Fileset as Fileset
+import Coalmine.Fileset qualified as Fileset
 import Coalmine.Prelude
-import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
-import qualified CodegenKit.ByLanguage.Haskell.Packaging as HaskellPackaging
-import qualified Demo.SamplesFor.ModelAndUtils.Iso8601 as Iso8601ModelAndUtils
+import CodegenKit.ByLanguage.Haskell.Packaging qualified as HaskellPackaging
+import Demo.SamplesFor.ModelAndUtils.Iso8601 qualified as Iso8601ModelAndUtils
 
 -- * --
 
+main :: IO ()
 main =
   do
     Fileset.write . Fileset.inDir "demo-output" $ fileset

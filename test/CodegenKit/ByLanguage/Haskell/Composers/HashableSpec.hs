@@ -5,6 +5,7 @@ import CodegenKit.ByLanguage.Haskell.Composers.Hashable
 import CodegenKit.ByLanguage.Haskell.Composers.Module
 import Test.Hspec
 
+spec :: Spec
 spec = do
   describe "Local product" do
     it "Should print as expected"

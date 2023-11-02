@@ -27,16 +27,12 @@ module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
   )
 where
 
-import qualified Coalmine.BaseExtras.List as List
-import qualified Coalmine.MultilineTextBuilder as B
-import qualified Coalmine.Name as Name
-import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors as ModelAccessorsPackage
-import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
-import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
-import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
+import Coalmine.Name qualified as Name
+import CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors qualified as ModelAccessorsPackage
+import CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes qualified as ModelTypesPackage
+import CodegenKit.ByLanguage.Haskell.Packaging qualified as Packaging
 import CodegenKit.Prelude hiding (Product, Sum, product, sum)
-import qualified Data.Map.Strict as Map
-import qualified TextBuilderDev as B'
+import Data.Map.Strict qualified as Map
 
 -- * --
 

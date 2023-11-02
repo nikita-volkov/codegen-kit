@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
+
 -- |
 -- A local convention of this module is to avoid calling into other public
 -- definitions from it.
@@ -6,11 +8,8 @@
 -- like using the \"where\" clause.
 module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors.Templates where
 
-import Coalmine.MultilineTextBuilder (Builder)
-import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
+import CodegenKit.ByLanguage.Haskell.Snippets qualified as Snippets
 import CodegenKit.Prelude hiding (product, sum)
-import qualified TextBuilderDev as B'
 
 module_ preludeModuleRef typesModuleRef moduleRef productFieldsContent sumVariantsContent =
   [i|

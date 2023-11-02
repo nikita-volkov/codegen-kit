@@ -11,14 +11,14 @@ module CodegenKit.ByLanguage.Java.Builders.Equals
     Field,
     primitiveField,
     objectField,
+    nullCheckedObjectField,
     arrayField,
   )
 where
 
-import qualified Coalmine.BaseExtras.List as List
+import Coalmine.BaseExtras.List qualified as List
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude
-import qualified Data.HashSet as HashSet
 
 -- * --
 

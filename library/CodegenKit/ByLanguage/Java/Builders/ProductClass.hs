@@ -48,18 +48,15 @@ module CodegenKit.ByLanguage.Java.Builders.ProductClass
   )
 where
 
-import qualified Coalmine.BaseExtras.List as List
-import Coalmine.EvenSimplerPaths (Path)
-import qualified Coalmine.EvenSimplerPaths as Paths
-import qualified Coalmine.Fileset as Fileset
+import Coalmine.BaseExtras.List qualified as List
+import Coalmine.EvenSimplerPaths qualified as Paths
+import Coalmine.Fileset qualified as Fileset
 import Coalmine.MultilineTextBuilder
-import qualified Coalmine.Name as Name
-import qualified CodegenKit.ByLanguage.Java.Builders.CompareTo as CompareToBuilder
-import qualified CodegenKit.ByLanguage.Java.Builders.Equals as EqualsBuilder
-import qualified CodegenKit.ByLanguage.Java.Builders.HashCode as HashCodeBuilder
-import qualified CodegenKit.ByLanguage.Java.Builders.ToJson as ToJsonBuilder
+import CodegenKit.ByLanguage.Java.Builders.CompareTo qualified as CompareToBuilder
+import CodegenKit.ByLanguage.Java.Builders.Equals qualified as EqualsBuilder
+import CodegenKit.ByLanguage.Java.Builders.HashCode qualified as HashCodeBuilder
+import CodegenKit.ByLanguage.Java.Builders.ToJson qualified as ToJsonBuilder
 import CodegenKit.Prelude hiding (intercalate)
-import qualified Data.Text.IO as TextIO
 
 -- * --
 

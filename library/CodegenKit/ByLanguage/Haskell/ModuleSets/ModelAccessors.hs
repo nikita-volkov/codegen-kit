@@ -1,17 +1,17 @@
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
+
 module CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors
   ( moduleName,
     modules,
   )
 where
 
-import Coalmine.MultilineTextBuilder (Builder)
-import qualified Coalmine.MultilineTextBuilder as B
-import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.BasePreludes as BasePreludesPackage
-import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors.Templates as Templates
-import qualified CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes as ModelTypesPackage
-import qualified CodegenKit.ByLanguage.Haskell.Packaging as Packaging
-import qualified CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies as Dependencies
-import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
+import Coalmine.MultilineTextBuilder qualified as B
+import CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAccessors.Templates qualified as Templates
+import CodegenKit.ByLanguage.Haskell.ModuleSets.ModelTypes qualified as ModelTypesPackage
+import CodegenKit.ByLanguage.Haskell.Packaging qualified as Packaging
+import CodegenKit.ByLanguage.Haskell.PackagingPresets.Dependencies qualified as Dependencies
+import CodegenKit.ByLanguage.Haskell.Snippets qualified as Snippets
 import CodegenKit.Prelude hiding (product, sum)
 
 -- * --

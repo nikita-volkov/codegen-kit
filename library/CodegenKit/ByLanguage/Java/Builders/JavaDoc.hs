@@ -22,10 +22,8 @@ module CodegenKit.ByLanguage.Java.Builders.JavaDoc
   )
 where
 
-import qualified Coalmine.BaseExtras.List as List
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude
-import qualified Data.HashSet as HashSet
 
 -- * Types
 

@@ -3,8 +3,6 @@ module CodegenKit.ByLanguage.Java.Builders.HashCode.Snippets where
 
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude
-import qualified Data.Text as Text
-import qualified TextBuilderDev
 
 unitHashCodeMethod :: Builder -> Builder
 unitHashCodeMethod className =

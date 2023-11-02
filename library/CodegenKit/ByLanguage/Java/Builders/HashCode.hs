@@ -15,13 +15,14 @@ module CodegenKit.ByLanguage.Java.Builders.HashCode
     charField,
     arrayField,
     objectField,
+    nullCheckedObjectField,
   )
 where
 
 import Coalmine.MultilineTextBuilder
-import qualified CodegenKit.ByLanguage.Java.Builders.HashCode.Snippets as Snippets
+import CodegenKit.ByLanguage.Java.Builders.HashCode.Snippets qualified as Snippets
 import CodegenKit.Prelude
-import qualified Data.Set as Set
+import Data.Set qualified as Set
 
 -- * --
 
@@ -106,8 +107,8 @@ charField name =
 
 arrayField :: Builder -> Field
 arrayField name =
-  addFieldImport "java.util.Arrays" $
-    hashExpField [j|Arrays.hashCode(this.$name)|]
+  addFieldImport "java.util.Arrays"
+    $ hashExpField [j|Arrays.hashCode(this.$name)|]
 
 objectField :: Builder -> Field
 objectField name =

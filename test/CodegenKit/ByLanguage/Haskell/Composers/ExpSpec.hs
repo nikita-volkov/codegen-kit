@@ -4,6 +4,7 @@ import Coalmine.Prelude
 import CodegenKit.ByLanguage.Haskell.Composers.Exp
 import Test.Hspec
 
+spec :: Spec
 spec = do
   describe "multilineList" do
     it "Matches the reference value" do

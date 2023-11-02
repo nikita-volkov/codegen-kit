@@ -1,12 +1,11 @@
 module CodegenKit.ByLanguage.Java.Dsl {-# DEPRECATED "Use specialized DSLs" #-} where
 
-import Coalmine.EvenSimplerPaths (Path)
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude hiding (intercalate)
-import qualified Data.Attoparsec.Text as Attoparsec
-import qualified Data.Text as Text
-import qualified Data.Text.IO as TextIO
-import qualified StructureKit.Charset as Charset
+import Data.Attoparsec.Text qualified as Attoparsec
+import Data.Text qualified as Text
+import Data.Text.IO qualified as TextIO
+import StructureKit.Charset qualified as Charset
 
 -- * --
 

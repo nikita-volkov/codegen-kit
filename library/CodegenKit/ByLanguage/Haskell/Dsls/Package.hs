@@ -4,7 +4,6 @@
 module CodegenKit.ByLanguage.Haskell.Dsls.Package where
 
 import Coalmine.EvenSimplerPaths qualified as Path
-import Coalmine.MultilineTextBuilder qualified as TextBlock
 import Coalmine.Prelude
 import CodegenKit.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.ByLanguage.Haskell.Composers.Exp qualified as Exp

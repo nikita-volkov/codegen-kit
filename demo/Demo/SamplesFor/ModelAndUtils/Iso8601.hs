@@ -2,9 +2,11 @@ module Demo.SamplesFor.ModelAndUtils.Iso8601 where
 
 import Coalmine.Inter
 import CodegenKit.ByLanguage.Haskell.ModuleSets.ModelAndUtils
+import CodegenKit.ByLanguage.Haskell.Packaging (Modules)
 
 -- * --
 
+iso8601Modules :: Modules
 iso8601Modules =
   modules
     [ section
