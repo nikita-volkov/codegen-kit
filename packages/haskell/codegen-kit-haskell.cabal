@@ -80,3 +80,4 @@ library
   build-depends:
     , coalmine
     , codegen-kit-legacy
+    , rerebase

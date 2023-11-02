@@ -1,6 +1,7 @@
 module CodegenKit.Haskell.Contexts.Package where
 
 import Coalmine.Prelude
+import CodegenKit.Legacy.Dependencies qualified as Dependencies
 
 data Component
 
@@ -8,17 +9,24 @@ data Module
 
 module_ ::
   -- | Namespace.
-  [Text] ->
-  -- | Qualified import alias map.
-  -- If a requested import is not present in it,
-  -- it will be imported unqualified.
-  [(Text, Text)] ->
-  -- | Printer of the file contents,
-  -- given the preferences.
+  Text ->
+  -- | Compiler of the module given the preferences.
   -- It does not neccessarily have to satisfy them.
-  (CodePreferences -> Text) ->
+  (Preferences -> CompiledModule) ->
   Module
 module_ =
   error "TODO"
 
-data CodePreferences
+data Preferences = Preferences
+  { strictData :: Bool,
+    overloadedRecordDot :: Bool,
+    importQualifiedPost :: Bool
+  }
+
+data CompiledModule = CompiledModule
+  { path :: Path,
+    name :: Text,
+    requestedExtensions :: Set Text,
+    requestedDependencies :: Dependencies.Dependencies,
+    content :: Text
+  }
