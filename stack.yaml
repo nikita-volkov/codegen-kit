@@ -2,3 +2,4 @@ resolver: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/a83631f
 
 packages:
   - packages/legacy
+  - packages/haskell

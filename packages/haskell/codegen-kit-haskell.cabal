@@ -1,0 +1,82 @@
+cabal-version: 3.0
+name:          codegen-kit-haskell
+version:       0
+synopsis:      Code generation tools for Haskell
+homepage:      https://github.com/nikita-volkov/codegen-kit
+bug-reports:   https://github.com/nikita-volkov/codegen-kit/issues
+author:        Nikita Volkov <nikita.y.volkov@mail.ru>
+maintainer:    Nikita Volkov <nikita.y.volkov@mail.ru>
+copyright:     (c) 2023 Nikita Volkov
+license:       MIT
+license-file:  LICENSE
+
+source-repository head
+  type:     git
+  location: git://github.com/nikita-volkov/codegen-kit.git
+
+common base
+  default-language:   Haskell2010
+  default-extensions:
+    NoImplicitPrelude
+    NoMonomorphismRestriction
+    BangPatterns
+    BlockArguments
+    ConstraintKinds
+    DataKinds
+    DefaultSignatures
+    DeriveDataTypeable
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveTraversable
+    DerivingVia
+    DuplicateRecordFields
+    EmptyDataDecls
+    FlexibleContexts
+    FlexibleInstances
+    FunctionalDependencies
+    GADTs
+    GeneralizedNewtypeDeriving
+    ImportQualifiedPost
+    InstanceSigs
+    LambdaCase
+    LiberalTypeSynonyms
+    MagicHash
+    MultiParamTypeClasses
+    MultiWayIf
+    NamedFieldPuns
+    NumericUnderscores
+    OverloadedLabels
+    OverloadedRecordDot
+    OverloadedStrings
+    ParallelListComp
+    PatternGuards
+    PatternSynonyms
+    QuasiQuotes
+    RankNTypes
+    RecordWildCards
+    ScopedTypeVariables
+    StandaloneDeriving
+    StrictData
+    TemplateHaskell
+    TupleSections
+    TypeApplications
+    TypeFamilies
+    TypeOperators
+    UndecidableInstances
+    ViewPatterns
+
+common executable
+  import:      base
+  ghc-options: -O2 -threaded "-with-rtsopts=-N -I0 -qg"
+
+library
+  import:          base
+  hs-source-dirs:  library
+  exposed-modules:
+    CodegenKit.Haskell.Contexts.Code
+    CodegenKit.Haskell.Contexts.Package
+
+  build-depends:
+    , coalmine
+    , codegen-kit-legacy
