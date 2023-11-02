@@ -1,0 +1,87 @@
+-- |
+-- API for immediately building every representation of the equals method that we need:
+--
+-- - The method declation
+-- - The docs in any form
+module CodegenKit.Legacy.ByLanguage.Java.Builders.Equals
+  ( -- * Execution
+    equalsMethodsForProduct,
+
+    -- * Field
+    Field,
+    primitiveField,
+    objectField,
+    nullCheckedObjectField,
+    arrayField,
+  )
+where
+
+import Coalmine.BaseExtras.List qualified as List
+import Coalmine.MultilineTextBuilder
+import CodegenKit.Legacy.Prelude
+
+-- * --
+
+-- |
+-- Build as an equals method for product.
+equalsMethodsForProduct :: Builder -> [Field] -> Builder
+equalsMethodsForProduct className = \case
+  [] ->
+    [i|
+      public boolean equals(Object that) {
+        return that instanceof $className;
+      }
+    |]
+  (multiFieldsExp -> fields) ->
+    [i|
+      public boolean equals(Object that) {
+        return that instanceof $className && equals(($className) that);
+      }
+      /**
+       * Equality check specialized to only the instances of this class.
+       * <p>
+       * Unlike the Object-generalized version it avoids instance checks,
+       * since that is resolved by the type system.
+       */
+      public boolean equals($className that) {
+        return
+          $fields;
+      }
+    |]
+
+-- * --
+
+multiFieldsExp :: [Field] -> Builder
+multiFieldsExp =
+  List.mapIntercalate fieldEqualsMethodExp " &&\n"
+
+-- * --
+
+data Field = Field
+  { fieldEqualsMethodExp :: Builder
+  }
+
+primitiveField :: Builder -> Field
+primitiveField fieldName =
+  Field
+    [j|$fieldName == that.$fieldName|]
+
+objectField :: Builder -> Field
+objectField fieldName =
+  Field
+    [j|$fieldName.equals(that.$fieldName)|]
+
+nullCheckedObjectField :: Builder -> Field
+nullCheckedObjectField fieldName =
+  Field
+    [j|
+      (
+        $fieldName == that.$fieldName ||
+        $fieldName != null && $fieldName.equals(that.$fieldName)
+      )
+    |]
+
+arrayField :: Builder -> Field
+arrayField fieldName =
+  Field
+    [j|java.util.Arrays.equals($fieldName, that.$fieldName)|]

@@ -2,7 +2,7 @@ module Main where
 
 import Coalmine.Fileset qualified as Fileset
 import Coalmine.Prelude
-import CodegenKit.ByLanguage.Haskell.Packaging qualified as HaskellPackaging
+import CodegenKit.Legacy.ByLanguage.Haskell.Packaging qualified as HaskellPackaging
 import Demo.SamplesFor.ModelAndUtils.Iso8601 qualified as Iso8601ModelAndUtils
 
 -- * --

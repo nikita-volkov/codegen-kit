@@ -1,0 +1,143 @@
+cabal-version: 3.0
+name:          codegen-kit-legacy
+version:       0.1.0.1
+synopsis:      Code generation utils
+homepage:      https://github.com/nikita-volkov/codegen-kit
+bug-reports:   https://github.com/nikita-volkov/codegen-kit/issues
+author:        Nikita Volkov <nikita.y.volkov@mail.ru>
+maintainer:    Nikita Volkov <nikita.y.volkov@mail.ru>
+copyright:     (c) 2022 Nikita Volkov
+license:       MIT
+license-file:  LICENSE
+
+source-repository head
+  type:     git
+  location: git://github.com/nikita-volkov/codegen-kit.git
+
+common base-settings
+  default-language:   Haskell2010
+  default-extensions:
+    NoImplicitPrelude
+    NoMonomorphismRestriction
+    BangPatterns
+    BlockArguments
+    ConstraintKinds
+    DataKinds
+    DefaultSignatures
+    DeriveDataTypeable
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveTraversable
+    DerivingVia
+    DuplicateRecordFields
+    EmptyDataDecls
+    FlexibleContexts
+    FlexibleInstances
+    FunctionalDependencies
+    GADTs
+    GeneralizedNewtypeDeriving
+    ImportQualifiedPost
+    InstanceSigs
+    LambdaCase
+    LiberalTypeSynonyms
+    MagicHash
+    MultiParamTypeClasses
+    MultiWayIf
+    NamedFieldPuns
+    NumericUnderscores
+    OverloadedLabels
+    OverloadedRecordDot
+    OverloadedStrings
+    ParallelListComp
+    PatternGuards
+    PatternSynonyms
+    QuasiQuotes
+    RankNTypes
+    RecordWildCards
+    ScopedTypeVariables
+    StandaloneDeriving
+    StrictData
+    TemplateHaskell
+    TupleSections
+    TypeApplications
+    TypeFamilies
+    TypeOperators
+    UndecidableInstances
+    ViewPatterns
+
+common executable-settings
+  import:      base-settings
+  ghc-options: -O2 -threaded "-with-rtsopts=-N -I0 -qg"
+
+library
+  import:          base-settings
+  hs-source-dirs:  library
+  exposed-modules:
+    CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate
+    CodegenKit.Legacy.ByLanguage.Haskell.Composers.Cabal
+    CodegenKit.Legacy.ByLanguage.Haskell.Composers.Exp
+    CodegenKit.Legacy.ByLanguage.Haskell.Composers.Haddock
+    CodegenKit.Legacy.ByLanguage.Haskell.Composers.Hashable
+    CodegenKit.Legacy.ByLanguage.Haskell.Composers.Module
+    CodegenKit.Legacy.ByLanguage.Haskell.Composers.Stack
+    CodegenKit.Legacy.ByLanguage.Haskell.Dsls.Package
+    CodegenKit.Legacy.ByLanguage.Haskell.Modules.BaseDataTypes
+    CodegenKit.Legacy.ByLanguage.Haskell.Modules.BaseOperators
+    CodegenKit.Legacy.ByLanguage.Haskell.Modules.BasePrelude
+    CodegenKit.Legacy.ByLanguage.Haskell.ModuleSets.BasePreludes
+    CodegenKit.Legacy.ByLanguage.Haskell.ModuleSets.ModelAccessors
+    CodegenKit.Legacy.ByLanguage.Haskell.ModuleSets.ModelAccessors.Templates
+    CodegenKit.Legacy.ByLanguage.Haskell.ModuleSets.ModelAndUtils
+    CodegenKit.Legacy.ByLanguage.Haskell.ModuleSets.ModelTypes
+    CodegenKit.Legacy.ByLanguage.Haskell.Packaging
+    CodegenKit.Legacy.ByLanguage.Haskell.PackagingPresets.Dependencies
+    CodegenKit.Legacy.ByLanguage.Haskell.Snippets
+    CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock
+    CodegenKit.Legacy.ByLanguage.Java.Attoparsec
+    CodegenKit.Legacy.ByLanguage.Java.Builders.CompareTo
+    CodegenKit.Legacy.ByLanguage.Java.Builders.Equals
+    CodegenKit.Legacy.ByLanguage.Java.Builders.HashCode
+    CodegenKit.Legacy.ByLanguage.Java.Builders.HashCode.Snippets
+    CodegenKit.Legacy.ByLanguage.Java.Builders.JavaDoc
+    CodegenKit.Legacy.ByLanguage.Java.Builders.ProductClass
+    CodegenKit.Legacy.ByLanguage.Java.Builders.ToJson
+    CodegenKit.Legacy.ByLanguage.Java.Charsets
+    CodegenKit.Legacy.ByLanguage.Java.Code
+    CodegenKit.Legacy.ByLanguage.Java.Dsl
+    CodegenKit.Legacy.Dependencies
+    CodegenKit.Legacy.Versioning
+
+  other-modules:   CodegenKit.Legacy.Prelude
+  build-depends:
+    , attoparsec
+    , coalmine
+    , extra
+    , rerebase
+    , structure-kit
+    , text-builder-dev
+
+test-suite test
+  import:             base-settings
+  type:               exitcode-stdio-1.0
+  hs-source-dirs:     test
+  main-is:            Main.hs
+  other-modules:
+    CodegenKit.Legacy.ByLanguage.Haskell.Composers.ExpSpec
+    CodegenKit.Legacy.ByLanguage.Haskell.Composers.HashableSpec
+
+  build-tool-depends: hspec-discover:hspec-discover >=2.11.7 && <3
+  build-depends:
+    , coalmine
+    , codegen-kit-legacy
+    , hspec
+
+test-suite demo
+  import:         base-settings
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: demo
+  main-is:        Main.hs
+  other-modules:  Demo.SamplesFor.ModelAndUtils.Iso8601
+  build-depends:
+    , coalmine
+    , codegen-kit-legacy
