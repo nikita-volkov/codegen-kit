@@ -3,10 +3,10 @@
 -- taking care of parenthesis and indentation.
 module CodegenKit.ByLanguage.Haskell.Composers.Exp where
 
-import qualified Coalmine.MultilineTextBuilder as B
+import Coalmine.MultilineTextBuilder qualified as B
 import CodegenKit.Prelude
-import qualified Data.Text as Text
-import qualified TextBuilderDev as B'
+import Data.Text qualified as Text
+import TextBuilderDev qualified as B'
 
 -- * --
 

@@ -1,10 +1,10 @@
 module CodegenKit.ByLanguage.Java.Attoparsec where
 
 import Coalmine.AttoparsecExtras.Text
-import qualified CodegenKit.ByLanguage.Java.Charsets as Charsets
+import CodegenKit.ByLanguage.Java.Charsets qualified as Charsets
 import CodegenKit.Prelude hiding (takeWhile)
 import Data.Attoparsec.Text
-import qualified Data.Text as Text
+import Data.Text qualified as Text
 
 namespace :: Parser [Text]
 namespace =

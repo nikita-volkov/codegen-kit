@@ -9,8 +9,8 @@ module CodegenKit.Versioning
 where
 
 import CodegenKit.Prelude
-import qualified Data.Attoparsec.Text as Attoparsec
-import qualified StructureKit.OpenRange as OpenRange
+import Data.Attoparsec.Text qualified as Attoparsec
+import StructureKit.OpenRange qualified as OpenRange
 
 -- * --
 

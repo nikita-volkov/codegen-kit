@@ -3,8 +3,8 @@ module CodegenKit.ByLanguage.Java.Code where
 
 import Coalmine.MultilineTextBuilder
 import CodegenKit.Prelude
-import qualified Data.Text as Text
-import qualified TextBuilderDev
+import Data.Text qualified as Text
+import TextBuilderDev qualified
 
 type Code = Builder
 

@@ -1,8 +1,8 @@
 module CodegenKit.ByLanguage.Haskell.Composers.Hashable where
 
-import qualified Coalmine.MultilineTextBuilder as Builder
+import Coalmine.MultilineTextBuilder qualified as Builder
 import CodegenKit.ByLanguage.Haskell.Composers.Module
-import qualified CodegenKit.ByLanguage.Haskell.Snippets as Snippets
+import CodegenKit.ByLanguage.Haskell.Snippets qualified as Snippets
 import CodegenKit.Prelude hiding (intercalate)
 
 product :: Text -> Int -> Body

@@ -11,8 +11,8 @@ module CodegenKit.Dependencies
 where
 
 import CodegenKit.Prelude hiding (singleton, toList)
-import qualified CodegenKit.Versioning as Versioning
-import qualified Data.Map.Strict as Map
+import CodegenKit.Versioning qualified as Versioning
+import Data.Map.Strict qualified as Map
 
 -- * --
 
