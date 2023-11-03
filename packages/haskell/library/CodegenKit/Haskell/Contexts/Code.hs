@@ -6,8 +6,8 @@ module CodegenKit.Haskell.Contexts.Code
     toHeadlessSplice,
 
     -- ** Execution configs
-    ModuleConfig,
-    Preferences,
+    ModuleConfig (..),
+    Preferences (..),
 
     -- * Code
     Code,
@@ -29,16 +29,34 @@ import Data.Text qualified as Text
 
 toPackageModule :: ModuleConfig -> Code -> Package.Module
 toPackageModule moduleConfig code =
-  Package.module_ moduleName compiler
+  Package.module_ compiler
+  where
+    compiler packagePreferences =
+      toPackageCompiledModule moduleConfig (preferences packagePreferences) code
+
+    preferences Package.Preferences {..} =
+      Preferences {..}
+
+toPackageCompiledModule :: ModuleConfig -> Preferences -> Code -> Package.CompiledModule
+toPackageCompiledModule moduleConfig preferences code =
+  Package.CompiledModule
+    { path =
+        Path.addExtension "hs" . foldMap (fromString . to) $ moduleConfig.namespace,
+      name =
+        moduleName,
+      requestedExtensions =
+        compiledCode.extensions,
+      requestedDependencies =
+        compiledCode.dependencies,
+      content =
+        content preferences compiledCode.imports compiledCode.splice
+    }
   where
     moduleName =
       Text.intercalate "." moduleConfig.namespace
 
-    compiler packagePreferences =
-      case preferences packagePreferences of
-        preferences ->
-          code.compile preferences aliasModule
-            & packageCompiledModule preferences
+    compiledCode =
+      code.compile preferences aliasModule
 
     aliasMap =
       Map.fromList moduleConfig.importAliases
@@ -47,23 +65,6 @@ toPackageModule moduleConfig code =
       case Map.lookup qualified aliasMap of
         Just alias -> alias
         Nothing -> qualified
-
-    preferences Package.Preferences {..} =
-      Preferences {..}
-
-    packageCompiledModule preferences compiledCode =
-      Package.CompiledModule
-        { path =
-            Path.addExtension "hs" . foldMap (fromString . to) $ moduleConfig.namespace,
-          name =
-            moduleName,
-          requestedExtensions =
-            compiledCode.extensions,
-          requestedDependencies =
-            compiledCode.dependencies,
-          content =
-            content preferences compiledCode.imports compiledCode.splice
-        }
 
     content preferences imports bodySplice =
       [i|
@@ -146,6 +147,7 @@ newtype Code = Code
       (Text -> Text) ->
       CompiledCode
   }
+  deriving (Semigroup, Monoid)
 
 data CompiledCode = CompiledCode
   { extensions :: Set Text,
@@ -155,9 +157,23 @@ data CompiledCode = CompiledCode
     splice :: Splice
   }
 
-instance Semigroup CompiledCode
+instance Semigroup CompiledCode where
+  left <> right =
+    CompiledCode
+      { extensions = left.extensions <> right.extensions,
+        dependencies = left.dependencies <> right.dependencies,
+        imports = Map.unionWith Set.union left.imports right.imports,
+        splice = left.splice <> right.splice
+      }
 
-instance Monoid CompiledCode
+instance Monoid CompiledCode where
+  mempty =
+    CompiledCode
+      { extensions = mempty,
+        dependencies = mempty,
+        imports = mempty,
+        splice = mempty
+      }
 
 importing ::
   -- | Fully qualified module reference.

@@ -8,8 +8,6 @@ data Component
 data Module
 
 module_ ::
-  -- | Namespace.
-  Text ->
   -- | Compiler of the module given the preferences.
   -- It does not neccessarily have to satisfy them.
   (Preferences -> CompiledModule) ->
