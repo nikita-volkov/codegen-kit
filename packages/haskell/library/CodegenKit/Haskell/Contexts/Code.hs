@@ -11,11 +11,17 @@ module CodegenKit.Haskell.Contexts.Code
 
     -- * Code
     Code,
+    splice,
     importing,
+    importedSymbol,
+    indent,
+    prefix,
   )
 where
 
 import Coalmine.EvenSimplerPaths qualified as Path
+import Coalmine.Fileset qualified as Fileset
+import Coalmine.MultilineTextBuilder qualified as Splice
 import Coalmine.Prelude
 import CodegenKit.Haskell.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
@@ -100,12 +106,16 @@ toPackageCompiledModule moduleConfig preferences code =
                 }
 
 toModuleFile :: ModuleConfig -> Preferences -> Code -> Fileset
-toModuleFile =
-  error "TODO"
+toModuleFile moduleConfig preferences code =
+  toPackageCompiledModule moduleConfig preferences code
+    & \compiledModule ->
+      Fileset.file compiledModule.path compiledModule.content
 
 toModuleText :: ModuleConfig -> Preferences -> Code -> Text
-toModuleText =
-  error "TODO"
+toModuleText moduleConfig preferences code =
+  toPackageCompiledModule moduleConfig preferences code
+    & \compiledModule ->
+      compiledModule.content
 
 toHeadlessSplice :: CodeConfig -> Preferences -> Code -> Splice
 toHeadlessSplice config preferences code =
@@ -149,31 +159,18 @@ newtype Code = Code
   }
   deriving (Semigroup, Monoid)
 
-data CompiledCode = CompiledCode
-  { extensions :: Set Text,
-    dependencies :: Dependencies.Dependencies,
-    -- | Modules and symbols that are requested to be imported.
-    imports :: Map Text (Set Text),
-    splice :: Splice
-  }
+instance IsString Code where
+  fromString = Code . const . const . fromString
 
-instance Semigroup CompiledCode where
-  left <> right =
-    CompiledCode
-      { extensions = left.extensions <> right.extensions,
-        dependencies = left.dependencies <> right.dependencies,
-        imports = Map.unionWith Set.union left.imports right.imports,
-        splice = left.splice <> right.splice
-      }
-
-instance Monoid CompiledCode where
-  mempty =
-    CompiledCode
-      { extensions = mempty,
-        dependencies = mempty,
-        imports = mempty,
-        splice = mempty
-      }
+mapSplice :: (Splice -> Splice) -> Code -> Code
+mapSplice mapper code =
+  Code
+    { compile = \preferences deref ->
+        let compiledCode = code.compile preferences deref
+         in compiledCode
+              { splice = mapper compiledCode.splice
+              }
+    }
 
 importing ::
   -- | Fully qualified module reference.
@@ -204,3 +201,68 @@ importing moduleName memberName cont =
                 moduleName
                 imports
           }
+
+-- | Produce code with a symbol reference that is determined based on the imports and produces requirements for them.
+importedSymbol ::
+  -- | Fully qualified module reference.
+  Text ->
+  -- | Member name.
+  Text ->
+  Code
+importedSymbol moduleRef memberName =
+  importing moduleRef memberName $ splice . to
+
+splice :: Splice -> Code
+splice splice =
+  Code \_ _ ->
+    CompiledCode
+      { extensions = mempty,
+        dependencies = mempty,
+        imports = mempty,
+        splice
+      }
+
+indent :: Int -> Code -> Code
+indent spaces =
+  mapSplice (Splice.indent spaces)
+
+prefix :: Text -> Code -> Code
+prefix prefix =
+  mapSplice (Splice.prefixEachLine (to prefix))
+
+-- * CompiledCode
+
+data CompiledCode = CompiledCode
+  { extensions :: Set Text,
+    dependencies :: Dependencies.Dependencies,
+    -- | Modules and symbols that are requested to be imported.
+    imports :: Map Text (Set Text),
+    splice :: Splice
+  }
+
+instance Semigroup CompiledCode where
+  left <> right =
+    CompiledCode
+      { extensions = left.extensions <> right.extensions,
+        dependencies = left.dependencies <> right.dependencies,
+        imports = Map.unionWith Set.union left.imports right.imports,
+        splice = left.splice <> right.splice
+      }
+
+instance Monoid CompiledCode where
+  mempty =
+    CompiledCode
+      { extensions = mempty,
+        dependencies = mempty,
+        imports = mempty,
+        splice = mempty
+      }
+
+instance IsString CompiledCode where
+  fromString string =
+    CompiledCode
+      { extensions = mempty,
+        dependencies = mempty,
+        imports = mempty,
+        splice = fromString string
+      }
