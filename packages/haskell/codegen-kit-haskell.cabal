@@ -78,6 +78,7 @@ library
     CodegenKit.Haskell.Contexts.Code
     CodegenKit.Haskell.Contexts.Package
 
+  other-modules:   CodegenKit.Haskell.Contexts.CompiledCode
   build-depends:
     , coalmine
     , codegen-kit-legacy

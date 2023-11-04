@@ -23,6 +23,7 @@ import Coalmine.EvenSimplerPaths qualified as Path
 import Coalmine.Fileset qualified as Fileset
 import Coalmine.MultilineTextBuilder qualified as Splice
 import Coalmine.Prelude
+import CodegenKit.Haskell.Contexts.CompiledCode qualified as CompiledCode
 import CodegenKit.Haskell.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
@@ -121,7 +122,7 @@ toHeadlessSplice :: CodeConfig -> Preferences -> Code -> Splice
 toHeadlessSplice config preferences code =
   (code.compile preferences config.aliasModule).splice
 
-toCompiledCode :: CodeConfig -> Preferences -> Code -> CompiledCode
+toCompiledCode :: CodeConfig -> Preferences -> Code -> CompiledCode.CompiledCode
 toCompiledCode config preferences code =
   code.compile preferences config.aliasModule
 
@@ -155,7 +156,7 @@ newtype Code = Code
   { compile ::
       Preferences ->
       (Text -> Text) ->
-      CompiledCode
+      CompiledCode.CompiledCode
   }
   deriving (Semigroup, Monoid)
 
@@ -166,10 +167,8 @@ mapSplice :: (Splice -> Splice) -> Code -> Code
 mapSplice mapper code =
   Code
     { compile = \preferences deref ->
-        let compiledCode = code.compile preferences deref
-         in compiledCode
-              { splice = mapper compiledCode.splice
-              }
+        code.compile preferences deref
+          & CompiledCode.mapSplice mapper
     }
 
 importing ::
@@ -186,21 +185,8 @@ importing moduleName memberName cont =
           case aliasModule moduleName of
             "" -> memberName
             prefix -> mconcat [prefix, ".", memberName]
-        CompiledCode {..} =
-          (cont ref).compile preferences aliasModule
-     in CompiledCode
-          { extensions,
-            dependencies,
-            splice,
-            imports =
-              Map.alter
-                ( \case
-                    Nothing -> Just (Set.singleton ref)
-                    Just set -> Just (Set.insert ref set)
-                )
-                moduleName
-                imports
-          }
+     in (cont ref).compile preferences aliasModule
+          & CompiledCode.addImport moduleName memberName
 
 -- | Produce code with a symbol reference that is determined based on the imports and produces requirements for them.
 importedSymbol ::
@@ -215,12 +201,7 @@ importedSymbol moduleRef memberName =
 splice :: Splice -> Code
 splice splice =
   Code \_ _ ->
-    CompiledCode
-      { extensions = mempty,
-        dependencies = mempty,
-        imports = mempty,
-        splice
-      }
+    CompiledCode.fromSplice splice
 
 indent :: Int -> Code -> Code
 indent spaces =
@@ -229,40 +210,3 @@ indent spaces =
 prefix :: Text -> Code -> Code
 prefix prefix =
   mapSplice (Splice.prefixEachLine (to prefix))
-
--- * CompiledCode
-
-data CompiledCode = CompiledCode
-  { extensions :: Set Text,
-    dependencies :: Dependencies.Dependencies,
-    -- | Modules and symbols that are requested to be imported.
-    imports :: Map Text (Set Text),
-    splice :: Splice
-  }
-
-instance Semigroup CompiledCode where
-  left <> right =
-    CompiledCode
-      { extensions = left.extensions <> right.extensions,
-        dependencies = left.dependencies <> right.dependencies,
-        imports = Map.unionWith Set.union left.imports right.imports,
-        splice = left.splice <> right.splice
-      }
-
-instance Monoid CompiledCode where
-  mempty =
-    CompiledCode
-      { extensions = mempty,
-        dependencies = mempty,
-        imports = mempty,
-        splice = mempty
-      }
-
-instance IsString CompiledCode where
-  fromString string =
-    CompiledCode
-      { extensions = mempty,
-        dependencies = mempty,
-        imports = mempty,
-        splice = fromString string
-      }
