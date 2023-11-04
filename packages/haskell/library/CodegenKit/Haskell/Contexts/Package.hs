@@ -28,3 +28,4 @@ data CompiledModule = CompiledModule
     requestedDependencies :: Dependencies.Dependencies,
     content :: Text
   }
+  deriving (Show, Eq)

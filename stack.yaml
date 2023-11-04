@@ -1,5 +1,4 @@
-resolver: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/a83631fe7e310c93be1ae76dc6d9ffbc75c7a29b/snapshot.yaml
-
+resolver: ./stack-snapshot/snapshot.yaml
 packages:
   - packages/legacy
   - packages/haskell

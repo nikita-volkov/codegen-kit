@@ -18,6 +18,7 @@ import Data.Map.Strict qualified as Map
 
 newtype Dependencies
   = Dependencies (Map Text Versioning.VersionRange)
+  deriving (Show, Eq)
 
 instance Semigroup Dependencies where
   Dependencies lMap <> Dependencies rMap =

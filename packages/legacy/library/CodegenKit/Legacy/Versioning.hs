@@ -15,10 +15,10 @@ import StructureKit.OpenRange qualified as OpenRange
 -- * --
 
 type VersionRange =
-  OpenRange.Range Version
+  OpenRange.OpenRange Version
 
 pattern VersionRange :: Maybe Version -> Maybe Version -> VersionRange
-pattern VersionRange from upTo = OpenRange.Range from upTo
+pattern VersionRange from upto = OpenRange.OpenRange from upto
 
 {-# COMPLETE VersionRange #-}
 
