@@ -1,0 +1,14 @@
+
+
+component Package
+component Code
+component Exp
+component Type
+component Declaration
+
+Package --> Code
+Code --> Exp
+Code --> Type
+Code --> Declaration
+Declaration --> Exp
+Declaration --> Type
