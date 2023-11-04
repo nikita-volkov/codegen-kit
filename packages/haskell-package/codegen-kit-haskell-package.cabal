@@ -78,6 +78,7 @@ library
   other-modules:
     CodegenKit.HaskellPackage.Contexts.Code
     CodegenKit.HaskellPackage.Contexts.CompiledCode
+    CodegenKit.HaskellPackage.Contexts.Exp
     CodegenKit.HaskellPackage.Contexts.Package
 
   build-depends:

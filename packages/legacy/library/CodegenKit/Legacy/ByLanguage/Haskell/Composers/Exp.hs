@@ -1,3 +1,5 @@
+{-# LANGUAGE NoFieldSelectors #-}
+
 -- |
 -- Smart haskell expressions formatter,
 -- taking care of parenthesis and indentation.
@@ -31,19 +33,19 @@ isMultiline (Exp _ isMultiline _) =
 
 -- * --
 
-data Exp
-  = Exp
-      -- | Needs grouping.
-      !Bool
-      -- | Is multiline.
-      !Bool
-      -- | Possibly multiline content.
-      !B.Builder
+data Exp = Exp
+  { -- | Needs grouping.
+    needsGrouping :: Bool,
+    -- | Is multiline.
+    isMultiline :: Bool,
+    -- | Possibly multiline content.
+    content :: B.Builder
+  }
 
 -- * Essentials
 
-infixBinOp :: Text -> Exp -> Exp -> Exp
-infixBinOp operator l r =
+infixBinOp :: Text -> Text -> Exp -> Exp -> Exp
+infixBinOp qualification operator l r =
   if isMultiline l || isMultiline r
     then
       Exp True True
@@ -53,7 +55,7 @@ infixBinOp operator l r =
               2
               ( mconcat
                   [ "\n",
-                    from @Text operator,
+                    operatorSplice,
                     " ",
                     B.indent
                       (Text.length operator + 1)
@@ -66,13 +68,19 @@ infixBinOp operator l r =
         $ mconcat
           [ groupedExp l,
             " ",
-            from @Text operator,
+            operatorSplice,
             " ",
             groupedExp r
           ]
+  where
+    operatorSplice =
+      if Text.null qualification
+        then from @Text operator
+        else from @Text qualification <> "." <> from @Text operator
 
 reference :: Text -> Text -> Exp
 reference qualification reference =
+  -- TODO: Add extraction of the metainformation whether the referred symbol is an operator.
   Exp False False
     $ if Text.null qualification
       then from @Text reference
@@ -156,14 +164,12 @@ multilinePostAppChain baseExp chain =
     $ groupedExp baseExp
     <> B.indent 2 (foldMap (mappend "\n& " . B.indent 4 . groupedExp) chain)
 
-staticMonoid :: [Exp] -> Exp
-staticMonoid = \case
-  [] -> Exp False False "mempty"
-  [a] -> a
-  a ->
-    Exp True True
-      $ "mconcat "
-      <> B.indent 2 ("\n" <> groupedExp (multilineList a))
+overloadedRecordDotField :: Text -> Exp -> Exp
+overloadedRecordDotField fieldName exp =
+  Exp False (isMultiline exp)
+    $ groupedExp exp
+    <> "."
+    <> to fieldName
 
 -- * --
 
@@ -205,5 +211,16 @@ alternatives ::
 alternatives preludeNs = \case
   [] -> reference preludeNs "empty"
   [a] -> a
-  [a, b] -> infixBinOp "<|>" a b
+  [a, b] -> infixBinOp preludeNs "<|>" a b
   alternatives -> appChain (reference preludeNs "asum") [list alternatives]
+
+staticMonoid ::
+  -- | Prelude namespace.
+  Text ->
+  [Exp] ->
+  Exp
+staticMonoid preludeNs = \case
+  [] -> reference preludeNs "mempty"
+  [a] -> a
+  [a, b] -> infixBinOp preludeNs "<>" a b
+  a -> appChain (reference preludeNs "mconcat") [list a]

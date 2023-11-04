@@ -16,14 +16,16 @@ module CodegenKit.HaskellPackage.Contexts.Code
     importedSymbol,
     indent,
     prefix,
+    exp,
   )
 where
 
 import Coalmine.EvenSimplerPaths qualified as Path
 import Coalmine.Fileset qualified as Fileset
 import Coalmine.MultilineTextBuilder qualified as Splice
-import Coalmine.Prelude
+import Coalmine.Prelude hiding (exp)
 import CodegenKit.HaskellPackage.Contexts.CompiledCode qualified as CompiledCode
+import CodegenKit.HaskellPackage.Contexts.Exp qualified as Exp
 import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
@@ -210,3 +212,16 @@ indent spaces =
 prefix :: Text -> Code -> Code
 prefix prefix =
   mapSplice (Splice.prefixEachLine (to prefix))
+
+exp :: Exp.Exp -> Code
+exp exp =
+  Code compile
+  where
+    compile preferences deref =
+      Exp.toCompiledCode config exp
+      where
+        config =
+          Exp.Config
+            { overloadedRecordDot = preferences.overloadedRecordDot,
+              deref
+            }
