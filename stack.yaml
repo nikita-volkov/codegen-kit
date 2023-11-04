@@ -1,4 +1,4 @@
 resolver: ./stack-snapshot/snapshot.yaml
 packages:
   - packages/legacy
-  - packages/haskell
+  - packages/haskell-package

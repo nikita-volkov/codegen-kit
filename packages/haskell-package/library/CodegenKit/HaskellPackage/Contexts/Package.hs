@@ -1,4 +1,4 @@
-module CodegenKit.Haskell.Contexts.Package where
+module CodegenKit.HaskellPackage.Contexts.Package where
 
 import Coalmine.Prelude
 import CodegenKit.Legacy.Dependencies qualified as Dependencies
