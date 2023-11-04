@@ -5,10 +5,12 @@ component Code
 component Exp
 component Type
 component Declaration
+component Module
 
-Package --> Code
-Code --> Exp
-Code --> Type
-Code --> Declaration
-Declaration --> Exp
-Declaration --> Type
+Package --> Module : Composes
+Code --> Module : Compiles into
+Code --> Exp : Composes
+Code --> Type : Composes
+Code --> Declaration : Composes
+Declaration --> Exp : Composes
+Declaration --> Type : Composes
