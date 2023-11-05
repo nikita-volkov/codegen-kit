@@ -8,9 +8,10 @@ component Declaration
 component Module
 
 Package --> Module : Composes
-Code --> Module : Compiles into
+Module --> Code : Composes
+Exp --> Code : Compiles into
+Type --> Code : Compiles into
+Declaration --> Code : Compiles into
 Code --> Exp : Composes
 Code --> Type : Composes
 Code --> Declaration : Composes
-Declaration --> Exp : Composes
-Declaration --> Type : Composes
