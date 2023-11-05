@@ -75,7 +75,6 @@ library
   import:          base
   hs-source-dirs:  library
   exposed-modules:
-  other-modules:
     CodegenKit.HaskellPackage.Contexts.Code
     CodegenKit.HaskellPackage.Contexts.CompiledCode
     CodegenKit.HaskellPackage.Contexts.Exp
