@@ -91,3 +91,11 @@ staticMonoid exps =
     BaseExp.staticMonoid
       (config.deref "Prelude")
       (fmap (\exp -> exp.compile config) exps)
+
+apChain :: Exp -> [Exp] -> Exp
+apChain constructor params =
+  Exp \config ->
+    BaseExp.apChain
+      (config.deref "Prelude")
+      (constructor.compile config)
+      (fmap (\exp -> exp.compile config) params)

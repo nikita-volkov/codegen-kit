@@ -185,23 +185,30 @@ apChain preludeNs constructor params =
       if isMultiline constructor
         then
           Exp True True
-            $ ungroupedExp (reference preludeNs "pure")
+            $ pureSplice
             <> B.indent 2 ("\n" <> groupedExp constructor)
         else
           Exp True False
-            $ ungroupedExp (reference preludeNs "pure")
+            $ pureSplice
             <> " "
             <> groupedExp constructor
     [param]
       | not (isMultiline constructor || isMultiline param) ->
           Exp True False
             $ groupedExp constructor
-            <> " <$> "
+            <> " "
+            <> mapOperatorSplice
+            <> " "
             <> groupedExp param
     _ ->
       Exp True True
         $ groupedExp constructor
-        <> B.indent 2 ("\n<$> " <> B.intercalate "\n<*> " (fmap (B.indent 4 . groupedExp) params))
+        <> B.indent 2 ("\n" <> mapOperatorSplice <> " " <> B.intercalate ("\n" <> apOperatorSplice <> " ") (fmap (B.indent 4 . groupedExp) params))
+  where
+    preludeRefSplice = ungroupedExp . reference preludeNs
+    mapOperatorSplice = preludeRefSplice "<$>"
+    apOperatorSplice = preludeRefSplice "<*>"
+    pureSplice = preludeRefSplice "pure"
 
 alternatives ::
   -- | Prelude namespace.
