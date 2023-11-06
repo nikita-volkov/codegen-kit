@@ -79,6 +79,7 @@ library
     CodegenKit.HaskellPackage.Contexts.CompiledCode
     CodegenKit.HaskellPackage.Contexts.Exp
     CodegenKit.HaskellPackage.Contexts.Package
+    CodegenKit.HaskellPackage.Contexts.Type
 
   build-depends:
     , coalmine
