@@ -23,14 +23,14 @@ data Type = Type
   }
 
 chainApplication :: Type -> [Type] -> Type
-chainApplication base params =
-  if all (not . (.isMultiline)) params && not base.isMultiline
+chainApplication function params =
+  if all (not . (.isMultiline)) params && not function.isMultiline
     then
       Type
         { needsGrouping = True,
           isMultiline = False,
           content =
-            toUngroupedCode base
+            toUngroupedCode function
               <> foldMap (mappend " " . toGroupedCode) params
         }
     else
@@ -38,6 +38,24 @@ chainApplication base params =
         { needsGrouping = True,
           isMultiline = False,
           content =
-            toGroupedCode base
+            toGroupedCode function
               <> Code.indent 2 (foldMap (mappend "\n" . toGroupedCode) params)
+        }
+
+binApplication :: Type -> Type -> Type
+binApplication function param =
+  if function.isMultiline && param.isMultiline
+    then
+      Type
+        { needsGrouping = True,
+          isMultiline = True,
+          content =
+            function.content <> Code.indent 2 ("\n" <> toGroupedCode param)
+        }
+    else
+      Type
+        { needsGrouping = True,
+          isMultiline = False,
+          content =
+            function.content <> " " <> toGroupedCode param
         }
