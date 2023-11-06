@@ -22,6 +22,28 @@ data Type = Type
     content :: Code.Code
   }
 
+localSymbol :: Text -> Type
+localSymbol text =
+  Type
+    { needsGrouping = False,
+      isMultiline = False,
+      content = Code.splice (from text)
+    }
+
+-- | Produce code with a symbol reference that is determined based on the imports and produces requirements for them.
+importedSymbol ::
+  -- | Fully qualified module reference.
+  Text ->
+  -- | Member name.
+  Text ->
+  Type
+importedSymbol moduleRef memberName =
+  Type
+    { needsGrouping = False,
+      isMultiline = False,
+      content = Code.importedSymbol moduleRef memberName
+    }
+
 chainApplication :: Type -> [Type] -> Type
 chainApplication function params =
   if all (not . (.isMultiline)) params && not function.isMultiline
