@@ -10,13 +10,12 @@ module CodegenKit.HaskellPackage.Contexts.Code
     Preferences (..),
 
     -- * Code
-    Code,
+    Code (..),
     splice,
-    importing,
+    importingSymbol,
     importedSymbol,
     indent,
     prefix,
-    exp,
   )
 where
 
@@ -25,7 +24,6 @@ import Coalmine.Fileset qualified as Fileset
 import Coalmine.MultilineTextBuilder qualified as Splice
 import Coalmine.Prelude hiding (exp)
 import CodegenKit.HaskellPackage.Contexts.CompiledCode qualified as CompiledCode
-import CodegenKit.HaskellPackage.Contexts.Exp qualified as Exp
 import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
@@ -58,7 +56,7 @@ toPackageCompiledModule moduleConfig preferences code =
       requestedDependencies =
         compiledCode.dependencies,
       content =
-        content preferences compiledCode.imports compiledCode.splice
+        content preferences compiledCode.symbolImports compiledCode.splice
     }
   where
     moduleName =
@@ -173,7 +171,7 @@ mapSplice mapper code =
           & CompiledCode.mapSplice mapper
     }
 
-importing ::
+importingSymbol ::
   -- | Fully qualified module reference.
   Text ->
   -- | Member name.
@@ -181,14 +179,14 @@ importing ::
   -- | Code given a qualified member name.
   (Text -> Code) ->
   Code
-importing moduleName memberName cont =
+importingSymbol moduleName memberName cont =
   Code \preferences aliasModule ->
     let ref =
           case aliasModule moduleName of
             "" -> memberName
             prefix -> mconcat [prefix, ".", memberName]
      in (cont ref).compile preferences aliasModule
-          & CompiledCode.addImport moduleName memberName
+          & CompiledCode.addSymbolImport moduleName memberName
 
 -- | Produce code with a symbol reference that is determined based on the imports and produces requirements for them.
 importedSymbol ::
@@ -198,7 +196,15 @@ importedSymbol ::
   Text ->
   Code
 importedSymbol moduleRef memberName =
-  importing moduleRef memberName $ splice . to
+  importingSymbol moduleRef memberName $ splice . to
+
+importingModule ::
+  -- | Fully qualified module reference.
+  Text ->
+  (Text -> Code) ->
+  Code
+importingModule moduleName =
+  error "TODO"
 
 splice :: Splice -> Code
 splice splice =
@@ -212,16 +218,3 @@ indent spaces =
 prefix :: Text -> Code -> Code
 prefix prefix =
   mapSplice (Splice.prefixEachLine (to prefix))
-
-exp :: Exp.Exp -> Code
-exp exp =
-  Code compile
-  where
-    compile preferences deref =
-      Exp.toCompiledCode config exp
-      where
-        config =
-          Exp.Config
-            { overloadedRecordDot = preferences.overloadedRecordDot,
-              deref
-            }
