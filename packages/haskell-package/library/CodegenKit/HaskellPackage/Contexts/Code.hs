@@ -17,6 +17,7 @@ module CodegenKit.HaskellPackage.Contexts.Code
     importingModule,
     indent,
     prefix,
+    decimalLiteral,
   )
 where
 
@@ -32,6 +33,7 @@ import CodegenKit.Legacy.Dependencies qualified as Dependencies
 import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
 import Data.Text qualified as Text
+import TextBuilderDev qualified as UnilineSplice
 
 -- * Execution
 
@@ -222,3 +224,7 @@ indent spaces =
 prefix :: Text -> Code -> Code
 prefix prefix =
   mapSplice (Splice.prefixEachLine (to prefix))
+
+decimalLiteral :: (Integral a) => a -> Code
+decimalLiteral =
+  splice . to . UnilineSplice.decimal

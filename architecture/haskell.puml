@@ -6,9 +6,11 @@ component Exp
 component Type
 component Declaration
 component Module
+component GroupingCode
 
 Package --> Module : Composes
 Module --> Code : Composes
-Code <--> Exp : Composes and\ncompiles into
-Code <--> Type : Composes and\ncompiles into
-Code <--> Declaration : Composes and\ncompiles into
+Declaration --> Code : Extends
+GroupingCode --> Code : Extends
+Exp --> GroupingCode : Extends
+Type --> GroupingCode : Extends
