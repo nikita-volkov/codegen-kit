@@ -5,6 +5,7 @@ module CodegenKit.HaskellPackage.Contexts.CompiledCode
     fromModuleImport,
     mapSplice,
     addSymbolImport,
+    addModuleImport,
   )
 where
 
@@ -98,18 +99,29 @@ mapSplice mapper compiledCode =
     { splice = mapper compiledCode.splice
     }
 
-mapImports :: (Map Text (Set Text) -> Map Text (Set Text)) -> CompiledCode -> CompiledCode
-mapImports mapper compiledCode =
+mapSymbolImports :: (Map Text (Set Text) -> Map Text (Set Text)) -> CompiledCode -> CompiledCode
+mapSymbolImports mapper compiledCode =
   compiledCode
     { symbolImports = mapper compiledCode.symbolImports
     }
 
+mapModuleImports :: (Set Text -> Set Text) -> CompiledCode -> CompiledCode
+mapModuleImports mapper compiledCode =
+  compiledCode
+    { moduleImports = mapper compiledCode.moduleImports
+    }
+
 addSymbolImport :: Text -> Text -> CompiledCode -> CompiledCode
 addSymbolImport moduleName symbolName =
-  mapImports
+  mapSymbolImports
     $ Map.alter
       ( \case
           Nothing -> Just (Set.singleton symbolName)
           Just set -> Just (Set.insert symbolName set)
       )
       moduleName
+
+addModuleImport :: Text -> CompiledCode -> CompiledCode
+addModuleImport moduleName =
+  mapModuleImports
+    $ Set.insert moduleName

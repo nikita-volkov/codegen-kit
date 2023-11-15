@@ -14,6 +14,7 @@ module CodegenKit.HaskellPackage.Contexts.Code
     splice,
     importingSymbol,
     importedSymbol,
+    importingModule,
     indent,
     prefix,
   )
@@ -201,10 +202,13 @@ importedSymbol moduleRef memberName =
 importingModule ::
   -- | Fully qualified module reference.
   Text ->
+  -- | Code given a qualified module name.
   (Text -> Code) ->
   Code
-importingModule moduleName =
-  error "TODO"
+importingModule moduleName cont =
+  Code \preferences aliasModule ->
+    (cont (aliasModule moduleName)).compile preferences aliasModule
+      & CompiledCode.addModuleImport moduleName
 
 splice :: Splice -> Code
 splice splice =
