@@ -72,15 +72,12 @@ toPackageCompiledModule moduleConfig preferences code =
       Text.intercalate "." moduleConfig.namespace
 
     compiledCode =
-      code.compile preferences aliasModule
+      code.compile preferences (aliasModule . remap)
       where
         aliasModule qualified =
           case Map.lookup qualified aliasMap of
             Just alias -> alias
-            Nothing ->
-              case Map.lookup qualified remappingMap of
-                Just remapping -> remapping
-                Nothing -> qualified
+            Nothing -> qualified
 
     contentSplice =
       compiledCode.splice
@@ -90,6 +87,10 @@ toPackageCompiledModule moduleConfig preferences code =
 
     remappingMap =
       Map.fromList moduleConfig.importRemappings
+
+    remap name = case Map.lookup name remappingMap of
+      Just remapping -> remapping
+      Nothing -> name
 
     importsSplice =
       CodeTemplate.compileCodeTemplate style
@@ -103,6 +104,7 @@ toPackageCompiledModule moduleConfig preferences code =
         (symbolImportsUnqualified, symbolImportsQualified) =
           compiledCode.symbolImports
             & Map.toAscList
+            & fmap (first remap)
             & fmap
               ( \(name, symbols) ->
                   case Map.lookup name aliasMap of
