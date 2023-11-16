@@ -59,7 +59,13 @@ toPackageCompiledModule moduleConfig preferences code =
       requestedDependencies =
         compiledCode.dependencies,
       content =
-        content preferences compiledCode.symbolImports compiledCode.splice
+        [i|
+          module $moduleName where
+  
+          $importsSplice
+  
+          $contentSplice
+        |]
     }
   where
     moduleName =
@@ -67,26 +73,35 @@ toPackageCompiledModule moduleConfig preferences code =
 
     compiledCode =
       code.compile preferences aliasModule
+      where
+        aliasModule qualified =
+          case Map.lookup qualified aliasMap of
+            Just alias -> alias
+            Nothing ->
+              case Map.lookup qualified remappingMap of
+                Just remapping -> remapping
+                Nothing -> qualified
+
+    contentSplice =
+      compiledCode.splice
 
     aliasMap =
       Map.fromList moduleConfig.importAliases
 
-    aliasModule qualified =
-      case Map.lookup qualified aliasMap of
-        Just alias -> alias
-        Nothing -> qualified
+    remappingMap =
+      Map.fromList moduleConfig.importRemappings
 
-    content preferences imports bodySplice =
-      [i|
-        module $moduleName where
-
-        $importsSplice
-
-        $bodySplice
-      |]
+    importsSplice =
+      CodeTemplate.compileCodeTemplate style
+        $ ImportsBlockTemplate.ImportsBlock
+          { unqualified =
+              symbolImportsUnqualified,
+            qualified =
+              symbolImportsQualified
+          }
       where
-        importsSplice =
-          imports
+        (symbolImportsUnqualified, symbolImportsQualified) =
+          compiledCode.symbolImports
             & Map.toAscList
             & fmap
               ( \(name, symbols) ->
@@ -97,17 +112,12 @@ toPackageCompiledModule moduleConfig preferences code =
                       Right (ImportsBlockTemplate.QualifiedImport name alias)
               )
             & partitionEithers
-            & ( \(unqualified, qualified) ->
-                  ImportsBlockTemplate.ImportsBlock {..}
-              )
-            & CodeTemplate.compileCodeTemplate style
-          where
-            style =
-              CodeTemplate.CodeStyle
-                { importQualifiedPost = preferences.importQualifiedPost,
-                  overloadedRecordDot = preferences.overloadedRecordDot,
-                  strictData = preferences.strictData
-                }
+        style =
+          CodeTemplate.CodeStyle
+            { importQualifiedPost = preferences.importQualifiedPost,
+              overloadedRecordDot = preferences.overloadedRecordDot,
+              strictData = preferences.strictData
+            }
 
 toModuleFile :: ModuleConfig -> Preferences -> Code -> Fileset
 toModuleFile moduleConfig preferences code =
@@ -137,7 +147,9 @@ data ModuleConfig = ModuleConfig
     -- | Qualified import alias map.
     -- If a requested import is not present in it,
     -- it will be imported unqualified.
-    importAliases :: [(Text, Text)]
+    importAliases :: [(Text, Text)],
+    -- | Conversion of requested imports to other.
+    importRemappings :: [(Text, Text)]
   }
 
 newtype CodeConfig = CodeConfig

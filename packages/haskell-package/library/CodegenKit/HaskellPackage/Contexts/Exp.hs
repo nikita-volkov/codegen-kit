@@ -5,7 +5,7 @@ module CodegenKit.HaskellPackage.Contexts.Exp
     code,
     reference,
     infixBinOp,
-    intLiteral,
+    decimalLiteral,
     stringLiteral,
     multilineList,
     list,
@@ -101,8 +101,8 @@ infixBinOp moduleName symbolName left right =
                 Code.splice (to symbolName)
               )
 
-intLiteral :: (Integral a) => a -> Exp
-intLiteral =
+decimalLiteral :: (Integral a) => a -> Exp
+decimalLiteral =
   code False False . Code.decimalLiteral
 
 stringLiteral :: Text -> Exp
