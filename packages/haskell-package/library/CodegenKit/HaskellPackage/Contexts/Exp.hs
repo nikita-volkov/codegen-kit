@@ -202,23 +202,19 @@ apChain constructor params =
     pureCode = preludeRefCode "pure"
 
 alternatives ::
-  -- | Prelude namespace.
-  Text ->
   [Exp] ->
   Exp
-alternatives preludeNs = \case
-  [] -> reference preludeNs "empty"
+alternatives = \case
+  [] -> reference "Control.Applicative" "empty"
   [a] -> a
-  [a, b] -> infixBinOp preludeNs "<|>" a b
-  alternatives -> appChain (reference preludeNs "asum") [list alternatives]
+  [a, b] -> infixBinOp "Control.Applicative" "<|>" a b
+  alternatives -> appChain (reference "Control.Applicative" "asum") [list alternatives]
 
 staticMonoid ::
-  -- | Prelude namespace.
-  Text ->
   [Exp] ->
   Exp
-staticMonoid preludeNs = \case
-  [] -> reference preludeNs "mempty"
+staticMonoid = \case
+  [] -> reference "Data.Monoid" "mempty"
   [a] -> a
-  [a, b] -> infixBinOp preludeNs "<>" a b
-  a -> appChain (reference preludeNs "mconcat") [list a]
+  [a, b] -> infixBinOp "Data.Monoid" "<>" a b
+  a -> appChain (reference "Data.Monoid" "mconcat") [list a]
