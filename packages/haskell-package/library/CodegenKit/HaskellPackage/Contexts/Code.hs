@@ -18,6 +18,7 @@ module CodegenKit.HaskellPackage.Contexts.Code
     indent,
     prefix,
     decimalLiteral,
+    extension,
   )
 where
 
@@ -242,3 +243,8 @@ prefix prefix =
 decimalLiteral :: (Integral a) => a -> Code
 decimalLiteral =
   splice . to . UnilineSplice.decimal
+
+extension :: Text -> Code
+extension name =
+  Code \_ _ ->
+    CompiledCode.fromExtension name

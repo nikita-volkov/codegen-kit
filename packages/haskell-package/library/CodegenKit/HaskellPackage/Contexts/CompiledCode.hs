@@ -3,6 +3,7 @@ module CodegenKit.HaskellPackage.Contexts.CompiledCode
     fromSplice,
     fromSymbolImport,
     fromModuleImport,
+    fromExtension,
     mapSplice,
     addSymbolImport,
     addModuleImport,
@@ -90,6 +91,16 @@ fromModuleImport moduleName =
       dependencies = mempty,
       symbolImports = mempty,
       moduleImports = Set.singleton moduleName,
+      splice = mempty
+    }
+
+fromExtension :: Text -> CompiledCode
+fromExtension extension =
+  CompiledCode
+    { extensions = Set.singleton extension,
+      dependencies = mempty,
+      symbolImports = mempty,
+      moduleImports = mempty,
       splice = mempty
     }
 
