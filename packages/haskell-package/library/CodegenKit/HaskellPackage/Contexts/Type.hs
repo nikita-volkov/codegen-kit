@@ -1,7 +1,9 @@
 module CodegenKit.HaskellPackage.Contexts.Type where
 
+import Coalmine.BaseExtras.List qualified as List
 import Coalmine.Prelude
 import CodegenKit.HaskellPackage.Contexts.Code qualified as Code
+import CodegenKit.HaskellPackage.Contexts.Exp qualified as Exp
 
 toGroupedCode :: Type -> Code.Code
 toGroupedCode x =
@@ -105,4 +107,33 @@ binApplication function param =
           isMultiline = False,
           content =
             function.content <> " " <> toGroupedCode param
+        }
+
+tuple :: [Type] -> Type
+tuple params =
+  if any (.isMultiline) params
+    then
+      Type
+        { needsGrouping = False,
+          isMultiline = True,
+          content =
+            case params of
+              head : tail ->
+                mconcat
+                  [ "( ",
+                    Code.indent 2 (toUngroupedCode head <> foldMap (mappend ",\n" . toUngroupedCode) tail),
+                    "\n)"
+                  ]
+              _ -> "()"
+        }
+    else
+      Type
+        { needsGrouping = False,
+          isMultiline = False,
+          content =
+            mconcat
+              [ "(",
+                List.mapIntercalate (.content) ", " params,
+                ")"
+              ]
         }
