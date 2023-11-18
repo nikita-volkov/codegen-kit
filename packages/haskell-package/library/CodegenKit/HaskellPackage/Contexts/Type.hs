@@ -44,6 +44,31 @@ importedSymbol moduleRef memberName =
       content = Code.importedSymbol moduleRef memberName
     }
 
+importedSymbolWithDependency ::
+  -- | Package name.
+  Text ->
+  -- | Min inclusive version first position.
+  Word ->
+  -- | Min inclusive version remaining positions.
+  [Word] ->
+  -- | Max exclusive version first position.
+  Word ->
+  -- | Max exclusive version remaining positions.
+  [Word] ->
+  -- | Fully qualified module reference.
+  Text ->
+  -- | Member name.
+  Text ->
+  Type
+importedSymbolWithDependency packageName minHead minTail maxHead maxTail moduleRef memberName =
+  Type
+    { needsGrouping = False,
+      isMultiline = False,
+      content =
+        Code.dependency packageName minHead minTail maxHead maxTail
+          <> Code.importedSymbol moduleRef memberName
+    }
+
 chainApplication :: Type -> [Type] -> Type
 chainApplication function params =
   if all (not . (.isMultiline)) params && not function.isMultiline
