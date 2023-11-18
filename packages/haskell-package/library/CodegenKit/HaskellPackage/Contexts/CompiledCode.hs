@@ -4,6 +4,7 @@ module CodegenKit.HaskellPackage.Contexts.CompiledCode
     fromSymbolImport,
     fromModuleImport,
     fromExtension,
+    fromDependency,
     mapSplice,
     addSymbolImport,
     addModuleImport,
@@ -99,6 +100,16 @@ fromExtension extension =
   CompiledCode
     { extensions = Set.singleton extension,
       dependencies = mempty,
+      symbolImports = mempty,
+      moduleImports = mempty,
+      splice = mempty
+    }
+
+fromDependency :: Text -> Word -> [Word] -> Word -> [Word] -> CompiledCode
+fromDependency packageName minHead minTail maxHead maxTail =
+  CompiledCode
+    { extensions = mempty,
+      dependencies = Dependencies.singleton packageName minHead minTail maxHead maxTail,
       symbolImports = mempty,
       moduleImports = mempty,
       splice = mempty

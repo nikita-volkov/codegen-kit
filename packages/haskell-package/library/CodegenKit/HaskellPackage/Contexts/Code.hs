@@ -12,6 +12,7 @@ module CodegenKit.HaskellPackage.Contexts.Code
     -- * Code
     Code (..),
     splice,
+    dependency,
     importingSymbol,
     importedSymbol,
     importingModule,
@@ -188,6 +189,11 @@ mapSplice mapper code =
         code.compile preferences deref
           & CompiledCode.mapSplice mapper
     }
+
+dependency :: Text -> Word -> [Word] -> Word -> [Word] -> Code
+dependency packageName minHead minTail maxHead maxTail =
+  Code \_ _ ->
+    CompiledCode.fromDependency packageName minHead minTail maxHead maxTail
 
 importingSymbol ::
   -- | Fully qualified module reference.
