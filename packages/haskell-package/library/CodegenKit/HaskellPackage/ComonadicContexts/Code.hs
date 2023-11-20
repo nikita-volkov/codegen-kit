@@ -61,3 +61,9 @@ deriving instance ComonadTraced Config Context
 context :: CodeRequirements -> (Config -> a) -> Context a
 context codeRequirements compile =
   Context (EnvT codeRequirements compile)
+
+dependency :: (Monoid a) => Text -> Word -> [Word] -> Word -> [Word] -> Context a
+dependency packageName minHead minTail maxHead maxTail =
+  context
+    (CodeRequirements.fromDependency packageName minHead minTail maxHead maxTail)
+    mempty
