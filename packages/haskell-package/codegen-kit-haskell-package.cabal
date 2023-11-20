@@ -50,6 +50,7 @@ common base
     OverloadedLabels
     OverloadedRecordDot
     OverloadedStrings
+    PackageImports
     ParallelListComp
     PatternGuards
     PatternSynonyms
@@ -75,7 +76,9 @@ library
   import:          base
   hs-source-dirs:  library
   exposed-modules:
+    CodegenKit.HaskellPackage.Aggregates.CodeRequirements
     CodegenKit.HaskellPackage.Contexts.Code
+    CodegenKit.HaskellPackage.Contexts.Code2
     CodegenKit.HaskellPackage.Contexts.CompiledCode
     CodegenKit.HaskellPackage.Contexts.Exp
     CodegenKit.HaskellPackage.Contexts.GroupingCode
@@ -85,5 +88,6 @@ library
   build-depends:
     , coalmine
     , codegen-kit-legacy
+    , comonad
     , rerebase
     , text-builder-dev
