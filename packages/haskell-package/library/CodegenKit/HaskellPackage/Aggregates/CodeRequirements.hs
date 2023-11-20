@@ -7,6 +7,7 @@ module CodegenKit.HaskellPackage.Aggregates.CodeRequirements
     fromDependency,
     addSymbolImport,
     addModuleImport,
+    addDependency,
   )
 where
 
@@ -17,6 +18,7 @@ import Coalmine.Prelude
 import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
+import CodegenKit.Legacy.Dependencies (Dependencies)
 import CodegenKit.Legacy.Dependencies qualified as Dependencies
 import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
@@ -25,7 +27,7 @@ import Data.Text qualified as Text
 -- | Compiled code with metadata.
 data CodeRequirements = CodeRequirements
   { extensions :: Set Text,
-    dependencies :: Dependencies.Dependencies,
+    dependencies :: Dependencies,
     -- | Modules and symbols that are requested to be imported.
     symbolImports :: Map Text (Set Text),
     moduleImports :: Set Text
@@ -95,15 +97,21 @@ fromDependency packageName minHead minTail maxHead maxTail =
     }
 
 mapSymbolImports :: (Map Text (Set Text) -> Map Text (Set Text)) -> CodeRequirements -> CodeRequirements
-mapSymbolImports mapper compiledCode =
-  compiledCode
-    { symbolImports = mapper compiledCode.symbolImports
+mapSymbolImports mapper requirements =
+  requirements
+    { symbolImports = mapper requirements.symbolImports
     }
 
 mapModuleImports :: (Set Text -> Set Text) -> CodeRequirements -> CodeRequirements
-mapModuleImports mapper compiledCode =
-  compiledCode
-    { moduleImports = mapper compiledCode.moduleImports
+mapModuleImports mapper requirements =
+  requirements
+    { moduleImports = mapper requirements.moduleImports
+    }
+
+mapDependencies :: (Dependencies -> Dependencies) -> CodeRequirements -> CodeRequirements
+mapDependencies mapper requirements =
+  requirements
+    { dependencies = mapper requirements.dependencies
     }
 
 addSymbolImport :: Text -> Text -> CodeRequirements -> CodeRequirements
@@ -120,3 +128,8 @@ addModuleImport :: Text -> CodeRequirements -> CodeRequirements
 addModuleImport moduleName =
   mapModuleImports
     $ Set.insert moduleName
+
+addDependency :: Text -> Word -> [Word] -> Word -> [Word] -> CodeRequirements -> CodeRequirements
+addDependency packageName minHead minTail maxHead maxTail =
+  mapDependencies
+    $ Dependencies.add packageName minHead minTail maxHead maxTail

@@ -61,3 +61,10 @@ instance (Semigroup a) => Semigroup (Context a) where
 instance (Monoid a) => Monoid (Context a) where
   mempty =
     Context mempty
+
+dependency :: (Monoid a) => Text -> Word -> [Word] -> Word -> [Word] -> Context a
+dependency packageName minHead minTail maxHead maxTail =
+  Context \_ requirements ->
+    ( mempty,
+      CodeRequirements.addDependency packageName minHead minTail maxHead maxTail requirements
+    )
