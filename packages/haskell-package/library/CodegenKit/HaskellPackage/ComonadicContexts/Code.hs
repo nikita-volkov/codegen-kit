@@ -1,4 +1,4 @@
-module CodegenKit.HaskellPackage.Contexts2.Code2 where
+module CodegenKit.HaskellPackage.ComonadicContexts.Code where
 
 import Coalmine.EvenSimplerPaths qualified as Path
 import Coalmine.Fileset qualified as Fileset
