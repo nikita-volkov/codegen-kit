@@ -76,6 +76,7 @@ library
   import:          base
   hs-source-dirs:  library
   exposed-modules:
+    CodegenKit.HaskellPackage.Aggregates.CodeGrouping
     CodegenKit.HaskellPackage.Aggregates.CodeRequirements
     CodegenKit.HaskellPackage.ComonadicContexts.Code
     CodegenKit.HaskellPackage.Contexts.Code
