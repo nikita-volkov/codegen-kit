@@ -1,4 +1,4 @@
-module CodegenKit.HaskellPackage.Contexts.Code2 where
+module CodegenKit.HaskellPackage.Contexts2.Code3 where
 
 import Coalmine.EvenSimplerPaths qualified as Path
 import Coalmine.Fileset qualified as Fileset
@@ -14,10 +14,6 @@ import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
 import Data.Text qualified as Text
 import TextBuilderDev qualified as UnilineSplice
-import "comonad" Control.Comonad
-import "comonad" Control.Comonad.Env
-import "comonad" Control.Comonad.Store
-import "comonad" Control.Comonad.Traced
 
 newtype Config = Config
   { -- | Function attempting to look up an alias or
@@ -43,21 +39,21 @@ instance Monoid Config where
       }
 
 newtype Context a = Context
-  { envt :: EnvT CodeRequirements ((->) Config) a
+  { reader :: Config -> CodeRequirements -> (a, CodeRequirements)
   }
+  deriving
+    (Functor, Applicative, Monad)
+    via (ReaderT Config (State CodeRequirements))
 
-deriving instance Functor Context
-
-deriving instance Applicative Context
-
-instance Comonad Context where
-  extract = extract . (.envt)
-  duplicate (Context envt) = unsafeCoerce (duplicate envt)
-
-deriving instance ComonadEnv CodeRequirements Context
-
-deriving instance ComonadTraced Config Context
-
-context :: CodeRequirements -> (Config -> a) -> Context a
-context codeRequirements compile =
-  Context (EnvT codeRequirements compile)
+instance (Semigroup a) => Semigroup (Context a) where
+  left <> right =
+    Context
+      ( \config requirements ->
+          case left.reader config requirements of
+            (leftResult, leftResultRequirements) ->
+              case right.reader config leftResultRequirements of
+                (rightResult, rightResultRequirements) ->
+                  ( leftResult <> rightResult,
+                    rightResultRequirements
+                  )
+      )

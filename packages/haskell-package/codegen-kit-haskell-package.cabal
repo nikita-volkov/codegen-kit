@@ -78,13 +78,13 @@ library
   exposed-modules:
     CodegenKit.HaskellPackage.Aggregates.CodeRequirements
     CodegenKit.HaskellPackage.Contexts.Code
-    CodegenKit.HaskellPackage.Contexts.Code2
-    CodegenKit.HaskellPackage.Contexts.Code3
     CodegenKit.HaskellPackage.Contexts.CompiledCode
     CodegenKit.HaskellPackage.Contexts.Exp
     CodegenKit.HaskellPackage.Contexts.GroupingCode
     CodegenKit.HaskellPackage.Contexts.Package
     CodegenKit.HaskellPackage.Contexts.Type
+    CodegenKit.HaskellPackage.Contexts2.Code2
+    CodegenKit.HaskellPackage.Contexts2.Code3
 
   build-depends:
     , coalmine
