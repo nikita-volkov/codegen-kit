@@ -11,6 +11,7 @@ module CodegenKit.HaskellPackage.Contexts.Code
 
     -- * Code
     Code (..),
+    mapSplice,
     splice,
     dependency,
     importingSymbol,
