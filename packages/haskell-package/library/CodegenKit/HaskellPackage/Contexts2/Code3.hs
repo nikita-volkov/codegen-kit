@@ -57,3 +57,7 @@ instance (Semigroup a) => Semigroup (Context a) where
                     rightResultRequirements
                   )
       )
+
+instance (Monoid a) => Monoid (Context a) where
+  mempty =
+    Context mempty
