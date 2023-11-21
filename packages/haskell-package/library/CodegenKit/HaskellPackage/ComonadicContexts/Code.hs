@@ -23,23 +23,23 @@ newtype Config = Config
   { -- | Function attempting to look up an alias or
     -- qualified reference for a module,
     -- producing empty text otherwise.
-    aliasModule :: Text -> Text
+    aliasNamespace :: Text -> Text
   }
 
 instance Semigroup Config where
   left <> right =
     Config
-      { aliasModule = \input ->
-          let leftResult = left.aliasModule input
+      { aliasNamespace = \input ->
+          let leftResult = left.aliasNamespace input
            in if Text.null leftResult
-                then right.aliasModule input
+                then right.aliasNamespace input
                 else leftResult
       }
 
 instance Monoid Config where
   mempty =
     Config
-      { aliasModule = const Text.empty
+      { aliasNamespace = const Text.empty
       }
 
 newtype Context a = Context
@@ -54,6 +54,8 @@ instance Comonad Context where
   extract = extract . (.envt)
   duplicate (Context envt) = unsafeCoerce (duplicate envt)
 
+deriving instance ComonadApply Context
+
 deriving instance ComonadEnv CodeRequirements Context
 
 deriving instance ComonadTraced Config Context
@@ -67,3 +69,19 @@ dependency packageName minHead minTail maxHead maxTail =
   context
     (CodeRequirements.fromDependency packageName minHead minTail maxHead maxTail)
     mempty
+
+reference ::
+  -- | Fully qualified module reference.
+  Text ->
+  -- | Member name.
+  Text ->
+  Context Text
+reference namespace name =
+  context requirements compiler
+  where
+    requirements =
+      CodeRequirements.fromSymbolImport namespace name
+    compiler config =
+      case config.aliasNamespace namespace of
+        "" -> name
+        alias -> mconcat [alias, ".", name]
