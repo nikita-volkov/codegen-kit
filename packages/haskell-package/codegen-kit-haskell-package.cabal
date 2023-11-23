@@ -87,6 +87,7 @@ library
     CodegenKit.HaskellPackage.Contexts.GroupingCode
     CodegenKit.HaskellPackage.Contexts.Package
     CodegenKit.HaskellPackage.Contexts.Type
+    CodegenKit.HaskellPackage.Dsls.ValueExp
     CodegenKit.HaskellPackage.MonadicContexts.Code
 
   build-depends:

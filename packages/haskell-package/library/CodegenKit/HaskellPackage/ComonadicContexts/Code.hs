@@ -42,6 +42,8 @@ instance Monoid Config where
       { aliasNamespace = const Text.empty
       }
 
+-- |
+-- The most useful bit of this type is the Applicative instance, which lets you specify how you want the renderings to compose, while having the metadata composed automatically.
 newtype Context a = Context
   { envt :: EnvT CodeRequirements ((->) Config) a
   }
