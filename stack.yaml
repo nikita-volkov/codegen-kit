@@ -2,3 +2,4 @@ resolver: ./stack-snapshot/snapshot.yaml
 packages:
   - packages/legacy
   - packages/haskell-package
+  - packages/haskell-package-v2

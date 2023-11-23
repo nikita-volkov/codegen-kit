@@ -9,7 +9,6 @@ import CodegenKit.HaskellPackage.Aggregates.CodeGrouping qualified as CodeGroupi
 import CodegenKit.HaskellPackage.Aggregates.CodeRequirements (CodeRequirements)
 import CodegenKit.HaskellPackage.Aggregates.CodeRequirements qualified as CodeRequirements
 import CodegenKit.HaskellPackage.ComonadicContexts.Code qualified as Code
-import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Composers.Exp qualified as LegacyExp
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
@@ -18,10 +17,6 @@ import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
 import Data.Text qualified as Text
 import TextBuilderDev qualified as UnilineSplice
-import "comonad" Control.Comonad
-import "comonad" Control.Comonad.Env
-import "comonad" Control.Comonad.Store
-import "comonad" Control.Comonad.Traced
 
 toGroupedCodeSplice :: ValueExp -> Code.Context Splice
 toGroupedCodeSplice =

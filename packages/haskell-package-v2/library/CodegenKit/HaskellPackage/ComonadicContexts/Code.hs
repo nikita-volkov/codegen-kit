@@ -6,7 +6,6 @@ import Coalmine.MultilineTextBuilder qualified as Splice
 import Coalmine.Prelude hiding (exp)
 import CodegenKit.HaskellPackage.Aggregates.CodeRequirements (CodeRequirements)
 import CodegenKit.HaskellPackage.Aggregates.CodeRequirements qualified as CodeRequirements
-import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
 import CodegenKit.Legacy.Dependencies qualified as Dependencies

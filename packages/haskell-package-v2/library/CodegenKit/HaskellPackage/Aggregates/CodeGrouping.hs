@@ -4,7 +4,6 @@ import Coalmine.EvenSimplerPaths qualified as Path
 import Coalmine.Fileset qualified as Fileset
 import Coalmine.MultilineTextBuilder qualified as Splice
 import Coalmine.Prelude
-import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
 import CodegenKit.Legacy.Dependencies (Dependencies)

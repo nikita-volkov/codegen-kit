@@ -8,7 +8,6 @@ import CodegenKit.HaskellPackage.Aggregates.CodeGrouping qualified as CodeGroupi
 import CodegenKit.HaskellPackage.Aggregates.CodeRequirements (CodeRequirements)
 import CodegenKit.HaskellPackage.Aggregates.CodeRequirements qualified as CodeRequirements
 import CodegenKit.HaskellPackage.ComonadicContexts.Code qualified as Code
-import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Composers.Exp qualified as LegacyExp
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate

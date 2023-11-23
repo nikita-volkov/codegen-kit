@@ -1,5 +1,5 @@
 cabal-version: 3.0
-name:          codegen-kit-haskell-package
+name:          codegen-kit-haskell-package-v2
 version:       0
 synopsis:      Haskell package construction eDSL
 homepage:      https://github.com/nikita-volkov/codegen-kit
@@ -77,12 +77,12 @@ library
   import:          base
   hs-source-dirs:  library
   exposed-modules:
-    CodegenKit.HaskellPackage.Contexts.Code
-    CodegenKit.HaskellPackage.Contexts.CompiledCode
-    CodegenKit.HaskellPackage.Contexts.Exp
-    CodegenKit.HaskellPackage.Contexts.GroupingCode
-    CodegenKit.HaskellPackage.Contexts.Package
-    CodegenKit.HaskellPackage.Contexts.Type
+    CodegenKit.HaskellPackage.Aggregates.CodeGrouping
+    CodegenKit.HaskellPackage.Aggregates.CodeRequirements
+    CodegenKit.HaskellPackage.ComonadicContexts.Code
+    CodegenKit.HaskellPackage.ComonadicContexts.ValueExp
+    CodegenKit.HaskellPackage.Dsls.ValueExp
+    CodegenKit.HaskellPackage.MonadicContexts.Code
 
   build-depends:
     , coalmine
