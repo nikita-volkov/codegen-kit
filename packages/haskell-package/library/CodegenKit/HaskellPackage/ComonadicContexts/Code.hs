@@ -70,18 +70,24 @@ dependency packageName minHead minTail maxHead maxTail =
     (CodeRequirements.fromDependency packageName minHead minTail maxHead maxTail)
     mempty
 
-reference ::
+importedSymbol ::
   -- | Fully qualified module reference.
   Text ->
   -- | Member name.
   Text ->
-  Context Text
-reference namespace name =
+  Context Splice
+importedSymbol namespace name =
   context requirements compiler
   where
     requirements =
       CodeRequirements.fromSymbolImport namespace name
     compiler config =
       case config.aliasNamespace namespace of
-        "" -> name
-        alias -> mconcat [alias, ".", name]
+        "" -> to name
+        alias -> mconcat [to alias, ".", to name]
+
+importedModule :: Text -> Context Text
+importedModule namespace =
+  context
+    (CodeRequirements.fromModuleImport namespace)
+    (\config -> config.aliasNamespace namespace)

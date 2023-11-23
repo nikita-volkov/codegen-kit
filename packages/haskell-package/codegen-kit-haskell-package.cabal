@@ -20,6 +20,7 @@ common base
     NoFieldSelectors
     NoImplicitPrelude
     NoMonomorphismRestriction
+    ApplicativeDo
     BangPatterns
     BlockArguments
     ConstraintKinds
