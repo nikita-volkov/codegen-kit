@@ -99,6 +99,10 @@ binApplication function param =
             function.content <> " " <> toGroupedCodeSplice param
         }
 
+decimalLiteral :: (Integral a) => a -> Exp
+decimalLiteral =
+  Exp False False . pure . to . UnilineSplice.decimal
+
 stringLiteral :: Text -> Exp
 stringLiteral text =
   Exp False isMultiline (pure splice)
