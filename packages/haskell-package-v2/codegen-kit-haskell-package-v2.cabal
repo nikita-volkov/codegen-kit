@@ -73,6 +73,10 @@ common executable
   import:      base
   ghc-options: -O2 -threaded "-with-rtsopts=-N -I0 -qg"
 
+common test
+  import:      base
+  ghc-options: -threaded "-with-rtsopts=-N -I0 -qg"
+
 library
   import:          base
   hs-source-dirs:  library
@@ -91,3 +95,24 @@ library
     , rerebase
     , text-builder-dev
     , transformers
+
+test-suite test
+  import:             test
+  type:               exitcode-stdio-1.0
+  hs-source-dirs:     test
+  main-is:            Main.hs
+  other-modules:      CodegenKit.HaskellPackage.Dsls.ExpSpec
+  build-tool-depends: hspec-discover:hspec-discover >=2.11.7 && <3
+  build-depends:
+    , coalmine
+    , codegen-kit-haskell-package-v2
+    , hspec
+
+test-suite demo
+  import:         test
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: demo
+  main-is:        Main.hs
+  build-depends:
+    , coalmine
+    , codegen-kit-haskell-package-v2
