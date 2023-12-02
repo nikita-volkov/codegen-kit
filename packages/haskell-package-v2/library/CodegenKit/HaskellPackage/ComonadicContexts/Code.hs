@@ -61,6 +61,25 @@ deriving instance ComonadEnv CodeRequirements Context
 
 deriving instance ComonadTraced Config Context
 
+instance (Semigroup a) => Semigroup (Context a) where
+  Context (EnvT leftCodeRequirements leftPrinter) <> Context (EnvT rightCodeRequirements rightPrinter) =
+    Context
+      ( EnvT
+          (leftCodeRequirements <> rightCodeRequirements)
+          (leftPrinter <> rightPrinter)
+      )
+
+instance (Monoid a) => Monoid (Context a) where
+  mempty =
+    Context (EnvT mempty mempty)
+
+instance (IsString a) => IsString (Context a) where
+  fromString x =
+    Context (EnvT mempty (const (fromString x)))
+
+run :: Context a -> (CodeRequirements, Config -> a)
+run = runEnvT . (.envt)
+
 context :: CodeRequirements -> (Config -> a) -> Context a
 context codeRequirements compile =
   Context (EnvT codeRequirements compile)
