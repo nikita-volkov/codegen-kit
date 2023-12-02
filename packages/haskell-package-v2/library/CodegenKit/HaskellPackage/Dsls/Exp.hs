@@ -75,7 +75,7 @@ chainApplication function params =
     else
       Exp
         { needsGrouping = True,
-          isMultiline = False,
+          isMultiline = True,
           content =
             toGroupedCodeSplice function
               <> fmap (Splice.indent 2) (foldMap (mappend "\n" . toGroupedCodeSplice) params)
