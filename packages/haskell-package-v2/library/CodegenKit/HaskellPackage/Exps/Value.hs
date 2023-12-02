@@ -1,5 +1,5 @@
 -- | Value expression printer DSL managing metadata about dependencies, imports and extensions.
-module CodegenKit.HaskellPackage.Dsls.ValueExp where
+module CodegenKit.HaskellPackage.Exps.Value where
 
 import Coalmine.BaseExtras.List qualified as List
 import Coalmine.EvenSimplerPaths qualified as Path
