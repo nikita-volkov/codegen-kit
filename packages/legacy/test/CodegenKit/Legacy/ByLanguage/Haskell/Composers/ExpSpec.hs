@@ -12,11 +12,12 @@ spec = do
         ( to @Text
             ( groupedExp
                 ( infixBinOp
+                    ""
                     "<*"
                     (reference "" "aa")
                     ( multilineList
                         [ reference "" "bbb",
-                          infixBinOp "<*" (reference "" "cc") (reference "" "ddd")
+                          infixBinOp "" "<*" (reference "" "cc") (reference "" "ddd")
                         ]
                     )
                 )
