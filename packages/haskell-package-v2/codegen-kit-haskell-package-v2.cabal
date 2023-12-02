@@ -80,7 +80,6 @@ library
     CodegenKit.HaskellPackage.Aggregates.CodeGrouping
     CodegenKit.HaskellPackage.Aggregates.CodeRequirements
     CodegenKit.HaskellPackage.ComonadicContexts.Code
-    CodegenKit.HaskellPackage.ComonadicContexts.ValueExp
     CodegenKit.HaskellPackage.Dsls.Exp
     CodegenKit.HaskellPackage.Dsls.ValueExp
     CodegenKit.HaskellPackage.MonadicContexts.Code
