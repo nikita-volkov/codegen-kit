@@ -86,7 +86,6 @@ library
     CodegenKit.HaskellPackage.ComonadicContexts.Code
     CodegenKit.HaskellPackage.Dsls.Exp
     CodegenKit.HaskellPackage.Exps.Value
-    CodegenKit.HaskellPackage.MonadicContexts.Code
 
   build-depends:
     , coalmine
