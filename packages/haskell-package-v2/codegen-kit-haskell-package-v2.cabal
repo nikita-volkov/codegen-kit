@@ -85,6 +85,7 @@ library
     CodegenKit.HaskellPackage.Aggregates.CodeRequirements
     CodegenKit.HaskellPackage.ComonadicContexts.Code
     CodegenKit.HaskellPackage.Dsls.Exp
+    CodegenKit.HaskellPackage.Dsls.Package
     CodegenKit.HaskellPackage.Exps.Value
 
   build-depends:
