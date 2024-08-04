@@ -102,7 +102,7 @@ toPackageCompiledModule moduleConfig preferences code =
           { unqualified =
               symbolImportsUnqualified,
             qualified =
-              symbolImportsQualified
+              symbolImportsQualified <> moduleImports
           }
       where
         (symbolImportsUnqualified, symbolImportsQualified) =
@@ -118,6 +118,16 @@ toPackageCompiledModule moduleConfig preferences code =
                       Right (ImportsBlockTemplate.QualifiedImport name alias)
               )
             & partitionEithers
+        moduleImports =
+          compiledCode.moduleImports
+            & Set.toList
+            & fmap
+              ( \name ->
+                  let alias = case Map.lookup name aliasMap of
+                        Nothing -> ""
+                        Just x -> x
+                   in ImportsBlockTemplate.QualifiedImport name alias
+              )
         style =
           CodeTemplate.CodeStyle
             { importQualifiedPost = preferences.importQualifiedPost,
@@ -171,6 +181,17 @@ data Preferences = Preferences
     overloadedRecordDot :: Bool,
     importQualifiedPost :: Bool
   }
+
+instance Semigroup Preferences where
+  left <> right =
+    Preferences
+      { strictData = left.strictData || right.strictData,
+        overloadedRecordDot = left.overloadedRecordDot || right.overloadedRecordDot,
+        importQualifiedPost = left.importQualifiedPost || right.importQualifiedPost
+      }
+
+instance Monoid Preferences where
+  mempty = Preferences False False False
 
 -- * Code
 
