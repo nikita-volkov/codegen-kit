@@ -154,6 +154,7 @@ data ModuleConfig = ModuleConfig
     -- it will be imported unqualified.
     importAliases :: [(Text, Text)],
     -- | Conversion of requested imports to other.
+    -- It's a mechanism for overriding.
     importRemappings :: [(Text, Text)]
   }
 
