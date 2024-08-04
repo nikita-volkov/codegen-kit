@@ -17,6 +17,7 @@ module CodegenKit.HaskellPackage.Contexts.Code
     importingSymbol,
     importedSymbol,
     importingModule,
+    export,
     indent,
     prefix,
     decimalLiteral,
@@ -234,6 +235,11 @@ importingModule moduleName cont =
   Code \preferences aliasModule ->
     (cont (aliasModule moduleName)).compile preferences aliasModule
       & CompiledCode.addModuleImport moduleName
+
+export :: Text -> Code
+export content =
+  Code \_ _ ->
+    CompiledCode.fromExport content
 
 splice :: Splice -> Code
 splice splice =

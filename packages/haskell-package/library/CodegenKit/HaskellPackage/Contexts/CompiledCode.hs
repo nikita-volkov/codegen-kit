@@ -3,11 +3,13 @@ module CodegenKit.HaskellPackage.Contexts.CompiledCode
     fromSplice,
     fromSymbolImport,
     fromModuleImport,
+    fromExport,
     fromExtension,
     fromDependency,
     mapSplice,
     addSymbolImport,
     addModuleImport,
+    addExport,
   )
 where
 
@@ -32,6 +34,7 @@ data CompiledCode = CompiledCode
     -- | Modules and symbols that are requested to be imported.
     symbolImports :: Map Text (Set Text),
     moduleImports :: Set Text,
+    exports :: [Text],
     splice :: Splice
   }
 
@@ -42,6 +45,7 @@ instance Semigroup CompiledCode where
         dependencies = left.dependencies <> right.dependencies,
         symbolImports = Map.unionWith Set.union left.symbolImports right.symbolImports,
         moduleImports = Set.union left.moduleImports right.moduleImports,
+        exports = left.exports <> right.exports,
         splice = left.splice <> right.splice
       }
 
@@ -52,6 +56,7 @@ instance Monoid CompiledCode where
         dependencies = mempty,
         symbolImports = mempty,
         moduleImports = mempty,
+        exports = mempty,
         splice = mempty
       }
 
@@ -62,6 +67,7 @@ instance IsString CompiledCode where
         dependencies = mempty,
         symbolImports = mempty,
         moduleImports = mempty,
+        exports = mempty,
         splice = fromString string
       }
 
@@ -72,6 +78,7 @@ fromSplice splice =
       dependencies = mempty,
       symbolImports = mempty,
       moduleImports = mempty,
+      exports = mempty,
       splice
     }
 
@@ -82,6 +89,7 @@ fromSymbolImport moduleName symbolName =
       dependencies = mempty,
       symbolImports = Map.singleton moduleName (Set.singleton symbolName),
       moduleImports = mempty,
+      exports = mempty,
       splice = mempty
     }
 
@@ -92,8 +100,13 @@ fromModuleImport moduleName =
       dependencies = mempty,
       symbolImports = mempty,
       moduleImports = Set.singleton moduleName,
+      exports = mempty,
       splice = mempty
     }
+
+fromExport :: Text -> CompiledCode
+fromExport export =
+  addExport export mempty
 
 fromExtension :: Text -> CompiledCode
 fromExtension extension =
@@ -102,6 +115,7 @@ fromExtension extension =
       dependencies = mempty,
       symbolImports = mempty,
       moduleImports = mempty,
+      exports = mempty,
       splice = mempty
     }
 
@@ -112,6 +126,7 @@ fromDependency packageName minHead minTail maxHead maxTail =
       dependencies = Dependencies.singleton packageName minHead minTail maxHead maxTail,
       symbolImports = mempty,
       moduleImports = mempty,
+      exports = mempty,
       splice = mempty
     }
 
@@ -147,3 +162,7 @@ addModuleImport :: Text -> CompiledCode -> CompiledCode
 addModuleImport moduleName =
   mapModuleImports
     $ Set.insert moduleName
+
+addExport :: Text -> CompiledCode -> CompiledCode
+addExport export code =
+  code {exports = export : code.exports}
