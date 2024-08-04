@@ -11,6 +11,7 @@ module CodegenKit.HaskellPackage.Contexts.Code
 
     -- * Code
     Code (..),
+    splicing,
     mapSplice,
     splice,
     dependency,
@@ -205,6 +206,14 @@ newtype Code = Code
 
 instance IsString Code where
   fromString = Code . const . const . fromString
+
+-- | A hook allowing to splice into code, while merging the metadata.
+splicing :: Code -> (Splice -> Code) -> Code
+splicing code cont =
+  Code \preferences aliasModule ->
+    let compiled = code.compile preferences aliasModule
+     in (cont compiled.splice).compile preferences aliasModule
+          <> compiled {CompiledCode.splice = mempty}
 
 mapSplice :: (Splice -> Splice) -> Code -> Code
 mapSplice mapper code =
