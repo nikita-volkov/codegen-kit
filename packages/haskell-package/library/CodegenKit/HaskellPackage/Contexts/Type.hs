@@ -3,7 +3,6 @@ module CodegenKit.HaskellPackage.Contexts.Type where
 import Coalmine.BaseExtras.List qualified as List
 import Coalmine.Prelude
 import CodegenKit.HaskellPackage.Contexts.Code qualified as Code
-import CodegenKit.HaskellPackage.Contexts.Exp qualified as Exp
 
 toGroupedCode :: Type -> Code.Code
 toGroupedCode x =

@@ -87,7 +87,5 @@ library
   build-depends:
     , coalmine
     , codegen-kit-legacy
-    , comonad
     , rerebase
     , text-builder-dev
-    , transformers

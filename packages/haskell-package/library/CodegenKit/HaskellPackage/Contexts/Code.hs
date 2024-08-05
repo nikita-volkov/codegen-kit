@@ -3,7 +3,6 @@ module CodegenKit.HaskellPackage.Contexts.Code
     toPackageModule,
     toModuleFile,
     toModuleText,
-    toHeadlessSplice,
 
     -- ** Execution configs
     ModuleConfig (..),
@@ -34,7 +33,6 @@ import CodegenKit.HaskellPackage.Contexts.CompiledCode qualified as CompiledCode
 import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
 import CodegenKit.Legacy.ByLanguage.Haskell.Templates.ImportsBlock qualified as ImportsBlockTemplate
-import CodegenKit.Legacy.Dependencies qualified as Dependencies
 import Data.Map.Strict qualified as Map
 import Data.Set qualified as Set
 import Data.Text qualified as Text
@@ -148,14 +146,6 @@ toModuleText moduleConfig preferences code =
     & \compiledModule ->
       compiledModule.content
 
-toHeadlessSplice :: CodeConfig -> Preferences -> Code -> Splice
-toHeadlessSplice config preferences code =
-  (code.compile preferences config.aliasModule).splice
-
-toCompiledCode :: CodeConfig -> Preferences -> Code -> CompiledCode.CompiledCode
-toCompiledCode config preferences code =
-  code.compile preferences config.aliasModule
-
 -- ** Execution configs
 
 data ModuleConfig = ModuleConfig
@@ -168,13 +158,6 @@ data ModuleConfig = ModuleConfig
     -- | Conversion of requested imports to other.
     -- It's a mechanism for overriding.
     importRemappings :: [(Text, Text)]
-  }
-
-newtype CodeConfig = CodeConfig
-  { -- | Function attempting to look up an alias or
-    -- qualified reference for a module,
-    -- producing empty text otherwise.
-    aliasModule :: Text -> Text
   }
 
 data Preferences = Preferences

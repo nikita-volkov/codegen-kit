@@ -94,7 +94,6 @@ library
     , comonad
     , rerebase
     , text-builder-dev
-    , transformers
 
 test-suite test
   import:             test
@@ -105,7 +104,6 @@ test-suite test
   build-tool-depends: hspec-discover:hspec-discover >=2.11.7 && <3
   build-depends:
     , coalmine
-    , codegen-kit-haskell-package-v2
     , hspec
 
 test-suite demo
@@ -113,6 +111,4 @@ test-suite demo
   type:           exitcode-stdio-1.0
   hs-source-dirs: demo
   main-is:        Main.hs
-  build-depends:
-    , coalmine
-    , codegen-kit-haskell-package-v2
+  build-depends:  coalmine

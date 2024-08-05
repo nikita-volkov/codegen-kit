@@ -2,6 +2,7 @@ module CodegenKit.HaskellPackage.Contexts.Exp
   ( toGroupedCode,
     toUngroupedCode,
     Exp,
+    mapGroupingCode,
     code,
     reference,
     infixBinOp,
@@ -22,10 +23,8 @@ import Coalmine.BaseExtras.List qualified as List
 import Coalmine.Prelude
 import CodegenKit.HaskellPackage.Contexts.Code (Code)
 import CodegenKit.HaskellPackage.Contexts.Code qualified as Code
-import CodegenKit.HaskellPackage.Contexts.CompiledCode qualified as CompiledCode
 import CodegenKit.HaskellPackage.Contexts.GroupingCode (GroupingCode)
 import CodegenKit.HaskellPackage.Contexts.GroupingCode qualified as GroupingCode
-import CodegenKit.Legacy.ByLanguage.Haskell.Composers.Exp qualified as LegacyExp
 import Data.Text qualified as Text
 
 toGroupedCode :: Exp -> Code

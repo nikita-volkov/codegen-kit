@@ -1,10 +1,6 @@
 module CodegenKit.HaskellPackage.Dsls.Package where
 
-import Coalmine.EvenSimplerPaths qualified as Path
-import Coalmine.Fileset qualified as Fileset
-import Coalmine.MultilineTextBuilder qualified as Splice
 import Coalmine.Prelude
-import CodegenKit.HaskellPackage.ComonadicContexts.Code qualified as Code
 
 printPackage :: Package -> Text
 printPackage =
