@@ -2,13 +2,15 @@ module CodegenKit.HaskellPackage.Contexts.CompiledCode
   ( CompiledCode (..),
     fromSplice,
     fromSymbolImport,
-    fromModuleImport,
+    fromQualifiedModuleImport,
+    fromUnqualifiedModuleImport,
     fromExport,
     fromExtension,
     fromDependency,
     mapSplice,
     addSymbolImport,
-    addModuleImport,
+    addQualifiedModuleImport,
+    addUnqualifiedModuleImport,
     addExport,
   )
 where
@@ -26,7 +28,8 @@ data CompiledCode = CompiledCode
     dependencies :: Dependencies.Dependencies,
     -- | Modules and symbols that are requested to be imported.
     symbolImports :: Map Text (Set Text),
-    moduleImports :: Set Text,
+    -- | Modules and whether they should be imported qualified.
+    moduleImports :: Map Text Bool,
     exports :: [Text],
     splice :: Splice
   }
@@ -37,7 +40,7 @@ instance Semigroup CompiledCode where
       { extensions = left.extensions <> right.extensions,
         dependencies = left.dependencies <> right.dependencies,
         symbolImports = Map.unionWith Set.union left.symbolImports right.symbolImports,
-        moduleImports = Set.union left.moduleImports right.moduleImports,
+        moduleImports = Map.unionWith (||) left.moduleImports right.moduleImports,
         exports = left.exports <> right.exports,
         splice = left.splice <> right.splice
       }
@@ -86,13 +89,24 @@ fromSymbolImport moduleName symbolName =
       splice = mempty
     }
 
-fromModuleImport :: Text -> CompiledCode
-fromModuleImport moduleName =
+fromQualifiedModuleImport :: Text -> CompiledCode
+fromQualifiedModuleImport moduleName =
   CompiledCode
     { extensions = mempty,
       dependencies = mempty,
       symbolImports = mempty,
-      moduleImports = Set.singleton moduleName,
+      moduleImports = Map.singleton moduleName True,
+      exports = mempty,
+      splice = mempty
+    }
+
+fromUnqualifiedModuleImport :: Text -> CompiledCode
+fromUnqualifiedModuleImport moduleName =
+  CompiledCode
+    { extensions = mempty,
+      dependencies = mempty,
+      symbolImports = mempty,
+      moduleImports = Map.singleton moduleName False,
       exports = mempty,
       splice = mempty
     }
@@ -135,12 +149,6 @@ mapSymbolImports mapper compiledCode =
     { symbolImports = mapper compiledCode.symbolImports
     }
 
-mapModuleImports :: (Set Text -> Set Text) -> CompiledCode -> CompiledCode
-mapModuleImports mapper compiledCode =
-  compiledCode
-    { moduleImports = mapper compiledCode.moduleImports
-    }
-
 addSymbolImport :: Text -> Text -> CompiledCode -> CompiledCode
 addSymbolImport moduleName symbolName =
   mapSymbolImports
@@ -151,10 +159,19 @@ addSymbolImport moduleName symbolName =
       )
       moduleName
 
-addModuleImport :: Text -> CompiledCode -> CompiledCode
-addModuleImport moduleName =
-  mapModuleImports
-    $ Set.insert moduleName
+addQualifiedModuleImport :: Text -> CompiledCode -> CompiledCode
+addQualifiedModuleImport moduleName x =
+  x
+    { moduleImports =
+        Map.insert moduleName True x.moduleImports
+    }
+
+addUnqualifiedModuleImport :: Text -> CompiledCode -> CompiledCode
+addUnqualifiedModuleImport moduleName x =
+  x
+    { moduleImports =
+        Map.insertWith (||) moduleName False x.moduleImports
+    }
 
 addExport :: Text -> CompiledCode -> CompiledCode
 addExport export code =

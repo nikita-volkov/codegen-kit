@@ -29,7 +29,7 @@ data UnqualifiedImport = UnqualifiedImport
   { qualifiedName :: Text,
     symbols :: Maybe [Text]
   }
-  deriving (Ord, Eq)
+  deriving (Ord, Eq, Show)
 
 instance CodeTemplate UnqualifiedImport where
   compileCodeTemplate _ UnqualifiedImport {..} =
@@ -48,7 +48,7 @@ data QualifiedImport = QualifiedImport
     -- | If empty, it's considered empty.
     alias :: Text
   }
-  deriving (Ord, Eq)
+  deriving (Ord, Eq, Show)
 
 instance CodeTemplate QualifiedImport where
   compileCodeTemplate style QualifiedImport {..} =

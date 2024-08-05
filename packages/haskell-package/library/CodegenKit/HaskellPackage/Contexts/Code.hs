@@ -18,6 +18,7 @@ module CodegenKit.HaskellPackage.Contexts.Code
     importedSymbol,
     importingModule,
     export,
+    reexportUnqualifiedModule,
     indent,
     prefix,
     decimalLiteral,
@@ -29,6 +30,7 @@ import Coalmine.EvenSimplerPaths qualified as Path
 import Coalmine.Fileset qualified as Fileset
 import Coalmine.MultilineTextBuilder qualified as Splice
 import Coalmine.Prelude hiding (exp)
+import CodegenKit.HaskellPackage.Contexts.Code.Templates.Module qualified as Templates.Module
 import CodegenKit.HaskellPackage.Contexts.CompiledCode qualified as CompiledCode
 import CodegenKit.HaskellPackage.Contexts.Package qualified as Package
 import CodegenKit.Legacy.ByLanguage.Haskell.CodeTemplate qualified as CodeTemplate
@@ -62,13 +64,16 @@ toPackageCompiledModule moduleConfig preferences code =
       requestedDependencies =
         compiledCode.dependencies,
       content =
-        [i|
-          module $moduleName where
-  
-          $importsSplice
-  
-          $contentSplice
-        |]
+        Templates.Module.compile
+          Templates.Module.Params
+            { moduleName = to moduleName,
+              exports =
+                case compiledCode.exports of
+                  [] -> Nothing
+                  exports -> exports & fmap to & Just,
+              imports = importsSplice,
+              content = compiledCode.splice
+            }
     }
   where
     moduleName =
@@ -81,9 +86,6 @@ toPackageCompiledModule moduleConfig preferences code =
           case Map.lookup qualified aliasMap of
             Just alias -> alias
             Nothing -> qualified
-
-    contentSplice =
-      compiledCode.splice
 
     aliasMap =
       Map.fromList moduleConfig.importAliases
@@ -99,9 +101,9 @@ toPackageCompiledModule moduleConfig preferences code =
       CodeTemplate.compileCodeTemplate style
         $ ImportsBlockTemplate.ImportsBlock
           { unqualified =
-              symbolImportsUnqualified,
+              symbolImportsUnqualified <> moduleImportsUnqualified,
             qualified =
-              symbolImportsQualified <> moduleImports
+              symbolImportsQualified <> moduleImportsQualified
           }
       where
         (symbolImportsUnqualified, symbolImportsQualified) =
@@ -117,16 +119,21 @@ toPackageCompiledModule moduleConfig preferences code =
                       Right (ImportsBlockTemplate.QualifiedImport name alias)
               )
             & partitionEithers
-        moduleImports =
+        (moduleImportsUnqualified, moduleImportsQualified) =
           compiledCode.moduleImports
-            & Set.toList
+            & Map.toList
             & fmap
-              ( \name ->
-                  let alias = case Map.lookup name aliasMap of
-                        Nothing -> ""
-                        Just x -> x
-                   in ImportsBlockTemplate.QualifiedImport name alias
+              ( \(name, qualified) ->
+                  if qualified
+                    then
+                      let alias = case Map.lookup name aliasMap of
+                            Nothing -> ""
+                            Just x -> x
+                       in Right (ImportsBlockTemplate.QualifiedImport name alias)
+                    else
+                      Left (ImportsBlockTemplate.UnqualifiedImport name Nothing)
               )
+            & partitionEithers
         style =
           CodeTemplate.CodeStyle
             { importQualifiedPost = preferences.importQualifiedPost,
@@ -247,12 +254,18 @@ importingModule ::
 importingModule moduleName cont =
   Code \preferences aliasModule ->
     (cont (aliasModule moduleName)).compile preferences aliasModule
-      & CompiledCode.addModuleImport moduleName
+      & CompiledCode.addQualifiedModuleImport moduleName
 
 export :: Text -> Code
 export content =
   Code \_ _ ->
     CompiledCode.fromExport content
+
+reexportUnqualifiedModule :: Text -> Code
+reexportUnqualifiedModule name =
+  Code \_ _ ->
+    CompiledCode.fromUnqualifiedModuleImport name
+      & CompiledCode.addExport ("module " <> name)
 
 splice :: Splice -> Code
 splice splice =

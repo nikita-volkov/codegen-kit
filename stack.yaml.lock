@@ -16,20 +16,20 @@ packages:
   original:
     url: https://github.com/nikita-volkov/curly/archive/befa756b963f049f34ff63d905c50125fb2f195f.tar.gz
 - completed:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     name: coalmine
     pantry-tree:
-      sha256: 327b98236d97ecd0548449c38fa4acafbfc788050284b1d7a928729e5bbbe006
+      sha256: 5b3a368dbac5badbfd816ee9578e76deef2ce54684a61a08c0d8a1b8eab781ec
       size: 14441
     subdir: coalmine
     version: '0'
   original:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     subdir: coalmine
 - completed:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     name: lift-instances
     pantry-tree:
@@ -38,11 +38,11 @@ packages:
     subdir: lift-instances
     version: '0'
   original:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     subdir: lift-instances
 - completed:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     name: posix-path
     pantry-tree:
@@ -51,11 +51,11 @@ packages:
     subdir: posix-path
     version: '0'
   original:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     subdir: posix-path
 - completed:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     name: posix-path-directory
     pantry-tree:
@@ -64,11 +64,11 @@ packages:
     subdir: posix-path-directory
     version: '0'
   original:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     subdir: posix-path-directory
 - completed:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     name: posix-path-structures
     pantry-tree:
@@ -77,11 +77,11 @@ packages:
     subdir: posix-path-structures
     version: '0'
   original:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     subdir: posix-path-structures
 - completed:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     name: qq-extras
     pantry-tree:
@@ -90,7 +90,7 @@ packages:
     subdir: qq-extras
     version: '0'
   original:
-    commit: e6d8718282739d51b597f63d00b08d9dfb1c46aa
+    commit: 69e985439b3967de6edf1585bf4e2a6ab82a81a4
     git: https://github.com/nikita-volkov/coalmine
     subdir: qq-extras
 - completed:
