@@ -125,11 +125,12 @@ toPackageCompiledModule moduleConfig preferences code =
             & fmap
               ( \(name, qualified) ->
                   if qualified
-                    then
-                      let alias = case Map.lookup name aliasMap of
-                            Nothing -> ""
-                            Just x -> x
-                       in Right (ImportsBlockTemplate.QualifiedImport name alias)
+                    then case Map.lookup name aliasMap of
+                      Nothing -> Right (ImportsBlockTemplate.QualifiedImport name "")
+                      Just alias ->
+                        if Text.null alias
+                          then Left (ImportsBlockTemplate.UnqualifiedImport name Nothing)
+                          else Right (ImportsBlockTemplate.QualifiedImport name alias)
                     else
                       Left (ImportsBlockTemplate.UnqualifiedImport name Nothing)
               )
