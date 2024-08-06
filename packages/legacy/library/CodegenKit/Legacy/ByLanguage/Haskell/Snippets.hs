@@ -9,11 +9,14 @@ import TextBuilderDev qualified as B'
 -- |
 -- Multiline Haddock in the prefix position.
 prefixHaddock :: Text -> Builder
-prefixHaddock =
-  mappend "-- |"
-    . foldMap (mappend "\n-- ")
-    . fmap (from @Text)
-    . Text.lines
+prefixHaddock text =
+  case Text.lines text of
+    [] -> ""
+    [line] -> "-- | " <> to line
+    lines ->
+      mappend "-- |"
+        . foldMap (mappend "\n-- " . to)
+        $ lines
 
 -- |
 -- Multiline Haddock in the prefix position followed by a line break.
@@ -24,11 +27,15 @@ prefixHaddockWithNewline =
 -- |
 -- Multiline Haddock in the suffix position.
 suffixHaddock :: Text -> Builder
-suffixHaddock =
-  mappend "-- ^"
-    . foldMap (mappend "\n-- ")
-    . fmap (from @Text)
-    . Text.lines
+suffixHaddock text =
+  case Text.lines text of
+    [] -> ""
+    [line] -> "-- ^ " <> to line
+    lines ->
+      mappend "-- ^"
+        . foldMap (mappend "\n-- ")
+        . fmap (from @Text)
+        $ lines
 
 -- |
 -- Multiline Haddock in the suffix position preceded by a line break.
