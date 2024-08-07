@@ -15,6 +15,7 @@ module CodegenKit.Legacy.ByLanguage.Haskell.Composers.Cabal
     -- * --
     ModuleRef,
     nameListModuleRef,
+    plainModuleRef,
 
     -- * --
     Dependency,
@@ -116,6 +117,10 @@ newtype ModuleRef
 nameListModuleRef :: [Name] -> ModuleRef
 nameListModuleRef =
   ModuleRef . B.uniline . B'.intercalate "." . fmap Name.toUpperCamelCaseTextBuilder
+
+plainModuleRef :: Text -> ModuleRef
+plainModuleRef =
+  ModuleRef . to
 
 -- * --
 
