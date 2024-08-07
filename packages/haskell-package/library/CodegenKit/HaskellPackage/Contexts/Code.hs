@@ -1,6 +1,7 @@
 module CodegenKit.HaskellPackage.Contexts.Code
   ( -- * Execution
     toPackageModule,
+    toPackageCompiledModule,
     toModuleFile,
     toModuleText,
 
