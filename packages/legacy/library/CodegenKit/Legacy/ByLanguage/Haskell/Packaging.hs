@@ -63,11 +63,11 @@ instance Monoid Modules where
 
 toExposedModuleSet :: Modules -> Set [Name]
 toExposedModuleSet (Modules _ exposed _ _ _) =
-  fromList . toList $ exposed
+  fromList . sort . toList $ exposed
 
 toHiddenModuleSet :: Modules -> Set [Name]
 toHiddenModuleSet (Modules _ _ hidden _ _) =
-  fromList . toList $ hidden
+  fromList . sort . toList $ hidden
 
 toDependencyList :: Modules -> [(Text, Versioning.VersionRange)]
 toDependencyList (Modules _ _ _ deps _) =
