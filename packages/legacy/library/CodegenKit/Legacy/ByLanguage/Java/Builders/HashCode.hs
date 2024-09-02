@@ -64,27 +64,27 @@ hashExpField :: Builder -> Field
 hashExpField hashExp =
   Field
     mempty
-    [j|hash = (hash << 5) - hash + $hashExp;|]
+    [j|hash = (hash << 5) - hash + ${hashExp};|]
 
 byteField :: Builder -> Field
 byteField name =
-  hashExpField [j|(int) this.$name|]
+  hashExpField [j|(int) this.${name}|]
 
 shortField :: Builder -> Field
 shortField name =
-  hashExpField [j|(int) this.$name|]
+  hashExpField [j|(int) this.${name}|]
 
 intField :: Builder -> Field
 intField name =
-  hashExpField [j|this.$name|]
+  hashExpField [j|this.${name}|]
 
 longField :: Builder -> Field
 longField name =
-  hashExpField [j|(int) (this.$name ^ (this.$name >>> 32))|]
+  hashExpField [j|(int) (this.${name} ^ (this.${name} >>> 32))|]
 
 floatField :: Builder -> Field
 floatField name =
-  hashExpField [j|Float.floatToIntBits(this.$name)|]
+  hashExpField [j|Float.floatToIntBits(this.${name})|]
 
 doubleField :: Builder -> Field
 doubleField name =
@@ -92,37 +92,37 @@ doubleField name =
     mempty
     [j|
       {
-        long bits = Double.doubleToLongBits(this.$name);
+        long bits = Double.doubleToLongBits(this.${name});
         hash = (hash << 5) - hash + (int) (bits ^ (bits >>> 32));
       }
     |]
 
 booleanField :: Builder -> Field
 booleanField name =
-  hashExpField [j|(this.$name ? 1231 : 1237)|]
+  hashExpField [j|(this.${name} ? 1231 : 1237)|]
 
 charField :: Builder -> Field
 charField name =
-  hashExpField [j|(int) this.$name|]
+  hashExpField [j|(int) this.${name}|]
 
 arrayField :: Builder -> Field
 arrayField name =
   addFieldImport "java.util.Arrays"
-    $ hashExpField [j|Arrays.hashCode(this.$name)|]
+    $ hashExpField [j|Arrays.hashCode(this.${name})|]
 
 objectField :: Builder -> Field
 objectField name =
-  hashExpField [j|this.$name.hashCode()|]
+  hashExpField [j|this.${name}.hashCode()|]
 
 nullCheckedObjectField :: Builder -> Field
 nullCheckedObjectField name =
   Field
     mempty
     [j|
-      if (this.$name == null) {
+      if (this.${name} == null) {
         hash = (hash << 5) - hash;
       } else {
         hash = (hash << 5) - hash + 1;
-        hash = (hash << 5) - hash + this.$name.hashCode();
+        hash = (hash << 5) - hash + this.${name}.hashCode();
       }
     |]

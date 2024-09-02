@@ -13,8 +13,8 @@ type Code = Builder
 fieldParamDoc :: Code -> Code -> Code
 fieldParamDoc className fieldName =
   [j|
-    * @param $fieldName value of the {@code $fieldName} property of
-    *        $fieldNameSpace the {@code $className} case.
+    * @param ${fieldName} value of the {@code ${fieldName}} property of
+    *        ${fieldNameSpace} the {@code ${className}} case.
   |]
   where
     fieldNameSpace =
@@ -24,7 +24,7 @@ memberlessEqualsMethod :: Code -> Code
 memberlessEqualsMethod className =
   [j|
     public boolean equals(Object that) {
-      return that instanceof $className;
+      return that instanceof ${className};
     }
   |]
 
@@ -32,10 +32,10 @@ productEqualsMethods :: Code -> Code -> Code
 productEqualsMethods className equalityExprs =
   [j|
     public boolean equals(Object that) {
-      return that instanceof $className && equals(($className) that);
+      return that instanceof ${className} && equals((${className}) that);
     }
-    private boolean equals($className that) {
+    private boolean equals(${className} that) {
       return
-        $equalityExprs;
+        ${equalityExprs};
     }
   |]

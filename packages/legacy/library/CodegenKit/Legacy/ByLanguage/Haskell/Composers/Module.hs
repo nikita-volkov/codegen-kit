@@ -30,11 +30,11 @@ compileModule ::
   Text
 compileModule moduleName unqualifiedImports aliasMapList (Body compileBody) =
   [i|
-    module $moduleName where
+    module ${moduleName} where
 
-    $importsSplice
+    ${importsSplice}
 
-    $bodySplice
+    ${bodySplice}
   |]
   where
     aliasMap =

@@ -35,13 +35,13 @@ instance CodeTemplate UnqualifiedImport where
   compileCodeTemplate _ UnqualifiedImport {..} =
     case symbols of
       Just symbols ->
-        [j|import $qualifiedName ($symbolsSplice)|]
+        [j|import ${qualifiedName} (${symbolsSplice})|]
         where
           symbolsSplice =
             symbols
               & Text.intercalate ", "
       Nothing ->
-        [j|import $qualifiedName|]
+        [j|import ${qualifiedName}|]
 
 data QualifiedImport = QualifiedImport
   { qualifiedName :: Text,
@@ -55,9 +55,9 @@ instance CodeTemplate QualifiedImport where
     if Text.null alias
       then
         if style.importQualifiedPost
-          then [j|import $qualifiedName qualified|]
-          else [j|import qualified $qualifiedName|]
+          then [j|import ${qualifiedName} qualified|]
+          else [j|import qualified ${qualifiedName}|]
       else
         if style.importQualifiedPost
-          then [j|import $qualifiedName qualified as $alias|]
-          else [j|import qualified $qualifiedName as $alias|]
+          then [j|import ${qualifiedName} qualified as ${alias}|]
+          else [j|import qualified ${qualifiedName} as ${alias}|]

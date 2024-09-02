@@ -23,7 +23,7 @@ compile params =
     Just exportList ->
       [i|
         module ${params.moduleName}
-          ( $exportSplice
+          ( ${exportSplice}
           )
         where${importsSplice}${contentSplice}
       |]

@@ -43,20 +43,20 @@ contents packageName synopsis version exposedModuleList otherModuleList dependen
   [i|
     cabal-version: 3.0
 
-    name: $packageName
-    synopsis: $synopsis
-    version: $version
+    name: ${packageName}
+    synopsis: ${synopsis}
+    version: ${version}
 
     library
       hs-source-dirs: library
       default-extensions: ApplicativeDo, BangPatterns, BinaryLiterals, BlockArguments, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, DuplicateRecordFields, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, HexFloatLiterals, LambdaCase, LiberalTypeSynonyms, MultiParamTypeClasses, MultiWayIf, NoFieldSelectors, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedRecordDot, OverloadedStrings, PatternGuards, PatternSynonyms, ParallelListComp, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TupleSections, TypeApplications, TypeFamilies, TypeOperators, ViewPatterns
       default-language: Haskell2010
       exposed-modules:
-        $exposedModules
+        ${exposedModules}
       other-modules:
-        $otherModules
+        ${otherModules}
       build-depends:
-        $dependencies
+        ${dependencies}
   |]
   where
     exposedModules =
@@ -132,5 +132,5 @@ rangeDependency :: PackageName -> Version -> Version -> Dependency
 rangeDependency name min max =
   Dependency
     [i|
-      $name >=$min && <$max
+      ${name} >=${min} && <${max}
     |]

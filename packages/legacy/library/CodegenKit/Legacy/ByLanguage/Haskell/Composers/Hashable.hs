@@ -19,11 +19,11 @@ product productRef fieldAmount =
               extendCode name =
                 [j|
 
-                  & flip $hashWithSalt $name
+                  & flip ${hashWithSalt} ${name}
                 |]
        in splice
             [i|
-              instance $hashable $productRef where
-                hashWithSalt salt ($productRef$patterns) =
-                  $definition
+              instance ${hashable} ${productRef} where
+                hashWithSalt salt (${productRef}${patterns}) =
+                  ${definition}
             |]

@@ -36,7 +36,7 @@ content namespace =
     -- It is not abstraction integration wrappers,
     -- like 'Data.Semigroup.First'.
     -- It is not resource types like 'System.IO.Handle'.
-    module $namespace.$name
+    module ${namespace}.${name}
       ( -- * From "Prelude"
         Prelude.Bool (..),
         Prelude.Char,

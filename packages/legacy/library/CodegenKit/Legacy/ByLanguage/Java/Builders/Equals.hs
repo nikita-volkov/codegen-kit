@@ -29,13 +29,13 @@ equalsMethodsForProduct className = \case
   [] ->
     [i|
       public boolean equals(Object that) {
-        return that instanceof $className;
+        return that instanceof ${className};
       }
     |]
   (multiFieldsExp -> fields) ->
     [i|
       public boolean equals(Object that) {
-        return that instanceof $className && equals(($className) that);
+        return that instanceof ${className} && equals((${className}) that);
       }
       /**
        * Equality check specialized to only the instances of this class.
@@ -43,9 +43,9 @@ equalsMethodsForProduct className = \case
        * Unlike the Object-generalized version it avoids instance checks,
        * since that is resolved by the type system.
        */
-      public boolean equals($className that) {
+      public boolean equals(${className} that) {
         return
-          $fields;
+          ${fields};
       }
     |]
 
@@ -64,24 +64,24 @@ data Field = Field
 primitiveField :: Builder -> Field
 primitiveField fieldName =
   Field
-    [j|$fieldName == that.$fieldName|]
+    [j|${fieldName} == that.${fieldName}|]
 
 objectField :: Builder -> Field
 objectField fieldName =
   Field
-    [j|$fieldName.equals(that.$fieldName)|]
+    [j|${fieldName}.equals(that.${fieldName})|]
 
 nullCheckedObjectField :: Builder -> Field
 nullCheckedObjectField fieldName =
   Field
     [j|
       (
-        $fieldName == that.$fieldName ||
-        $fieldName != null && $fieldName.equals(that.$fieldName)
+        ${fieldName} == that.${fieldName} ||
+        ${fieldName} != null && ${fieldName}.equals(that.${fieldName})
       )
     |]
 
 arrayField :: Builder -> Field
 arrayField fieldName =
   Field
-    [j|java.util.Arrays.equals($fieldName, that.$fieldName)|]
+    [j|java.util.Arrays.equals(${fieldName}, that.${fieldName})|]

@@ -30,7 +30,7 @@ content namespace =
     -- |
     -- Reexports of most of the definitions from the \"base\" package,
     -- which it is a common practice to import unqualified.
-    module $namespace.$name
+    module ${namespace}.${name}
       ( module Exports,
       )
     where

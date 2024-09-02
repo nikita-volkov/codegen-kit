@@ -57,7 +57,7 @@ snippets fields =
       public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append('{');
-        $statements
+        ${statements}
         builder.append('}');
         return builder.toString();
       }
@@ -79,12 +79,12 @@ field :: Builder -> FieldType -> Field
 field name (FieldType _ statements) =
   Field
     [j|
-      builder.append("\"$name\":");
-      $appliedStatements
+      builder.append("\"${name}\":");
+      ${appliedStatements}
     |]
   where
     appliedStatements =
-      statements name [j|this.$name|]
+      statements name [j|this.${name}|]
 
 -- * --
 
@@ -97,7 +97,7 @@ primitiveFieldType :: Builder -> FieldType
 primitiveFieldType type_ =
   FieldType
     type_
-    (\_ ref -> [j|builder.append($ref);|])
+    (\_ ref -> [j|builder.append(${ref});|])
 
 booleanFieldType :: FieldType
 booleanFieldType = primitiveFieldType "Boolean"
@@ -125,7 +125,7 @@ bigDecimalFieldType =
   FieldType "BigDecimal" $ \name ref ->
     [j|
       builder.append('"');
-      builder.append($ref.toPlainString());
+      builder.append(${ref}.toPlainString());
       builder.append('"');
     |]
 
@@ -134,7 +134,7 @@ stringFieldType =
   FieldType "String" $ \name ref ->
     [j|
       builder.append('"');
-      builder.append($ref.replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b").replace("\f", "\\f").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"));
+      builder.append(${ref}.replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b").replace("\f", "\\f").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"));
       builder.append('"');
     |]
 
@@ -152,13 +152,13 @@ uuidFieldType = customUnescapedToStringFieldType "UUID"
 
 optionalFieldType :: FieldType -> FieldType
 optionalFieldType (FieldType elementType elementStatements) =
-  FieldType [j|Optional<$elementType>|] statements
+  FieldType [j|Optional<${elementType}>|] statements
   where
     statements name ref =
       [j|
-        if ($ref.isPresent()) {
-          $elementType $elementName = $ref.get();
-          $appliedElementStatements
+        if (${ref}.isPresent()) {
+          ${elementType} ${elementName} = ${ref}.get();
+          ${appliedElementStatements}
         } else {
           builder.append("null");
         }
@@ -175,8 +175,8 @@ optionalIntFieldType =
   where
     statements name ref =
       [j|
-        if ($ref.isPresent()) {
-          builder.append($ref.getAsInt());
+        if (${ref}.isPresent()) {
+          builder.append(${ref}.getAsInt());
         } else {
           builder.append("null");
         }
@@ -188,8 +188,8 @@ optionalLongFieldType =
   where
     statements name ref =
       [j|
-        if ($ref.isPresent()) {
-          builder.append($ref.getAsLong());
+        if (${ref}.isPresent()) {
+          builder.append(${ref}.getAsLong());
         } else {
           builder.append("null");
         }
@@ -201,8 +201,8 @@ optionalDoubleFieldType =
   where
     statements name ref =
       [j|
-        if ($ref.isPresent()) {
-          builder.append($ref.getAsDouble());
+        if (${ref}.isPresent()) {
+          builder.append(${ref}.getAsDouble());
         } else {
           builder.append("null");
         }
@@ -213,7 +213,7 @@ customUnescapedToStringFieldType signature =
   FieldType signature $ \name ref ->
     [j|
       builder.append('"');
-      builder.append($ref.toString());
+      builder.append(${ref}.toString());
       builder.append('"');
     |]
 
@@ -222,28 +222,28 @@ customEscapedToStringFieldType signature =
   FieldType signature $ \name ref ->
     [j|
       builder.append('"');
-      builder.append($ref.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b").replace("\f", "\\f").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"));
+      builder.append(${ref}.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\b", "\\b").replace("\f", "\\f").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"));
       builder.append('"');
     |]
 
 arrayFieldType :: FieldType -> FieldType
 arrayFieldType (FieldType elementType elementStatements) =
-  FieldType [j|$elementType[]|] statements
+  FieldType [j|${elementType}[]|] statements
   where
     statements name ref =
       [j|
         builder.append('[');
-        if ($ref.length > 0) {
-          $headElementStatements
-          for (int i = 1; i < $ref.length; i++) {
+        if (${ref}.length > 0) {
+          ${headElementStatements}
+          for (int i = 1; i < ${ref}.length; i++) {
             builder.append(',');
-            $loopElementStatements
+            ${loopElementStatements}
           }
         }
         builder.append(']');
       |]
       where
         headElementStatements =
-          elementStatements name [j|$ref[0]|]
+          elementStatements name [j|${ref}[0]|]
         loopElementStatements =
-          elementStatements name [j|$ref[i]|]
+          elementStatements name [j|${ref}[i]|]

@@ -40,7 +40,7 @@ operators =
         -- |
         -- A collection of common operators provided across
         -- various modules of the \"base\" package.
-        module $moduleRef
+        module ${moduleRef}
           ( -- * From "Control.Applicative"
             (Control.Applicative.*>),
             (Control.Applicative.<*),
@@ -130,7 +130,7 @@ dataTypes =
         -- It is not abstraction integration wrappers,
         -- like 'Data.Semigroup.First'.
         -- It is not resource types like 'System.IO.Handle'.
-        module $moduleRef
+        module ${moduleRef}
           ( -- * From "Prelude"
             Prelude.Bool (..),
             Prelude.Char,
@@ -187,7 +187,7 @@ all =
         -- |
         -- Reexports of most of the definitions from the \"base\" package,
         -- which it is a common practice to import unqualified.
-        module $moduleRef
+        module ${moduleRef}
           ( module Exports,
           )
         where

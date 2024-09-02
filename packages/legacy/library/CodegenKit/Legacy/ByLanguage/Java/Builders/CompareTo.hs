@@ -8,8 +8,8 @@ import CodegenKit.Legacy.Prelude
 compareTo :: Builder -> [Component] -> Builder
 compareTo className components =
   [j|
-    public int compareTo($className that) {
-      int status;$statements
+    public int compareTo(${className} that) {
+      int status;${statements}
       return 0;
     }
   |]
@@ -27,8 +27,8 @@ component :: Builder -> Type -> Component
 component fieldName Type {..} =
   Component
     ( typeStatements
-        [j|this.$fieldName|]
-        [j|that.$fieldName|]
+        [j|this.${fieldName}|]
+        [j|that.${fieldName}|]
     )
 
 -- * Type
@@ -43,7 +43,7 @@ primitive :: Type
 primitive =
   Type $ \leftExp rightExp ->
     [j|
-      status = ($leftExp < $rightExp) ? -1 : (($leftExp == $rightExp) ? 0 : 1);
+      status = (${leftExp} < ${rightExp}) ? -1 : ((${leftExp} == ${rightExp}) ? 0 : 1);
       if (status != 0) return status;
     |]
 
@@ -51,7 +51,7 @@ comparable :: Type
 comparable =
   Type $ \leftExp rightExp ->
     [j|
-      status = $leftExp.compareTo($rightExp);
+      status = ${leftExp}.compareTo(${rightExp});
       if (status != 0) return status;
     |]
 
@@ -61,7 +61,7 @@ boolean :: Type
 boolean =
   Type $ \leftExp rightExp ->
     [j|
-      status = Boolean.compare($leftExp, $rightExp);
+      status = Boolean.compare(${leftExp}, ${rightExp});
       if (status != 0) return status;
     |]
 
@@ -69,7 +69,7 @@ byte :: Type
 byte =
   Type $ \leftExp rightExp ->
     [j|
-      status = Byte.compare($leftExp, $rightExp);
+      status = Byte.compare(${leftExp}, ${rightExp});
       if (status != 0) return status;
     |]
 
@@ -77,7 +77,7 @@ short :: Type
 short =
   Type $ \leftExp rightExp ->
     [j|
-      status = Short.compare($leftExp, $rightExp);
+      status = Short.compare(${leftExp}, ${rightExp});
       if (status != 0) return status;
     |]
 
@@ -85,7 +85,7 @@ int :: Type
 int =
   Type $ \leftExp rightExp ->
     [j|
-      status = Integer.compare($leftExp, $rightExp);
+      status = Integer.compare(${leftExp}, ${rightExp});
       if (status != 0) return status;
     |]
 
@@ -93,7 +93,7 @@ long :: Type
 long =
   Type $ \leftExp rightExp ->
     [j|
-      status = Long.compare($leftExp, $rightExp);
+      status = Long.compare(${leftExp}, ${rightExp});
       if (status != 0) return status;
     |]
 
@@ -101,7 +101,7 @@ float :: Type
 float =
   Type $ \leftExp rightExp ->
     [j|
-      status = Float.compare($leftExp, $rightExp);
+      status = Float.compare(${leftExp}, ${rightExp});
       if (status != 0) return status;
     |]
 
@@ -109,7 +109,7 @@ double :: Type
 double =
   Type $ \leftExp rightExp ->
     [j|
-      status = Double.compare($leftExp, $rightExp);
+      status = Double.compare(${leftExp}, ${rightExp});
       if (status != 0) return status;
     |]
 
@@ -121,19 +121,19 @@ optional Type {..} =
   where
     statements leftExp rightExp =
       [j|
-        if ($leftExp.isPresent()) {
-          if ($rightExp.isPresent()) {
-            $substatements
+        if (${leftExp}.isPresent()) {
+          if (${rightExp}.isPresent()) {
+            ${substatements}
           } else return 1;
         } else {
-          if ($rightExp.isPresent()) return -1;
+          if (${rightExp}.isPresent()) return -1;
         }
       |]
       where
         substatements =
           typeStatements
-            [j|$leftExp.get()|]
-            [j|$rightExp.get()|]
+            [j|${leftExp}.get()|]
+            [j|${rightExp}.get()|]
 
 optionalInt :: Type
 optionalInt =
@@ -141,20 +141,20 @@ optionalInt =
   where
     statements leftExp rightExp =
       [j|
-        if ($leftExp.isPresent()) {
-          if ($rightExp.isPresent()) {
-            $substatements
+        if (${leftExp}.isPresent()) {
+          if (${rightExp}.isPresent()) {
+            ${substatements}
           } else return 1;
         } else {
-          if ($rightExp.isPresent()) return -1;
+          if (${rightExp}.isPresent()) return -1;
         }
       |]
       where
         substatements =
           typeStatements
             int
-            [j|$leftExp.getAsInt()|]
-            [j|$rightExp.getAsInt()|]
+            [j|${leftExp}.getAsInt()|]
+            [j|${rightExp}.getAsInt()|]
 
 optionalLong :: Type
 optionalLong =
@@ -162,20 +162,20 @@ optionalLong =
   where
     statements leftExp rightExp =
       [j|
-        if ($leftExp.isPresent()) {
-          if ($rightExp.isPresent()) {
-            $substatements
+        if (${leftExp}.isPresent()) {
+          if (${rightExp}.isPresent()) {
+            ${substatements}
           } else return 1;
         } else {
-          if ($rightExp.isPresent()) return -1;
+          if (${rightExp}.isPresent()) return -1;
         }
       |]
       where
         substatements =
           typeStatements
             long
-            [j|$leftExp.getAsLong()|]
-            [j|$rightExp.getAsLong()|]
+            [j|${leftExp}.getAsLong()|]
+            [j|${rightExp}.getAsLong()|]
 
 optionalDouble :: Type
 optionalDouble =
@@ -183,17 +183,17 @@ optionalDouble =
   where
     statements leftExp rightExp =
       [j|
-        if ($leftExp.isPresent()) {
-          if ($rightExp.isPresent()) {
-            $substatements
+        if (${leftExp}.isPresent()) {
+          if (${rightExp}.isPresent()) {
+            ${substatements}
           } else return 1;
         } else {
-          if ($rightExp.isPresent()) return -1;
+          if (${rightExp}.isPresent()) return -1;
         }
       |]
       where
         substatements =
           typeStatements
             double
-            [j|$leftExp.getAsDouble()|]
-            [j|$rightExp.getAsDouble()|]
+            [j|${leftExp}.getAsDouble()|]
+            [j|${rightExp}.getAsDouble()|]

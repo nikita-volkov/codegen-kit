@@ -68,10 +68,10 @@ fileset dirPath namespace Class {..} =
       dirPath <> classPath
     code =
       [j|
-        package $namespace;
+        package ${namespace};
 
-        $imports
-        $classCode
+        ${imports}
+        ${classCode}
       |]
       where
         imports =
@@ -100,20 +100,20 @@ class_ ClassName {..} fields =
   where
     fieldsClassCode =
       [i|
-        public final class $classNameCode implements Comparable<$classNameCode> {
-          $propertyDecls
+        public final class ${classNameCode} implements Comparable<${classNameCode}> {
+          ${propertyDecls}
 
-          $classNameCode($constructorArgs) {
-            $propertyAssignments
+          ${classNameCode}(${constructorArgs}) {
+            ${propertyAssignments}
           }
 
-          $equalsMethods
+          ${equalsMethods}
 
-          $hashCodeSnippetsHashCodeMethodDecls
+          ${hashCodeSnippetsHashCodeMethodDecls}
 
-          $toJsonMethods
+          ${toJsonMethods}
 
-          $compareToDecls
+          ${compareToDecls}
         }
       |]
       where
@@ -178,9 +178,9 @@ data Field = Field
 field :: FieldName -> Type -> Field
 field FieldName {..} Type {..} =
   Field
-    [i|public final $typeSignature $valueNameBuilder;|]
-    [i|this.$valueNameBuilder = $valueNameBuilder;|]
-    [i|$typeSignature $valueNameBuilder|]
+    [i|public final ${typeSignature} ${valueNameBuilder};|]
+    [i|this.${valueNameBuilder} = ${valueNameBuilder};|]
+    [i|${typeSignature} ${valueNameBuilder}|]
     (typeHashCodeField valueNameBuilder)
     (ToJsonBuilder.field valueNameBuilder typeToJsonFieldType)
     (typeEqualsField valueNameBuilder)
@@ -238,8 +238,8 @@ customObjectType signature toJsonFieldType imports =
 arrayType :: Type -> Type
 arrayType Type {..} =
   Type
-    [j|$typeSignature[]|]
-    [j|$typeSignature[]|]
+    [j|${typeSignature}[]|]
+    [j|${typeSignature}[]|]
     EqualsBuilder.arrayField
     HashCodeBuilder.arrayField
     (ToJsonBuilder.arrayFieldType typeToJsonFieldType)
@@ -249,8 +249,8 @@ arrayType Type {..} =
 optionalType :: Type -> Type
 optionalType Type {..} =
   Type
-    [j|Optional<$typeBoxedSignature>|]
-    [j|Optional<$typeBoxedSignature>|]
+    [j|Optional<${typeBoxedSignature}>|]
+    [j|Optional<${typeBoxedSignature}>|]
     EqualsBuilder.objectField
     HashCodeBuilder.objectField
     (ToJsonBuilder.optionalFieldType typeToJsonFieldType)

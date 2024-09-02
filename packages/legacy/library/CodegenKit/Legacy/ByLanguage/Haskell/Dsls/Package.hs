@@ -60,11 +60,11 @@ module_ namespace aliasMapList code =
       code.dependencies
     content style =
       [i|
-        module $name where
+        module ${name} where
 
-        $importsSplice
+        ${importsSplice}
 
-        $bodySplice
+        ${bodySplice}
       |]
       where
         importsSplice =

@@ -56,9 +56,9 @@ classModule code namespace name =
 classModuleCode :: ClassDecl -> Namespace -> ClassName -> Text
 classModuleCode (ClassDecl runClassDecl) Namespace {..} ClassName {..} =
   [i|
-    package $namespaceCode;
+    package ${namespaceCode};
 
-    $decl
+    ${decl}
   |]
   where
     decl = runClassDecl classNameCode
@@ -128,11 +128,11 @@ productClass :: [ProductElement] -> ClassDecl
 productClass params =
   ClassDecl $ \name ->
     [i|
-      public final class $name {
-        $propertyDecls
+      public final class ${name} {
+        ${propertyDecls}
 
-        public $name($constructorArgs) {
-          $propertyAssignments
+        public ${name}(${constructorArgs}) {
+          ${propertyAssignments}
         }
       }
     |]
@@ -155,6 +155,6 @@ data ProductElement = ProductElement
 param :: Text -> Text -> ProductElement
 param name type_ =
   ProductElement
-    [i|public final $type_ $name;|]
-    [i|this.$name = $name;|]
-    [i|$type_ $name|]
+    [i|public final ${type_} ${name};|]
+    [i|this.${name} = ${name};|]
+    [i|${type_} ${name}|]

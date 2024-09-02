@@ -8,7 +8,7 @@ unitHashCodeMethod :: Builder -> Builder
 unitHashCodeMethod className =
   [j|
     public int hashCode() {
-      return $className.class.hashCode();
+      return ${className}.class.hashCode();
     }
   |]
 
@@ -16,7 +16,7 @@ statementsHashCodeMethod :: Builder -> [Builder] -> Builder
 statementsHashCodeMethod className statements =
   [j|
     public int hashCode() {
-      int hash = $className.class.hashCode();$statementsCode
+      int hash = ${className}.class.hashCode();${statementsCode}
       return hash;
     }
   |]

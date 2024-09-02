@@ -36,11 +36,11 @@ module_ preludeModuleRef typesModuleRef moduleRef productFieldsContent sumVarian
 
     -- * Product Fields
 
-    $productFieldsContent
+    ${productFieldsContent}
 
     -- * Sum Variants
     
-    $sumVariantsContent
+    ${sumVariantsContent}
   |]
 
 hasFieldClass lcFieldName ucFieldName =
@@ -53,7 +53,7 @@ hasFieldClass lcFieldName ucFieldName =
       -- |
       set${ucFieldName}Field :: ${ucFieldName}FieldOf a -> a -> a
       -- |
-      -- Map over the \"$lcFieldName\" field of a record that has it.
+      -- Map over the \"${lcFieldName}\" field of a record that has it.
       map${ucFieldName}Field ::
         (${ucFieldName}FieldOf a -> ${ucFieldName}FieldOf a) ->
         (a -> a)
@@ -110,16 +110,16 @@ hasFieldInstance ucFieldName ucProductName fieldTypeSig fieldIndex fieldsAmount 
   [i|
     instance Has${ucFieldName}Field T.${ucProductName} where
       type ${ucFieldName}FieldOf T.${ucProductName} = ${fieldTypeSig}
-      get${ucFieldName}Field (T.$ucProductName$allFields) =
-        $selectedFieldName
-      set${ucFieldName}Field value (T.$ucProductName$allFields) =
-        $setExp
-      map${ucFieldName}Field map (T.$ucProductName$allFields) =
-        $mapExp
-      traverse${ucFieldName}Field traverse (T.$ucProductName$allFields) =
+      get${ucFieldName}Field (T.${ucProductName}${allFields}) =
+        ${selectedFieldName}
+      set${ucFieldName}Field value (T.${ucProductName}${allFields}) =
+        ${setExp}
+      map${ucFieldName}Field map (T.${ucProductName}${allFields}) =
+        ${mapExp}
+      traverse${ucFieldName}Field traverse (T.${ucProductName}${allFields}) =
         fmap
-          (\$selectedFieldName -> T.$ucProductName$allFields)
-          (traverse $selectedFieldName)
+          (\${selectedFieldName} -> T.${ucProductName}${allFields})
+          (traverse ${selectedFieldName})
   |]
   where
     -- Helpers

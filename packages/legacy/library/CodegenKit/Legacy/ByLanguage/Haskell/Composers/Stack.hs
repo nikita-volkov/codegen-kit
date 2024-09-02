@@ -27,9 +27,9 @@ fileSet resolver =
 contents :: Text -> [ExtraDep] -> Text
 contents resolver extraDepList =
   [i|
-    resolver: $resolver
+    resolver: ${resolver}
     extra-deps:
-      $extraDepsSplice
+      ${extraDepsSplice}
   |]
   where
     extraDepsSplice =
@@ -66,6 +66,6 @@ githubExtraDep name user repo commitHash =
   where
     splice =
       [i|
-        - git: https://github.com/$user/$repo
-          commit: $commitHash
+        - git: https://github.com/${user}/${repo}
+          commit: ${commitHash}
       |]

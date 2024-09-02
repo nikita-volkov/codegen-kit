@@ -30,7 +30,7 @@ content namespace =
     -- |
     -- A collection of common operators provided across
     -- various modules of the \"base\" package.
-    module $namespace.$name
+    module ${namespace}.${name}
       ( -- * From "Control.Applicative"
         (Control.Applicative.*>),
         (Control.Applicative.<*),

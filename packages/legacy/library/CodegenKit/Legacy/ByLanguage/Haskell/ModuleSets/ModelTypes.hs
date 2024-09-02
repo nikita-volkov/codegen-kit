@@ -64,15 +64,15 @@ content ::
   Text
 content sections ns =
   [i|
-    module $moduleRef where
+    module ${moduleRef} where
 
     import BasePrelude.Operators
-    import qualified BasePrelude as $preludeAlias
-    import qualified Data.Hashable as $hashableAlias
-    import qualified Data.Vector as $boxedVectorAlias
-    import qualified Data.Vector.Unboxed as $unboxedVectorAlias
+    import qualified BasePrelude as ${preludeAlias}
+    import qualified Data.Hashable as ${hashableAlias}
+    import qualified Data.Vector as ${boxedVectorAlias}
+    import qualified Data.Vector.Unboxed as ${unboxedVectorAlias}
 
-    $content
+    ${content}
   |]
   where
     moduleRef =
@@ -95,9 +95,9 @@ section ::
 section heading declarations =
   Section
     [i|
-      -- * $heading
+      -- * ${heading}
 
-      $declarationsCode
+      ${declarationsCode}
     |]
   where
     declarationsCode =
@@ -117,10 +117,10 @@ product ::
 product name haddock fields =
   Decl
     [i|
-      ${haddockPrefix}data $name
-        = $name
-            $fieldsCode
-        deriving ($preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord)
+      ${haddockPrefix}data ${name}
+        = ${name}
+            ${fieldsCode}
+        deriving (${preludeAlias}.Show, ${preludeAlias}.Eq, ${preludeAlias}.Ord)
     |]
   where
     haddockPrefix =
@@ -135,9 +135,9 @@ sum :: Text -> Text -> [(Text, Text, [Type])] -> Decl
 sum sumName haddock variants =
   Decl
     [i|
-      ${haddockPrefix}data $sumName
-        $constructors
-        deriving ($derivings)
+      ${haddockPrefix}data ${sumName}
+        ${constructors}
+        deriving (${derivings})
     |]
   where
     haddockPrefix =
@@ -166,18 +166,18 @@ sum sumName haddock variants =
       if all (\(_, _, x) -> null x) variants
         then
           [i|
-            $preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord, $preludeAlias.Enum, $preludeAlias.Bounded
+            ${preludeAlias}.Show, ${preludeAlias}.Eq, ${preludeAlias}.Ord, ${preludeAlias}.Enum, ${preludeAlias}.Bounded
           |]
         else
           [i|
-            $preludeAlias.Show, $preludeAlias.Eq, $preludeAlias.Ord
+            ${preludeAlias}.Show, ${preludeAlias}.Eq, ${preludeAlias}.Ord
           |]
 
 alias :: Text -> Text -> Type -> Decl
 alias name haddock (Type signature) =
   Decl
     [i|
-      ${haddockPrefix}type $name = $signature
+      ${haddockPrefix}type ${name} = ${signature}
     |]
   where
     haddockPrefix =
@@ -189,9 +189,9 @@ productHashableInstance :: Text -> Int -> Decl
 productHashableInstance productName fieldAmount =
   Decl
     [i|
-      instance $hashableAlias.Hashable $productName where
-        hashWithSalt salt ($productName $fieldPatterns) =
-          $exp
+      instance ${hashableAlias}.Hashable ${productName} where
+        hashWithSalt salt (${productName} ${fieldPatterns}) =
+          ${exp}
     |]
   where
     fieldNames =
@@ -207,8 +207,8 @@ productAccessorIsLabelInstance :: Text -> Text -> Type -> Int -> Int -> Decl
 productAccessorIsLabelInstance productName fieldName (Type fieldType) fieldIndex fieldAmount =
   Decl
     [i|
-      instance (a ~ $fieldType) => $preludeAlias.IsLabel "$fieldName" ($productName -> a) where
-        fromLabel ($productName $fieldPatterns) =
+      instance (a ~ ${fieldType}) => ${preludeAlias}.IsLabel "${fieldName}" (${productName} -> a) where
+        fromLabel (${productName} ${fieldPatterns}) =
           a
     |]
   where
@@ -227,9 +227,9 @@ productMapperIsLabelInstance :: Text -> Text -> Type -> Int -> Int -> Decl
 productMapperIsLabelInstance productName fieldName (Type fieldType) fieldIndex fieldAmount =
   Decl
     [i|
-      instance (a ~ $fieldType) => $preludeAlias.IsLabel "$fieldName" ((a -> a) -> $productName -> $productName) where
-        fromLabel map ($productName $fieldPatterns) =
-          $productName $fieldExps
+      instance (a ~ ${fieldType}) => ${preludeAlias}.IsLabel "${fieldName}" ((a -> a) -> ${productName} -> ${productName}) where
+        fromLabel map (${productName} ${fieldPatterns}) =
+          ${productName} ${fieldExps}
     |]
   where
     fieldPatterns =
@@ -247,9 +247,9 @@ productMapperIsLabelInstance productName fieldName (Type fieldType) fieldIndex f
 productTraverserIsLabelInstance productName fieldName (Type fieldType) fieldIndex fieldAmount =
   Decl
     [i|
-      instance (a ~ $fieldType, $preludeAlias.Functor f) => $preludeAlias.IsLabel "$fieldName" ((a -> f a) -> $productName -> f $productName) where
-        fromLabel traverse ($productName $varNames) =
-          traverse $selectedVarName <&> \$selectedVarName -> $productName $varNames
+      instance (a ~ ${fieldType}, ${preludeAlias}.Functor f) => ${preludeAlias}.IsLabel "${fieldName}" ((a -> f a) -> ${productName} -> f ${productName}) where
+        fromLabel traverse (${productName} ${varNames}) =
+          traverse ${selectedVarName} <&> \${selectedVarName} -> ${productName} ${varNames}
     |]
   where
     varNames =
@@ -267,10 +267,10 @@ sumMapperIsLabelInstance :: Text -> Text -> Text -> Type -> Decl
 sumMapperIsLabelInstance sumType variantName constructorName (Type variantType) =
   Decl
     [i|
-      instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" ((a -> a) -> $sumType -> $sumType) where
+      instance (a ~ ${variantType}) => ${preludeAlias}.IsLabel "${variantName}" ((a -> a) -> ${sumType} -> ${sumType}) where
         fromLabel map sum = case sum of
-          $constructorName a ->
-            $constructorName (map a)
+          ${constructorName} a ->
+            ${constructorName} (map a)
           _ ->
             sum
     |]
@@ -280,62 +280,62 @@ sumTraverserIsLabelInstance sumType variantName constructorName (Type variantTyp
     [i|
       -- |
       -- Label which produces a function that updates the contents of
-      -- the \"$variantName\" variant of '${sumType}' in an applicative context.
+      -- the \"${variantName}\" variant of '${sumType}' in an applicative context.
       -- 
       -- Exactly the same thing as the @Traversal@ from the \"lens\" library and is
       -- directly compatible with it.
-      instance (a ~ $variantType, $preludeAlias.Applicative f) => $preludeAlias.IsLabel "$variantName" ((a -> f a) -> $sumType -> f $sumType) where
+      instance (a ~ ${variantType}, ${preludeAlias}.Applicative f) => ${preludeAlias}.IsLabel "${variantName}" ((a -> f a) -> ${sumType} -> f ${sumType}) where
         fromLabel traverse sum = case sum of
-          $constructorName a ->
-            $constructorName <$$> traverse a
+          ${constructorName} a ->
+            ${constructorName} <$$> traverse a
           _ ->
-            $preludeAlias.pure sum
+            ${preludeAlias}.pure sum
     |]
 
 sumConstructorIsLabelInstance sumType variantName constructorName (Type variantType) =
   Decl
     [i|
-      instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" (a -> $sumType) where
+      instance (a ~ ${variantType}) => ${preludeAlias}.IsLabel "${variantName}" (a -> ${sumType}) where
         fromLabel =
-          $constructorName
+          ${constructorName}
     |]
 
 sumExtractorIsLabelInstance sumType variantName constructorName (Type variantType) =
   Decl
     [i|
-      instance (a ~ $variantType) => $preludeAlias.IsLabel "$variantName" ($sumType -> $preludeAlias.Maybe a) where
+      instance (a ~ ${variantType}) => ${preludeAlias}.IsLabel "${variantName}" (${sumType} -> ${preludeAlias}.Maybe a) where
         fromLabel sum = case sum of
-          $constructorName a ->
-            $preludeAlias.Just a
+          ${constructorName} a ->
+            ${preludeAlias}.Just a
           _ ->
-            $preludeAlias.Nothing
+            ${preludeAlias}.Nothing
     |]
 
 enumConstructorIsLabelInstance enumType variantName constructorName =
   Decl
     [i|
-      instance $preludeAlias.IsLabel "$variantName" $enumType where
+      instance ${preludeAlias}.IsLabel "${variantName}" ${enumType} where
         fromLabel =
-          $constructorName
+          ${constructorName}
     |]
 
 enumPredicateIsLabelInstance :: Text -> Text -> Text -> Decl
 enumPredicateIsLabelInstance enumType variantName constructorName =
   Decl
     [i|
-      instance $preludeAlias.IsLabel "$variantName" ($enumType -> $preludeAlias.Bool) where
+      instance ${preludeAlias}.IsLabel "${variantName}" (${enumType} -> ${preludeAlias}.Bool) where
         fromLabel enum = case enum of
-          $constructorName -> $preludeAlias.True
-          _ -> $preludeAlias.False
+          ${constructorName} -> ${preludeAlias}.True
+          _ -> ${preludeAlias}.False
     |]
 
 sumHashableInstance :: Text -> [(Text, Int)] -> Decl
 sumHashableInstance sumName variants =
   Decl
     [i|
-      instance $hashableAlias.Hashable $sumName where
+      instance ${hashableAlias}.Hashable ${sumName} where
         hashWithSalt salt sum = case sum of
-          $matches
+          ${matches}
     |]
   where
     matches =
@@ -344,7 +344,7 @@ sumHashableInstance sumName variants =
         variantMatch (variantIndex, (variantName, memberCount)) =
           [i|
             ${variantName}${sumName}${memberPatterns} ->
-              $hashCode
+              ${hashCode}
           |]
           where
             variantIndexCode =
