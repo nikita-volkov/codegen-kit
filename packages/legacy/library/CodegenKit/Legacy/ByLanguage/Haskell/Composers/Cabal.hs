@@ -47,10 +47,65 @@ contents packageName synopsis version exposedModuleList otherModuleList dependen
     synopsis: ${synopsis}
     version: ${version}
 
-    library
-      hs-source-dirs: library
-      default-extensions: ApplicativeDo, BangPatterns, BinaryLiterals, BlockArguments, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, DuplicateRecordFields, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, HexFloatLiterals, LambdaCase, LiberalTypeSynonyms, MultiParamTypeClasses, MultiWayIf, NoFieldSelectors, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedRecordDot, OverloadedStrings, PatternGuards, PatternSynonyms, ParallelListComp, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TupleSections, TypeApplications, TypeFamilies, TypeOperators, ViewPatterns
+    common base
       default-language: Haskell2010
+      default-extensions:
+        ApplicativeDo
+        BangPatterns
+        BinaryLiterals
+        BlockArguments
+        ConstraintKinds
+        DataKinds
+        DefaultSignatures
+        DeriveAnyClass
+        DeriveDataTypeable
+        DeriveFoldable
+        DeriveFunctor
+        DeriveGeneric
+        DeriveTraversable
+        DerivingVia
+        DuplicateRecordFields
+        EmptyCase
+        EmptyDataDecls
+        FlexibleContexts
+        FlexibleInstances
+        FunctionalDependencies
+        GADTs
+        GeneralizedNewtypeDeriving
+        HexFloatLiterals
+        ImportQualifiedPost
+        LambdaCase
+        LiberalTypeSynonyms
+        MultiParamTypeClasses
+        MultiWayIf
+        NamedFieldPuns
+        NoFieldSelectors
+        NoImplicitPrelude
+        NoMonomorphismRestriction
+        NumericUnderscores
+        OverloadedLabels
+        OverloadedRecordDot
+        OverloadedStrings
+        ParallelListComp
+        PatternGuards
+        PatternSynonyms
+        QuasiQuotes
+        RankNTypes
+        RecordWildCards
+        ScopedTypeVariables
+        StandaloneDeriving
+        StrictData
+        TemplateHaskell
+        TupleSections
+        TypeApplications
+        TypeFamilies
+        TypeOperators
+        UndecidableInstances
+        ViewPatterns
+
+    library
+      import: base
+      hs-source-dirs: library
       exposed-modules:
         ${exposedModules}
       other-modules:
